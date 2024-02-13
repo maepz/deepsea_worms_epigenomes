@@ -1,0 +1,235 @@
+"comp"	"genome"	"categories"	"pvalue"	"diff"	"symbol"	"sign"	"count"	"tot"
+"high"	"P. echinospica"	"not annotated"	3.4531079707183e-42	-2.53067115809754	"***"	"depletion"	3983	32332
+"high"	"P. palmiformis"	"not annotated"	0.012086615588688	-2.79486026134491	"**"	"non-significant"	3080	32332
+"high"	"R. piscesae"	"not annotated"	0.245383755510279	-3.58546409096494	""	"non-significant"	5051	32332
+"low-intermediate"	"P. echinospica"	"not annotated"	NA	NA	""	"NA"	6205	41840
+"low-intermediate"	"P. palmiformis"	"not annotated"	NA	NA	""	"NA"	8562	41840
+"low-intermediate"	"R. piscesae"	"not annotated"	NA	NA	""	"NA"	11504	41840
+NA	"P. echinospica"	"not annotated"	0	2.60299557518339	"***"	"enrichment"	6205	41840
+NA	"P. palmiformis"	"not annotated"	0	2.00347607417847	"***"	"enrichment"	8562	41840
+NA	"R. piscesae"	"not annotated"	0	2.99391137336362	"***"	"enrichment"	11504	41840
+"high"	"P. echinospica"	"Secondary metabolites biosynthesis, transport and catabolism "	0.134232711348866	-0.101411863968232	""	"non-significant"	64	32332
+"high"	"P. palmiformis"	"Secondary metabolites biosynthesis, transport and catabolism "	0.0573229366867193	-0.0207810145845275	"*"	"non-significant"	73	32332
+"high"	"R. piscesae"	"Secondary metabolites biosynthesis, transport and catabolism "	0.499708087910708	-0.0548442710204114	""	"non-significant"	59	32332
+"low-intermediate"	"P. echinospica"	"Secondary metabolites biosynthesis, transport and catabolism "	NA	NA	""	"NA"	157	41840
+"low-intermediate"	"P. palmiformis"	"Secondary metabolites biosynthesis, transport and catabolism "	NA	NA	""	"NA"	147	41840
+"low-intermediate"	"R. piscesae"	"Secondary metabolites biosynthesis, transport and catabolism "	NA	NA	""	"NA"	152	41840
+NA	"P. echinospica"	"Secondary metabolites biosynthesis, transport and catabolism "	6.97320781852732e-30	0.104310128297686	"***"	"enrichment"	157	41840
+NA	"P. palmiformis"	"Secondary metabolites biosynthesis, transport and catabolism "	3.18393185052422e-16	0.0148967252828662	"***"	"enrichment"	147	41840
+NA	"R. piscesae"	"Secondary metabolites biosynthesis, transport and catabolism "	8.24111903872071e-25	0.0457957136387486	"***"	"enrichment"	152	41840
+"high"	"P. echinospica"	"Defense mechanisms "	0.22831153099723	-0.0785761162217811	""	"non-significant"	51	32332
+"high"	"P. palmiformis"	"Defense mechanisms "	6.16079975535398e-06	0.0237279442550144	"***"	"enrichment"	44	32332
+"high"	"R. piscesae"	"Defense mechanisms "	0.421216651528337	-0.0415584766788609	""	"non-significant"	40	32332
+"low-intermediate"	"P. echinospica"	"Defense mechanisms "	NA	NA	""	"NA"	123	41840
+"low-intermediate"	"P. palmiformis"	"Defense mechanisms "	NA	NA	""	"NA"	44	41840
+"low-intermediate"	"R. piscesae"	"Defense mechanisms "	NA	NA	""	"NA"	109	41840
+NA	"P. echinospica"	"Defense mechanisms "	3.63004324171829e-23	0.0808217544132251	"***"	"enrichment"	123	41840
+NA	"P. palmiformis"	"Defense mechanisms "	0.220259819803821	-0.017009211251759	""	"non-significant"	44	41840
+NA	"R. piscesae"	"Defense mechanisms "	8.12227482324664e-19	0.0347018943243755	"***"	"enrichment"	109	41840
+"high"	"P. echinospica"	"Inorganic ion transport and metabolism "	0.132232771892371	-0.16951714735209	""	"non-significant"	118	32332
+"high"	"P. palmiformis"	"Inorganic ion transport and metabolism "	0.000429682882507213	-0.186945518471023	"***"	"depletion"	104	32332
+"high"	"R. piscesae"	"Inorganic ion transport and metabolism "	0.880412183814071	-0.108585033670458	""	"non-significant"	142	32332
+"low-intermediate"	"P. echinospica"	"Inorganic ion transport and metabolism "	NA	NA	""	"NA"	273	41840
+"low-intermediate"	"P. palmiformis"	"Inorganic ion transport and metabolism "	NA	NA	""	"NA"	403	41840
+"low-intermediate"	"R. piscesae"	"Inorganic ion transport and metabolism "	NA	NA	""	"NA"	334	41840
+NA	"P. echinospica"	"Inorganic ion transport and metabolism "	1.86271556720014e-49	0.174361802426719	"***"	"enrichment"	273	41840
+NA	"P. palmiformis"	"Inorganic ion transport and metabolism "	4.09785288376905e-79	0.134010590300981	"***"	"enrichment"	403	41840
+NA	"R. piscesae"	"Inorganic ion transport and metabolism "	3.85782244692264e-50	0.0906699827512604	"***"	"enrichment"	334	41840
+"high"	"P. echinospica"	"Extracellular structures "	0.334507320173783	-0.0864806051206197	""	"non-significant"	62	32332
+"high"	"P. palmiformis"	"Extracellular structures "	0.000104361266396943	-0.0973493159408469	"***"	"depletion"	32	32332
+"high"	"R. piscesae"	"Extracellular structures "	0.886358181877825	-0.0540166991093457	""	"non-significant"	69	32332
+"low-intermediate"	"P. echinospica"	"Extracellular structures "	NA	NA	""	"NA"	141	41840
+"low-intermediate"	"P. palmiformis"	"Extracellular structures "	NA	NA	""	"NA"	173	41840
+"low-intermediate"	"R. piscesae"	"Extracellular structures "	NA	NA	""	"NA"	164	41840
+NA	"P. echinospica"	"Extracellular structures "	4.38774944911025e-25	0.0889521468436785	"***"	"enrichment"	141	41840
+NA	"P. palmiformis"	"Extracellular structures "	1.12936280363654e-40	0.0697841777718341	"***"	"enrichment"	173	41840
+NA	"R. piscesae"	"Extracellular structures "	7.47281942645e-25	0.0451046798160813	"***"	"enrichment"	164	41840
+"high"	"P. echinospica"	"Amino acid transport and metabolism "	0.00247700538600297	-0.0610575544511868	"***"	"depletion"	135	32332
+"high"	"P. palmiformis"	"Amino acid transport and metabolism "	0.197881124393174	-0.145015433426948	""	"non-significant"	129	32332
+"high"	"R. piscesae"	"Amino acid transport and metabolism "	4.51236814233094e-07	-0.00206762371008579	"***"	"depletion"	151	32332
+"low-intermediate"	"P. echinospica"	"Amino acid transport and metabolism "	NA	NA	""	"NA"	187	41840
+"low-intermediate"	"P. palmiformis"	"Amino acid transport and metabolism "	NA	NA	""	"NA"	393	41840
+"low-intermediate"	"R. piscesae"	"Amino acid transport and metabolism "	NA	NA	""	"NA"	201	41840
+NA	"P. echinospica"	"Amino acid transport and metabolism "	2.97415386577513e-19	0.0628025271317499	"***"	"enrichment"	187	41840
+NA	"P. palmiformis"	"Amino acid transport and metabolism "	5.98393860093959e-65	0.103953301449749	"***"	"enrichment"	393	41840
+NA	"R. piscesae"	"Amino acid transport and metabolism "	2.31843075907732e-14	0.00172649397244306	"***"	"enrichment"	201	41840
+"high"	"P. echinospica"	"Cell wall/membrane/envelope biogenesis "	0.00643233464744309	-0.0323570303749432	"***"	"depletion"	85	32332
+"high"	"P. palmiformis"	"Cell wall/membrane/envelope biogenesis "	4.25891622999595e-08	0.0325127845174657	"***"	"enrichment"	104	32332
+"high"	"R. piscesae"	"Cell wall/membrane/envelope biogenesis "	3.26620588175024e-07	0.0129189080854253	"***"	"enrichment"	101	32332
+"low-intermediate"	"P. echinospica"	"Cell wall/membrane/envelope biogenesis "	NA	NA	""	"NA"	112	41840
+"low-intermediate"	"P. palmiformis"	"Cell wall/membrane/envelope biogenesis "	NA	NA	""	"NA"	133	41840
+"low-intermediate"	"R. piscesae"	"Cell wall/membrane/envelope biogenesis "	NA	NA	""	"NA"	115	41840
+NA	"P. echinospica"	"Cell wall/membrane/envelope biogenesis "	7.8486030926042e-11	0.0332817666264347	"***"	"enrichment"	112	41840
+NA	"P. palmiformis"	"Cell wall/membrane/envelope biogenesis "	6.3118473978079e-07	-0.023306562688153	"***"	"depletion"	133	41840
+NA	"R. piscesae"	"Cell wall/membrane/envelope biogenesis "	3.99753650068152e-06	-0.0107874642911246	"***"	"depletion"	115	41840
+"high"	"P. echinospica"	"Carbohydrate transport and metabolism "	1.25218341645384e-10	-0.0139906629458559	"***"	"depletion"	198	32332
+"high"	"P. palmiformis"	"Carbohydrate transport and metabolism "	0.424927786481622	-0.164897810022235	""	"non-significant"	169	32332
+"high"	"R. piscesae"	"Carbohydrate transport and metabolism "	1.68977265016429e-08	-0.00703222404256649	"***"	"depletion"	203	32332
+"low-intermediate"	"P. echinospica"	"Carbohydrate transport and metabolism "	NA	NA	""	"NA"	203	41840
+"low-intermediate"	"P. palmiformis"	"Carbohydrate transport and metabolism "	NA	NA	""	"NA"	484	41840
+"low-intermediate"	"R. piscesae"	"Carbohydrate transport and metabolism "	NA	NA	""	"NA"	276	41840
+NA	"P. echinospica"	"Carbohydrate transport and metabolism "	3.19675061401212e-12	0.0143905041259184	"***"	"enrichment"	203	41840
+NA	"P. palmiformis"	"Carbohydrate transport and metabolism "	2.57274702417924e-76	0.118205844361249	"***"	"enrichment"	484	41840
+NA	"R. piscesae"	"Carbohydrate transport and metabolism "	3.1042119418196e-20	0.00587200290030369	"***"	"enrichment"	276	41840
+"high"	"P. echinospica"	"Signal transduction mechanisms "	2.04152898792205e-66	0.0548049877198017	"***"	"enrichment"	998	32332
+"high"	"P. palmiformis"	"Signal transduction mechanisms "	0.00465325998104365	-0.428682950248894	"***"	"depletion"	753	32332
+"high"	"R. piscesae"	"Signal transduction mechanisms "	4.75458903245658e-61	0.104824390178465	"***"	"enrichment"	1080	32332
+"low-intermediate"	"P. echinospica"	"Signal transduction mechanisms "	NA	NA	""	"NA"	905	41840
+"low-intermediate"	"P. palmiformis"	"Signal transduction mechanisms "	NA	NA	""	"NA"	1780	41840
+"low-intermediate"	"R. piscesae"	"Signal transduction mechanisms "	NA	NA	""	"NA"	1275	41840
+NA	"P. echinospica"	"Signal transduction mechanisms "	2.21573400565176e-41	-0.0563712673913221	"***"	"depletion"	905	41840
+NA	"P. palmiformis"	"Signal transduction mechanisms "	3.27185603458783e-245	0.307298381286016	"***"	"enrichment"	1780	41840
+NA	"R. piscesae"	"Signal transduction mechanisms "	1.32021662141591e-72	-0.0875297941909527	"***"	"depletion"	1275	41840
+"high"	"P. echinospica"	"Nucleotide transport and metabolism "	8.35493603781974e-08	0.0121734304828747	"***"	"enrichment"	85	32332
+"high"	"P. palmiformis"	"Nucleotide transport and metabolism "	9.16449587370931e-05	0.0133647463362767	"***"	"enrichment"	70	32332
+"high"	"R. piscesae"	"Nucleotide transport and metabolism "	9.51282324477082e-11	0.0318133128090434	"***"	"enrichment"	84	32332
+"low-intermediate"	"P. echinospica"	"Nucleotide transport and metabolism "	NA	NA	""	"NA"	70	41840
+"low-intermediate"	"P. palmiformis"	"Nucleotide transport and metabolism "	NA	NA	""	"NA"	100	41840
+"low-intermediate"	"R. piscesae"	"Nucleotide transport and metabolism "	NA	NA	""	"NA"	67	41840
+NA	"P. echinospica"	"Nucleotide transport and metabolism "	0.0159740018985113	-0.012521336713517	"**"	"non-significant"	70	41840
+NA	"P. palmiformis"	"Nucleotide transport and metabolism "	1.15427927944983e-06	-0.00958042514415725	"***"	"depletion"	100	41840
+NA	"R. piscesae"	"Nucleotide transport and metabolism "	0.207733050272262	-0.0265645497003809	""	"non-significant"	67	41840
+"high"	"P. echinospica"	"Cell motility "	0.0573803850414032	0.00163775271355104	"*"	"non-significant"	11	32332
+"high"	"P. palmiformis"	"Cell motility "	0.232025837951522	-3.12107126011329e-05	""	"non-significant"	12	32332
+"high"	"R. piscesae"	"Cell motility "	0.00248091448227152	0.00689591808074386	"***"	"enrichment"	14	32332
+"low-intermediate"	"P. echinospica"	"Cell motility "	NA	NA	""	"NA"	9	41840
+"low-intermediate"	"P. palmiformis"	"Cell motility "	NA	NA	""	"NA"	20	41840
+"low-intermediate"	"R. piscesae"	"Cell motility "	NA	NA	""	"NA"	9	41840
+NA	"P. echinospica"	"Cell motility "	0.975380787105002	-0.00168455828525059	""	"non-significant"	9	41840
+NA	"P. palmiformis"	"Cell motility "	0.0561095189297542	2.23731815215456e-05	"*"	"non-significant"	20	41840
+NA	"R. piscesae"	"Cell motility "	1	-0.00575818556480551	""	"non-significant"	9	41840
+"high"	"P. echinospica"	"Chromatin structure and dynamics "	1.40110273694182e-15	0.0420499208340311	"***"	"enrichment"	129	32332
+"high"	"P. palmiformis"	"Chromatin structure and dynamics "	1.34208715339398e-17	0.0750835758378364	"***"	"enrichment"	91	32332
+"high"	"R. piscesae"	"Chromatin structure and dynamics "	8.30617004820105e-18	0.0554894684041604	"***"	"enrichment"	155	32332
+"low-intermediate"	"P. echinospica"	"Chromatin structure and dynamics "	NA	NA	""	"NA"	84	41840
+"low-intermediate"	"P. palmiformis"	"Chromatin structure and dynamics "	NA	NA	""	"NA"	59	41840
+"low-intermediate"	"R. piscesae"	"Chromatin structure and dynamics "	NA	NA	""	"NA"	128	41840
+NA	"P. echinospica"	"Chromatin structure and dynamics "	0.382612226035654	-0.0432516716040179	""	"non-significant"	84	41840
+NA	"P. palmiformis"	"Chromatin structure and dynamics "	1	-0.0538231373623249	""	"non-significant"	59	41840
+NA	"R. piscesae"	"Chromatin structure and dynamics "	0.0150237349448717	-0.0463344622459758	"**"	"non-significant"	128	41840
+"high"	"P. echinospica"	"Coenzyme transport and metabolism "	7.21372110650838e-10	0.026834387317502	"***"	"enrichment"	65	32332
+"high"	"P. palmiformis"	"Coenzyme transport and metabolism "	2.82276576422691e-13	0.0532157723204903	"***"	"enrichment"	61	32332
+"high"	"R. piscesae"	"Coenzyme transport and metabolism "	1.72835404277845e-18	0.0480413212045692	"***"	"enrichment"	65	32332
+"low-intermediate"	"P. echinospica"	"Coenzyme transport and metabolism "	NA	NA	""	"NA"	37	41840
+"low-intermediate"	"P. palmiformis"	"Coenzyme transport and metabolism "	NA	NA	""	"NA"	36	41840
+"low-intermediate"	"R. piscesae"	"Coenzyme transport and metabolism "	NA	NA	""	"NA"	20	41840
+NA	"P. echinospica"	"Coenzyme transport and metabolism "	1	-0.0276012911542111	""	"non-significant"	37	41840
+NA	"P. palmiformis"	"Coenzyme transport and metabolism "	1	-0.0381473550172154	""	"non-significant"	36	41840
+NA	"R. piscesae"	"Coenzyme transport and metabolism "	0.116621065292647	-0.0401151578419701	""	"non-significant"	20	41840
+"high"	"P. echinospica"	"General function prediction only "	2.90208556508691e-124	0.383052293645861	"***"	"enrichment"	887	32332
+"high"	"P. palmiformis"	"General function prediction only "	2.01006137667731e-81	0.405438506038806	"***"	"enrichment"	788	32332
+"high"	"R. piscesae"	"General function prediction only "	1.47315857926885e-150	0.4822079863653	"***"	"enrichment"	901	32332
+"low-intermediate"	"P. echinospica"	"General function prediction only "	NA	NA	""	"NA"	489	41840
+"low-intermediate"	"P. palmiformis"	"General function prediction only "	NA	NA	""	"NA"	812	41840
+"low-intermediate"	"R. piscesae"	"General function prediction only "	NA	NA	""	"NA"	527	41840
+NA	"P. echinospica"	"General function prediction only "	0.289294850509211	-0.393999600554025	""	"non-significant"	489	41840
+NA	"P. palmiformis"	"General function prediction only "	5.01274459294322e-23	-0.290635763667317	"***"	"depletion"	812	41840
+NA	"R. piscesae"	"General function prediction only "	1	-0.402650239433107	""	"non-significant"	527	41840
+"high"	"P. echinospica"	"Transcription "	1.89417722159369e-59	0.184916293375438	"***"	"enrichment"	425	32332
+"high"	"P. palmiformis"	"Transcription "	1.91939483154362e-35	0.17621692468118	"***"	"enrichment"	375	32332
+"high"	"R. piscesae"	"Transcription "	2.68293555393358e-79	0.255148612787274	"***"	"enrichment"	470	32332
+"low-intermediate"	"P. echinospica"	"Transcription "	NA	NA	""	"NA"	233	41840
+"low-intermediate"	"P. palmiformis"	"Transcription "	NA	NA	""	"NA"	407	41840
+"low-intermediate"	"R. piscesae"	"Transcription "	NA	NA	""	"NA"	270	41840
+NA	"P. echinospica"	"Transcription "	0.964747167528279	-0.190201042871736	""	"non-significant"	233	41840
+NA	"P. palmiformis"	"Transcription "	1.33667668725135e-13	-0.126319872713123	"***"	"depletion"	407	41840
+NA	"R. piscesae"	"Transcription "	1	-0.213052568465742	""	"non-significant"	270	41840
+"high"	"P. echinospica"	"Energy production and conversion "	3.47635169220983e-26	0.0808911491520692	"***"	"enrichment"	162	32332
+"high"	"P. palmiformis"	"Energy production and conversion "	2.19117618494027e-33	0.144782239750411	"***"	"enrichment"	169	32332
+"high"	"R. piscesae"	"Energy production and conversion "	9.40818798176251e-33	0.103300684248092	"***"	"enrichment"	187	32332
+"low-intermediate"	"P. echinospica"	"Energy production and conversion "	NA	NA	""	"NA"	79	41840
+"low-intermediate"	"P. palmiformis"	"Energy production and conversion "	NA	NA	""	"NA"	103	41840
+"low-intermediate"	"R. piscesae"	"Energy production and conversion "	NA	NA	""	"NA"	105	41840
+NA	"P. echinospica"	"Energy production and conversion "	1	-0.0832029490044947	""	"non-significant"	79	41840
+NA	"P. palmiformis"	"Energy production and conversion "	1	-0.103786138190085	""	"non-significant"	103	41840
+NA	"R. piscesae"	"Energy production and conversion "	1	-0.0862574789762775	""	"non-significant"	105	41840
+"high"	"P. echinospica"	"Posttranslational modification, protein turnover, chaperones "	1.03198323042052e-103	0.328463882092998	"***"	"enrichment"	633	32332
+"high"	"P. palmiformis"	"Posttranslational modification, protein turnover, chaperones "	3.08521630249355e-96	0.447695860231208	"***"	"enrichment"	583	32332
+"high"	"R. piscesae"	"Posttranslational modification, protein turnover, chaperones "	8.59934032047026e-140	0.418764566408444	"***"	"enrichment"	641	32332
+"low-intermediate"	"P. echinospica"	"Posttranslational modification, protein turnover, chaperones "	NA	NA	""	"NA"	297	41840
+"low-intermediate"	"P. palmiformis"	"Posttranslational modification, protein turnover, chaperones "	NA	NA	""	"NA"	419	41840
+"low-intermediate"	"R. piscesae"	"Posttranslational modification, protein turnover, chaperones "	NA	NA	""	"NA"	272	41840
+NA	"P. echinospica"	"Posttranslational modification, protein turnover, chaperones "	1	-0.337851098891244	""	"non-significant"	297	41840
+NA	"P. palmiformis"	"Posttranslational modification, protein turnover, chaperones "	0.220259819803821	-0.320927653123651	""	"non-significant"	419	41840
+NA	"R. piscesae"	"Posttranslational modification, protein turnover, chaperones "	0.000395591369941921	-0.349674119255928	"***"	"depletion"	272	41840
+"high"	"P. echinospica"	"Lipid transport and metabolism "	4.92719193192112e-43	0.135116468448684	"***"	"enrichment"	231	32332
+"high"	"P. palmiformis"	"Lipid transport and metabolism "	6.42449767918216e-32	0.153027808552521	"***"	"enrichment"	228	32332
+"high"	"R. piscesae"	"Lipid transport and metabolism "	2.87353807533823e-53	0.159524993765249	"***"	"enrichment"	246	32332
+"low-intermediate"	"P. echinospica"	"Lipid transport and metabolism "	NA	NA	""	"NA"	94	41840
+"low-intermediate"	"P. palmiformis"	"Lipid transport and metabolism "	NA	NA	""	"NA"	191	41840
+"low-intermediate"	"R. piscesae"	"Lipid transport and metabolism "	NA	NA	""	"NA"	106	41840
+NA	"P. echinospica"	"Lipid transport and metabolism "	0.964747167528279	-0.138977981544915	""	"non-significant"	94	41840
+NA	"P. palmiformis"	"Lipid transport and metabolism "	0.0315189056742302	-0.109696916643484	"**"	"non-significant"	191	41840
+NA	"R. piscesae"	"Lipid transport and metabolism "	0.116621065292647	-0.133205543564935	""	"non-significant"	106	41840
+"high"	"P. echinospica"	"Cytoskeleton "	4.11840184568658e-61	0.191908131684383	"***"	"enrichment"	314	32332
+"high"	"P. palmiformis"	"Cytoskeleton "	1.43168200799104e-64	0.281209673204607	"***"	"enrichment"	321	32332
+"high"	"R. piscesae"	"Cytoskeleton "	5.60421850505155e-102	0.284110423872335	"***"	"enrichment"	388	32332
+"low-intermediate"	"P. echinospica"	"Cytoskeleton "	NA	NA	""	"NA"	120	41840
+"low-intermediate"	"P. palmiformis"	"Cytoskeleton "	NA	NA	""	"NA"	188	41840
+"low-intermediate"	"R. piscesae"	"Cytoskeleton "	NA	NA	""	"NA"	123	41840
+NA	"P. echinospica"	"Cytoskeleton "	0.205052699062571	-0.197392701939074	""	"non-significant"	120	41840
+NA	"P. palmiformis"	"Cytoskeleton "	1	-0.201583191791445	""	"non-significant"	188	41840
+NA	"R. piscesae"	"Cytoskeleton "	5.36224038216182e-08	-0.237236075370545	"***"	"depletion"	123	41840
+"high"	"P. echinospica"	"Nuclear structure "	5.10888200834312e-12	0.0338541709383101	"***"	"enrichment"	50	32332
+"high"	"P. palmiformis"	"Nuclear structure "	2.99172171347685e-12	0.0402732572723006	"***"	"enrichment"	37	32332
+"high"	"R. piscesae"	"Nuclear structure "	1.08338950051179e-16	0.0359045101317967	"***"	"enrichment"	41	32332
+"low-intermediate"	"P. echinospica"	"Nuclear structure "	NA	NA	""	"NA"	16	41840
+"low-intermediate"	"P. palmiformis"	"Nuclear structure "	NA	NA	""	"NA"	12	41840
+"low-intermediate"	"R. piscesae"	"Nuclear structure "	NA	NA	""	"NA"	5	41840
+NA	"P. echinospica"	"Nuclear structure "	0.964747167528279	-0.0348216941865217	""	"non-significant"	16	41840
+NA	"P. palmiformis"	"Nuclear structure "	0.275297887238818	-0.0288696034253468	""	"non-significant"	12	41840
+NA	"R. piscesae"	"Nuclear structure "	0.00148178917016817	-0.0299807552136732	"***"	"depletion"	5	41840
+"high"	"P. echinospica"	"Cell cycle control, cell division, chromosome partitioning "	1.40623655111824e-56	0.169000552678565	"***"	"enrichment"	232	32332
+"high"	"P. palmiformis"	"Cell cycle control, cell division, chromosome partitioning "	8.52146861555517e-45	0.181038270443678	"***"	"enrichment"	188	32332
+"high"	"R. piscesae"	"Cell cycle control, cell division, chromosome partitioning "	1.15394885915063e-81	0.212852801593676	"***"	"enrichment"	270	32332
+"low-intermediate"	"P. echinospica"	"Cell cycle control, cell division, chromosome partitioning "	NA	NA	""	"NA"	63	41840
+"low-intermediate"	"P. palmiformis"	"Cell cycle control, cell division, chromosome partitioning "	NA	NA	""	"NA"	90	41840
+"low-intermediate"	"R. piscesae"	"Cell cycle control, cell division, chromosome partitioning "	NA	NA	""	"NA"	65	41840
+NA	"P. echinospica"	"Cell cycle control, cell division, chromosome partitioning "	0.000187490267281904	-0.173830443919295	"***"	"depletion"	63	41840
+NA	"P. palmiformis"	"Cell cycle control, cell division, chromosome partitioning "	0.246016203716024	-0.129776020776804	""	"non-significant"	90	41840
+NA	"R. piscesae"	"Cell cycle control, cell division, chromosome partitioning "	2.84584655378734e-10	-0.177734989774256	"***"	"depletion"	65	41840
+"high"	"P. echinospica"	"Function unknown "	4.93662209482701e-138	0.414015895988084	"***"	"enrichment"	568	32332
+"high"	"P. palmiformis"	"Function unknown "	1.00554227811345e-130	0.543075797940283	"***"	"enrichment"	579	32332
+"high"	"R. piscesae"	"Function unknown "	2.49174715809558e-182	0.488917967916241	"***"	"enrichment"	639	32332
+"low-intermediate"	"P. echinospica"	"Function unknown "	NA	NA	""	"NA"	154	41840
+"low-intermediate"	"P. palmiformis"	"Function unknown "	NA	NA	""	"NA"	295	41840
+"low-intermediate"	"R. piscesae"	"Function unknown "	NA	NA	""	"NA"	174	41840
+NA	"P. echinospica"	"Function unknown "	8.84999427804361e-11	-0.425848116166435	"***"	"depletion"	154	41840
+NA	"P. palmiformis"	"Function unknown "	0.039235185188007	-0.38930009585351	"**"	"non-significant"	295	41840
+NA	"R. piscesae"	"Function unknown "	5.93417402322609e-19	-0.408253165461858	"***"	"depletion"	174	41840
+"high"	"P. echinospica"	"Intracellular trafficking, secretion, and vesicular transport "	1.75921002019615e-112	0.337116400079101	"***"	"enrichment"	460	32332
+"high"	"P. palmiformis"	"Intracellular trafficking, secretion, and vesicular transport "	1.61774044694853e-95	0.383983357795454	"***"	"enrichment"	391	32332
+"high"	"R. piscesae"	"Intracellular trafficking, secretion, and vesicular transport "	7.64485463658275e-141	0.363734596325062	"***"	"enrichment"	456	32332
+"low-intermediate"	"P. echinospica"	"Intracellular trafficking, secretion, and vesicular transport "	NA	NA	""	"NA"	123	41840
+"low-intermediate"	"P. palmiformis"	"Intracellular trafficking, secretion, and vesicular transport "	NA	NA	""	"NA"	178	41840
+"low-intermediate"	"R. piscesae"	"Intracellular trafficking, secretion, and vesicular transport "	NA	NA	""	"NA"	104	41840
+NA	"P. echinospica"	"Intracellular trafficking, secretion, and vesicular transport "	3.93206987116174e-09	-0.346750898440447	"***"	"depletion"	123	41840
+NA	"P. palmiformis"	"Intracellular trafficking, secretion, and vesicular transport "	0.00439640380461547	-0.27525579037562	"***"	"depletion"	178	41840
+NA	"R. piscesae"	"Intracellular trafficking, secretion, and vesicular transport "	9.63082856990777e-19	-0.303723344369167	"***"	"depletion"	104	41840
+"high"	"P. echinospica"	"RNA processing and modification "	2.08790561567789e-86	0.25004628663675	"***"	"enrichment"	318	32332
+"high"	"P. palmiformis"	"RNA processing and modification "	6.70257339637506e-90	0.327860112529213	"***"	"enrichment"	302	32332
+"high"	"R. piscesae"	"RNA processing and modification "	1.53511751092145e-117	0.286776464000179	"***"	"enrichment"	342	32332
+"low-intermediate"	"P. echinospica"	"RNA processing and modification "	NA	NA	""	"NA"	69	41840
+"low-intermediate"	"P. palmiformis"	"RNA processing and modification "	NA	NA	""	"NA"	99	41840
+"low-intermediate"	"R. piscesae"	"RNA processing and modification "	NA	NA	""	"NA"	59	41840
+NA	"P. echinospica"	"RNA processing and modification "	6.15307620421371e-10	-0.25719239563144	"***"	"depletion"	69	41840
+NA	"P. palmiformis"	"RNA processing and modification "	9.50902513253542e-08	-0.235024233667287	"***"	"depletion"	99	41840
+NA	"R. piscesae"	"RNA processing and modification "	1.80783500469203e-20	-0.239462255206151	"***"	"depletion"	59	41840
+"high"	"P. echinospica"	"Replication, recombination and repair "	1.01998279510339e-56	0.162719843837347	"***"	"enrichment"	206	32332
+"high"	"P. palmiformis"	"Replication, recombination and repair "	3.35579091883896e-56	0.202718366351431	"***"	"enrichment"	186	32332
+"high"	"R. piscesae"	"Replication, recombination and repair "	4.96517584370793e-82	0.20885314773483	"***"	"enrichment"	259	32332
+"low-intermediate"	"P. echinospica"	"Replication, recombination and repair "	NA	NA	""	"NA"	44	41840
+"low-intermediate"	"P. palmiformis"	"Replication, recombination and repair "	NA	NA	""	"NA"	60	41840
+"low-intermediate"	"R. piscesae"	"Replication, recombination and repair "	NA	NA	""	"NA"	56	41840
+NA	"P. echinospica"	"Replication, recombination and repair "	9.17506808861442e-07	-0.167370237791606	"***"	"depletion"	44	41840
+NA	"P. palmiformis"	"Replication, recombination and repair "	4.6767186979117e-05	-0.145317246231911	"***"	"depletion"	60	41840
+NA	"R. piscesae"	"Replication, recombination and repair "	1.13885922091103e-11	-0.174395224300745	"***"	"depletion"	56	41840
+"high"	"P. echinospica"	"Translation, ribosomal structure and biogenesis "	1.46068288476973e-98	0.265460290906898	"***"	"enrichment"	305	32332
+"high"	"P. palmiformis"	"Translation, ribosomal structure and biogenesis "	1.08563039591782e-108	0.353338516693806	"***"	"enrichment"	298	32332
+"high"	"R. piscesae"	"Translation, ribosomal structure and biogenesis "	3.36792268114554e-127	0.293488345285779	"***"	"enrichment"	336	32332
+"low-intermediate"	"P. echinospica"	"Translation, ribosomal structure and biogenesis "	NA	NA	""	"NA"	42	41840
+"low-intermediate"	"P. palmiformis"	"Translation, ribosomal structure and biogenesis "	NA	NA	""	"NA"	61	41840
+"low-intermediate"	"R. piscesae"	"Translation, ribosomal structure and biogenesis "	NA	NA	""	"NA"	42	41840
+NA	"P. echinospica"	"Translation, ribosomal structure and biogenesis "	8.62772355014568e-18	-0.273046918959242	"***"	"depletion"	42	41840
+NA	"P. palmiformis"	"Translation, ribosomal structure and biogenesis "	1.97548490287909e-17	-0.253288249889497	"***"	"depletion"	61	41840
+NA	"R. piscesae"	"Translation, ribosomal structure and biogenesis "	2.38566262540032e-27	-0.24506676753923	"***"	"depletion"	42	41840

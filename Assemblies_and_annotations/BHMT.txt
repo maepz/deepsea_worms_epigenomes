@@ -1,0 +1,7 @@
+		S-methyl_trans
+		PF02574
+Pec	PE_Scaf12331_0.15	present
+	pe4_TRINITY_DN818_c0_g1_i1	present
+R07	NP493_445g01015	present
+			
+Human	Q9H2M3	present

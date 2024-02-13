@@ -1,0 +1,20 @@
+assembly	evidence type	source type	species	assembly source	# of sequences	busco score	reference	associated raw reads	bioproject	biosamples
+R07B-5	transcriptome [a]	assembeled transcriptome	Ridgeia piscesae	this study	37120	23.5%[S:17.3%,D:6.2%],F:18.7%	this study			SAMN26521182
+R07B-5	transcriptome [b]	assembeled transcriptome	Ridgeia piscesae	this study	42586	14.2%[S:13.4%,D:0.8%],F:23.9%	this study			SAMN26521182
+R07B-5	transcriptome [f]	assembeled transcriptome	Ridgeia piscesae	https://www.ncbi.nlm.nih.gov/biosample/SAMN00153321 	515	1.7%[S:1.7%,D:0.0%],F:0.5%	Xu 2007 (unpublished)	https://www.ncbi.nlm.nih.gov/biosample/SAMN00153321/		SAMN00153321
+R07B-5	proteome [a,c]	translated transcriptome	Ridgeia piscesae	pers. com.	33069	36.8%[S:32.6%,D:4.2%],F:24.4%	Li et al 2017	SRR346554		SAMN00726688
+R07B-5	proteome [a,c]	translated transcriptome	Lamellibrachia luymesi	pers. com.	40745	94.0%[S:91.5%,D:2.5%],F:4.5	Li et al 2017,2019	"SRR3556248,
+SRR346554,
+SRR8519110–SRR8519119"	PRJNA322163	SAMN05013708
+R07B-5	proteome [a,c]	translated transcriptome	Escarpia spicata 	pers. com.	5836	25.9%[S:21.9%,D:4.0%],F:15.6%	Li et al 2017	SRR3554587	PRJNA322163	SAMN05013691
+R07B-5	proteome [a,c]	translated transcriptome	Riftia pachyptila	pers. com.	36261	47.6%[S:42.9%,D:4.7%],F:27.6%	Li et al 2017			"SAMN00726684, SAMN00726685"
+	proteome [a,c]	translated transcriptome	Riftia pachyptila	pers. com.	67092	96.8%[S:87.4%,D:9.4%],F:1.5%	Hinzke et al 2019			
+	proteome [b,c]	translated transcriptome	Riftia pachyptila	https://phaidra.univie.ac.at/o:1220863	40165	94.2%[S:60.8%,D:33.4%],F:3.8%	de Oliveira et al 2021		PRJNA754493	SRS9777048-SRS9777056
+R07B-5	proteome [d]	translated gene models	Parascarpia echinospica	https://figshare.com/articles/online_resource/Genome_assembly_and_annotation/15050478 	22641	81.4%[S:79.4%,D:2.0%],F:7.0%	Sun et al 2021		PRJNA472657	
+	transcriptome [a]	assembeled transcriptome	Paralvinella palmiformis	this study	69527	95.8%[S:57.9%,D:37.9%],F:2.8%	Stiller et al 2020	SRR11434460	PRJNA611902	SAMN14351933
+	transcriptome [b]	assembeled transcriptome	Paralvinella palmiformis	this study	116679	94.2%[S:52.6%,D:41.6%],F:3.1%	Stiller et al 2020	SRR11434460	PRJNA611902	SAMN14351933
+P08H-3	proteome [b,c,e]	translated transcriptome assembly	Paralvinella palmiformis	this study	19602	87.0%[S:84.4%,D:2.6%],F:3.8%	Stiller et al 2020	SRR11434460	PRJNA611902	SAMN14351933
+P08H-3	proteome [a]	translated transcriptome	Alvinella pompejana	NCBI Alvninella cDNA: https://www.ncbi.nlm.nih.gov/nuccore/?term=%22Alvinella+pompejana%22%5Bporgn%5D+AND+biomol_mrna%5BPROP%5D+AND+is_est%5Bfilter%5D 	218454	53.9%[S:12.7%,D:41.2%],F:26.4%	Ganiere et al 2010	FP489021-FP565142, GO96401-GO238734		"SAMN00169595, SAMN00167295"
+P08H-3	proteome [a]	translated transcriptome	Paralvinella hessleri 		22289	91.2%[S:81.2%,D:10.0%],F:5.3%	Wang et al (unpublished)			
+P08H-3	proteome [a,c,e]	translated transcriptome assembly	Paralvinella grasslei	this study	20331	76.4%[S:75.4%,D:1.0%],F:12.5%	Stiller et al 2020	SRR3665377	PRJNA325100	SAMN05223276
+P08H-3	proteome [a,c,e]	translated transcriptome assembly	Paralvinella grasslei	this study	13657	35.0%[S:34.8%,D:0.2%],F:21.6%	Stiller et al 2020	SRR3665378	PRJNA325100	SAMN05223277

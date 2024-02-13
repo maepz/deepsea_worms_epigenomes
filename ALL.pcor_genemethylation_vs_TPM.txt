@@ -1,0 +1,10 @@
+genome	ctrl	n	estimate	p.value
+P. echinospica	CDS length	21252	0.360224259504179	0
+P. echinospica	gene GC%	21252	0.32522943281075	0
+P. echinospica	gene GC% + CDS length	21252	0.301181921587459	0
+R. piscesae	CDS length	30090	0.194893919233668	2.38719474865667e-255
+R. piscesae	gene GC%	30090	0.191730314469965	4.85604330173772e-247
+R. piscesae	gene GC% + CDS length	30090	0.162254951548611	1.42205016461256e-176
+P. palmiformis	CDS length	24552	0.391834114433265	0
+P. palmiformis	gene GC%	24552	0.308589497206969	0
+P. palmiformis	gene GC% + CDS length	24552	0.301448776015774	0

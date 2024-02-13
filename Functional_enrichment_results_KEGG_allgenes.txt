@@ -1,0 +1,131 @@
+"categories"	"comp"	"pvalue"	"diff"	"symbol"	"sign"	"genome"	"diff2"
+"Aging"	"Unmethylated promoter"	0.0174168011885792	-0.00846431649361833	"**"	"depletion"	"P. echinospica"	NA
+"Amino acid metabolism"	"Unmethylated promoter"	0.0112848495611629	-0.0759223540033653	"**"	"depletion"	"P. echinospica"	NA
+"Carbohydrate metabolism"	"Unmethylated promoter"	0.00515330974976218	-0.0936204703082035	"***"	"depletion"	"P. echinospica"	NA
+"Cell growth and death"	"Unmethylated promoter"	3.52565272313778e-06	-0.0379611770016823	"***"	"depletion"	"P. echinospica"	NA
+"Circulatory system"	"Unmethylated promoter"	0.00752313004012392	0.00666885541921458	"***"	"enrichment"	"P. echinospica"	-0.00666885541921458
+"Endocrine system"	"Unmethylated promoter"	0.00224460031031522	-0.169286329872368	"***"	"depletion"	"P. echinospica"	NA
+"Energy metabolism"	"Unmethylated promoter"	2.2496664629501e-09	0.139532974925104	"***"	"enrichment"	"P. echinospica"	-0.139532974925104
+"Environmental adaptation"	"Unmethylated promoter"	3.05449408727598e-05	0.0361657159272787	"***"	"enrichment"	"P. echinospica"	-0.0361657159272787
+"Excretory system"	"Unmethylated promoter"	0.0234124483263087	-0.00564287766241225	"**"	"depletion"	"P. echinospica"	NA
+"Folding, sorting and degradation"	"Unmethylated promoter"	1.42717198274606e-22	0.354475314975172	"***"	"enrichment"	"P. echinospica"	-0.354475314975172
+"Glycan biosynthesis and metabolism"	"Unmethylated promoter"	1.28880616462931e-05	0.0392436491976855	"***"	"enrichment"	"P. echinospica"	-0.0392436491976855
+"Immune system"	"Unmethylated promoter"	2.17310921589065e-06	-0.00846431649361851	"***"	"depletion"	"P. echinospica"	NA
+"Lipid metabolism"	"Unmethylated promoter"	0.000256634195588605	-0.0297533549472647	"***"	"depletion"	"P. echinospica"	NA
+"Metabolism of cofactors and vitamins"	"Unmethylated promoter"	3.80554388383813e-05	0.0428345713464933	"***"	"enrichment"	"P. echinospica"	-0.0428345713464933
+"Metabolism of other amino acids"	"Unmethylated promoter"	0.00890500763373702	0.00564287766241234	"***"	"enrichment"	"P. echinospica"	-0.00564287766241234
+"Nervous system"	"Unmethylated promoter"	5.45890233881639e-05	0.0159026552304346	"***"	"enrichment"	"P. echinospica"	-0.0159026552304346
+"Replication and repair"	"Unmethylated promoter"	1.93399092709836e-05	0.0448865268600976	"***"	"enrichment"	"P. echinospica"	-0.0448865268600976
+"Signal transduction"	"Unmethylated promoter"	3.68844043312798e-10	-0.155692124594738	"***"	"depletion"	"P. echinospica"	NA
+"Transcription"	"Unmethylated promoter"	1.13588386003581e-09	0.138506997168301	"***"	"enrichment"	"P. echinospica"	-0.138506997168301
+"Translation"	"Unmethylated promoter"	3.30990827031801e-16	0.21571182336767	"***"	"enrichment"	"P. echinospica"	-0.21571182336767
+"Transport and catabolism"	"Unmethylated promoter"	2.49816262625398e-18	0.222124184347684	"***"	"enrichment"	"P. echinospica"	-0.222124184347684
+"Xenobiotics biodegradation and metabolism"	"Unmethylated promoter"	0.0266851031546934	0.00153896663520336	"**"	"enrichment"	"P. echinospica"	-0.00153896663520336
+"Aging"	"Methylated promoter"	0.0115222170575816	0.00791837831612087	"**"	"enrichment"	"P. echinospica"	0.00791837831612087
+"Amino acid metabolism"	"Methylated promoter"	2.6920567125333e-07	0.0710254539870234	"***"	"enrichment"	"P. echinospica"	0.0710254539870234
+"Carbohydrate metabolism"	"Methylated promoter"	6.08721833070843e-09	0.087582063193458	"***"	"enrichment"	"P. echinospica"	0.087582063193458
+"Cell growth and death"	"Methylated promoter"	3.13748447733331e-09	0.035512726993512	"***"	"enrichment"	"P. echinospica"	0.035512726993512
+"Cell motility"	"Methylated promoter"	0.00120088183743798	0.0386320881483472	"***"	"enrichment"	"P. echinospica"	0.0386320881483472
+"Cellular community - eukaryotes"	"Methylated promoter"	1.27447755656448e-12	0.168685453219181	"***"	"enrichment"	"P. echinospica"	0.168685453219181
+"Circulatory system"	"Methylated promoter"	0.0246535600238954	-0.00623872230967092	"**"	"depletion"	"P. echinospica"	NA
+"Development and regeneration"	"Methylated promoter"	2.33832905352355e-08	0.106058279264407	"***"	"enrichment"	"P. echinospica"	0.106058279264407
+"Digestive system"	"Methylated promoter"	1.93538020751634e-06	0.0835028986063655	"***"	"enrichment"	"P. echinospica"	0.0835028986063655
+"Endocrine system"	"Methylated promoter"	9.05358662544449e-15	0.158367566322417	"***"	"enrichment"	"P. echinospica"	0.158367566322417
+"Environmental adaptation"	"Methylated promoter"	0.00726934548717217	-0.033833070987062	"***"	"depletion"	"P. echinospica"	NA
+"Excretory system"	"Methylated promoter"	0.0227173046160647	0.00527891887741388	"**"	"enrichment"	"P. echinospica"	0.00527891887741388
+"Glycan biosynthesis and metabolism"	"Methylated promoter"	0.00355717804509411	-0.0367124812838331	"***"	"depletion"	"P. echinospica"	NA
+"Immune system"	"Methylated promoter"	2.01357167422619e-07	0.00791837831612061	"***"	"enrichment"	"P. echinospica"	0.00791837831612061
+"Lipid metabolism"	"Methylated promoter"	3.22398757511297e-06	0.0278342995354553	"***"	"enrichment"	"P. echinospica"	0.0278342995354553
+"Metabolism of cofactors and vitamins"	"Methylated promoter"	0.0220824552129262	-0.0400717932967328	"**"	"depletion"	"P. echinospica"	NA
+"Metabolism of other amino acids"	"Methylated promoter"	0.03348998522363	-0.00527891887741388	"**"	"depletion"	"P. echinospica"	NA
+"Nervous system"	"Methylated promoter"	0.000504574695138292	-0.0148769531999847	"***"	"depletion"	"P. echinospica"	NA
+"Nucleotide metabolism"	"Methylated promoter"	3.20752965696173e-05	0.0635869773870311	"***"	"enrichment"	"P. echinospica"	0.0635869773870311
+"Replication and repair"	"Methylated promoter"	0.0133716561921856	-0.0419914001612469	"**"	"depletion"	"P. echinospica"	NA
+"Sensory system"	"Methylated promoter"	2.40660870077257e-06	0.0873421123353937	"***"	"enrichment"	"P. echinospica"	0.0873421123353937
+"Signal transduction"	"Methylated promoter"	2.6632717286717e-23	0.145650170845011	"***"	"enrichment"	"P. echinospica"	0.145650170845011
+"Signaling molecules and interaction"	"Methylated promoter"	4.51494161969454e-06	0.0868622106192652	"***"	"enrichment"	"P. echinospica"	0.0868622106192652
+"Translation"	"Methylated promoter"	0.000722699172638575	-0.20179867163205	"***"	"depletion"	"P. echinospica"	NA
+"Transport and catabolism"	"Methylated promoter"	4.51494161969454e-06	-0.207797443083656	"***"	"depletion"	"P. echinospica"	NA
+"Aging"	"Unmethylated promoter"	7.50857809611593e-05	0.0169725277104683	"***"	"enrichment"	"R. piscesae"	-0.0169725277104683
+"Amino acid metabolism"	"Unmethylated promoter"	7.58911798566066e-07	0.00251560451170248	"***"	"enrichment"	"R. piscesae"	-0.00251560451170248
+"Carbohydrate metabolism"	"Unmethylated promoter"	2.0304555498549e-06	-0.0407771376493686	"***"	"depletion"	"R. piscesae"	NA
+"Cell growth and death"	"Unmethylated promoter"	1.98353631538902e-10	-0.0124422548212176	"***"	"depletion"	"R. piscesae"	NA
+"Cell motility"	"Unmethylated promoter"	1.05669908135641e-05	0.0476060987803922	"***"	"enrichment"	"R. piscesae"	-0.0476060987803922
+"Cellular community - eukaryotes"	"Unmethylated promoter"	0.000103404568928952	-0.0676872395102841	"***"	"depletion"	"R. piscesae"	NA
+"Circulatory system"	"Unmethylated promoter"	3.79076836701679e-05	0.0268071056464163	"***"	"enrichment"	"R. piscesae"	-0.0268071056464163
+"Development and regeneration"	"Unmethylated promoter"	0.00128061537632965	-0.0541291923653275	"***"	"depletion"	"R. piscesae"	NA
+"Digestive system"	"Unmethylated promoter"	0.0110520215332664	-0.059277442541572	"**"	"depletion"	"R. piscesae"	NA
+"Endocrine system"	"Unmethylated promoter"	5.91885171254914e-06	-0.149856370998607	"***"	"depletion"	"R. piscesae"	NA
+"Energy metabolism"	"Unmethylated promoter"	3.99192551146259e-19	0.208604787529343	"***"	"enrichment"	"R. piscesae"	-0.208604787529343
+"Environmental adaptation"	"Unmethylated promoter"	1.4102901127202e-12	0.111555824143327	"***"	"enrichment"	"R. piscesae"	-0.111555824143327
+"Excretory system"	"Unmethylated promoter"	7.47866336222323e-08	0.0741182607216524	"***"	"enrichment"	"R. piscesae"	-0.0741182607216524
+"Folding, sorting and degradation"	"Unmethylated promoter"	1.25107018671628e-20	0.154603560157787	"***"	"enrichment"	"R. piscesae"	-0.154603560157787
+"Glycan biosynthesis and metabolism"	"Unmethylated promoter"	3.89860696834227e-07	0.023879516276718	"***"	"enrichment"	"R. piscesae"	-0.023879516276718
+"Immune system"	"Unmethylated promoter"	6.62533300370768e-09	-0.0289528601151449	"***"	"depletion"	"R. piscesae"	NA
+"Lipid metabolism"	"Unmethylated promoter"	2.21255152750313e-05	-0.0404431802265995	"***"	"depletion"	"R. piscesae"	NA
+"Metabolism of cofactors and vitamins"	"Unmethylated promoter"	7.62156457228699e-07	0.03727058471029	"***"	"enrichment"	"R. piscesae"	-0.03727058471029
+"Metabolism of other amino acids"	"Unmethylated promoter"	0.0302052619360373	-0.0316994258351179	"**"	"depletion"	"R. piscesae"	NA
+"Nervous system"	"Unmethylated promoter"	2.686930018453e-08	0.0229806402229088	"***"	"enrichment"	"R. piscesae"	-0.0229806402229088
+"Nucleotide metabolism"	"Unmethylated promoter"	0.000326964492266533	0.00448033533070567	"***"	"enrichment"	"R. piscesae"	-0.00448033533070567
+"Replication and repair"	"Unmethylated promoter"	0.00508405888618737	-0.0796784957558926	"***"	"depletion"	"R. piscesae"	NA
+"Signal transduction"	"Unmethylated promoter"	6.58338565054215e-15	-0.221473072146897	"***"	"depletion"	"R. piscesae"	NA
+"Transcription"	"Unmethylated promoter"	5.41159185175102e-11	0.0833489063089474	"***"	"enrichment"	"R. piscesae"	-0.0833489063089474
+"Translation"	"Unmethylated promoter"	1.21300234038897e-15	0.0563607770128056	"***"	"enrichment"	"R. piscesae"	-0.0563607770128056
+"Transport and catabolism"	"Unmethylated promoter"	1.02698722611221e-17	0.0309394386160115	"***"	"enrichment"	"R. piscesae"	-0.0309394386160115
+"Xenobiotics biodegradation and metabolism"	"Unmethylated promoter"	0.00165448811802639	0.0140839520583833	"***"	"enrichment"	"R. piscesae"	-0.0140839520583833
+"Amino acid metabolism"	"Methylated promoter"	0.00128923547772085	-0.00275954396926729	"***"	"depletion"	"R. piscesae"	NA
+"Carbohydrate metabolism"	"Methylated promoter"	6.94275938898823e-06	0.0447313175663513	"***"	"enrichment"	"R. piscesae"	0.0447313175663513
+"Cell growth and death"	"Methylated promoter"	8.56145066796121e-07	0.0136487866420405	"***"	"enrichment"	"R. piscesae"	0.0136487866420405
+"Cellular community - eukaryotes"	"Methylated promoter"	1.08762206821434e-06	0.0742509057835025	"***"	"enrichment"	"R. piscesae"	0.0742509057835025
+"Development and regeneration"	"Methylated promoter"	3.89106729754429e-05	0.0593781278647709	"***"	"enrichment"	"R. piscesae"	0.0593781278647709
+"Digestive system"	"Methylated promoter"	6.35277309576836e-05	0.0650256064966649	"***"	"enrichment"	"R. piscesae"	0.0650256064966649
+"Endocrine system"	"Methylated promoter"	5.73164904785949e-13	0.164388020025319	"***"	"enrichment"	"R. piscesae"	0.164388020025319
+"Folding, sorting and degradation"	"Methylated promoter"	0.00268512763970337	-0.169595546547969	"***"	"depletion"	"R. piscesae"	NA
+"Glycan biosynthesis and metabolism"	"Methylated promoter"	0.0128511443372336	-0.0261951251971032	"**"	"depletion"	"R. piscesae"	NA
+"Immune system"	"Methylated promoter"	8.56145066796121e-07	0.0317604337852474	"***"	"enrichment"	"R. piscesae"	0.0317604337852474
+"Lipid metabolism"	"Methylated promoter"	2.39270272369063e-05	0.0443649761212996	"***"	"enrichment"	"R. piscesae"	0.0443649761212996
+"Metabolism of other amino acids"	"Methylated promoter"	0.00488598063569602	0.0347733353894104	"***"	"enrichment"	"R. piscesae"	0.0347733353894104
+"Nervous system"	"Methylated promoter"	0.00292353900180175	-0.0252090846721044	"***"	"depletion"	"R. piscesae"	NA
+"Replication and repair"	"Methylated promoter"	2.04538273473959e-06	0.0874049602871322	"***"	"enrichment"	"R. piscesae"	0.0874049602871322
+"Sensory system"	"Methylated promoter"	9.34953807380311e-05	0.0755176939579802	"***"	"enrichment"	"R. piscesae"	0.0755176939579802
+"Signal transduction"	"Methylated promoter"	4.97997955144929e-24	0.242949429353868	"***"	"enrichment"	"R. piscesae"	0.242949429353868
+"Signaling molecules and interaction"	"Methylated promoter"	0.000311787811519481	0.0667717199263503	"***"	"enrichment"	"R. piscesae"	0.0667717199263503
+"Translation"	"Methylated promoter"	7.21725728286032e-06	-0.0618261104181537	"***"	"depletion"	"R. piscesae"	NA
+"Transport and catabolism"	"Methylated promoter"	1.25128993080795e-08	-0.0339396518205314	"***"	"depletion"	"R. piscesae"	NA
+"Aging"	"Unmethylated promoter"	2.68136358845604e-06	-0.00146590545358214	"***"	"depletion"	"P. palmiformis"	NA
+"Amino acid metabolism"	"Unmethylated promoter"	9.01308885918065e-07	-0.0853214460473208	"***"	"depletion"	"P. palmiformis"	NA
+"Carbohydrate metabolism"	"Unmethylated promoter"	6.65125095582453e-18	0.0642813913017883	"***"	"enrichment"	"P. palmiformis"	-0.0642813913017883
+"Cell growth and death"	"Unmethylated promoter"	1.04691682133314e-13	-0.0769801565839966	"***"	"depletion"	"P. palmiformis"	NA
+"Cell motility"	"Unmethylated promoter"	0.00746565313437661	-0.038791882355971	"***"	"depletion"	"P. palmiformis"	NA
+"Cellular community - eukaryotes"	"Unmethylated promoter"	8.3155768697098e-11	0.0120779112077498	"***"	"enrichment"	"P. palmiformis"	-0.0120779112077498
+"Circulatory system"	"Unmethylated promoter"	5.871579148645e-08	0.0349920254743325	"***"	"enrichment"	"P. palmiformis"	-0.0349920254743325
+"Development and regeneration"	"Unmethylated promoter"	1.16618747868364e-05	-0.0498982719101702	"***"	"depletion"	"P. palmiformis"	NA
+"Digestive system"	"Unmethylated promoter"	0.0157385449524836	-0.0899261137662204	"**"	"depletion"	"P. palmiformis"	NA
+"Endocrine system"	"Unmethylated promoter"	1.73052175349252e-16	0.0102785841215879	"***"	"enrichment"	"P. palmiformis"	-0.0102785841215879
+"Energy metabolism"	"Unmethylated promoter"	1.9284022096226e-14	0.0762213349374364	"***"	"enrichment"	"P. palmiformis"	-0.0762213349374364
+"Environmental adaptation"	"Unmethylated promoter"	1.15431194218458e-21	0.134995520652826	"***"	"enrichment"	"P. palmiformis"	-0.134995520652826
+"Excretory system"	"Unmethylated promoter"	0.000120377219161211	-0.00300079469321536	"***"	"depletion"	"P. palmiformis"	NA
+"Folding, sorting and degradation"	"Unmethylated promoter"	1.68342829130908e-19	-0.0529623017405986	"***"	"depletion"	"P. palmiformis"	NA
+"Glycan biosynthesis and metabolism"	"Unmethylated promoter"	4.49038979792464e-10	0.00684089211671693	"***"	"enrichment"	"P. palmiformis"	-0.00684089211671693
+"Immune system"	"Unmethylated promoter"	2.56950034485782e-12	-0.0469607123541681	"***"	"depletion"	"P. palmiformis"	NA
+"Lipid metabolism"	"Unmethylated promoter"	1.46885711463225e-14	0.0380962958466242	"***"	"enrichment"	"P. palmiformis"	-0.0380962958466242
+"Metabolism of cofactors and vitamins"	"Unmethylated promoter"	4.95292788151662e-06	-0.0502316935427497	"***"	"depletion"	"P. palmiformis"	NA
+"Metabolism of other amino acids"	"Unmethylated promoter"	1.0790262849492e-05	0.00780666512142994	"***"	"enrichment"	"P. palmiformis"	-0.00780666512142994
+"Nervous system"	"Unmethylated promoter"	1.68642278482156e-16	0.0627465020621554	"***"	"enrichment"	"P. palmiformis"	-0.0627465020621554
+"Nucleotide metabolism"	"Unmethylated promoter"	0.000157064258317419	-0.0173436735429704	"***"	"depletion"	"P. palmiformis"	NA
+"Replication and repair"	"Unmethylated promoter"	0.00188949041278525	-0.142227320890498	"***"	"depletion"	"P. palmiformis"	NA
+"Sensory system"	"Unmethylated promoter"	0.0114996320261327	-0.012807989610122	"**"	"depletion"	"P. palmiformis"	NA
+"Signal transduction"	"Unmethylated promoter"	3.74681128246035e-38	0.076962910637484	"***"	"enrichment"	"P. palmiformis"	-0.076962910637484
+"Signaling molecules and interaction"	"Unmethylated promoter"	8.38827918893819e-05	0.029220382041405	"***"	"enrichment"	"P. palmiformis"	-0.029220382041405
+"Transcription"	"Unmethylated promoter"	7.61987139226317e-10	-0.0304505928926464	"***"	"depletion"	"P. palmiformis"	NA
+"Translation"	"Unmethylated promoter"	3.94789945846815e-27	0.0711222834185059	"***"	"enrichment"	"P. palmiformis"	-0.0711222834185059
+"Transport and catabolism"	"Unmethylated promoter"	6.09398123315424e-32	0.0615507831039398	"***"	"enrichment"	"P. palmiformis"	-0.0615507831039398
+"Xenobiotics biodegradation and metabolism"	"Unmethylated promoter"	3.68497038155419e-05	0.0111753733402501	"***"	"enrichment"	"P. palmiformis"	-0.0111753733402501
+"Amino acid metabolism"	"Methylated promoter"	0.00135608057686031	0.135756088329449	"***"	"enrichment"	"P. palmiformis"	0.135756088329449
+"Cell growth and death"	"Methylated promoter"	0.000705055942525795	0.122484151652045	"***"	"enrichment"	"P. palmiformis"	0.122484151652045
+"Development and regeneration"	"Methylated promoter"	0.0384340272284255	0.0793938045209283	"**"	"enrichment"	"P. palmiformis"	0.0793938045209283
+"Digestive system"	"Methylated promoter"	0.00059813476538303	0.143082636419456	"***"	"enrichment"	"P. palmiformis"	0.143082636419456
+"Folding, sorting and degradation"	"Methylated promoter"	0.00109359150309762	0.0842690231625934	"***"	"enrichment"	"P. palmiformis"	0.0842690231625934
+"Immune system"	"Methylated promoter"	0.0103878954678711	0.0747198144160672	"**"	"enrichment"	"P. palmiformis"	0.0747198144160672
+"Metabolism of cofactors and vitamins"	"Methylated promoter"	0.0366475793047274	0.0799243161179576	"**"	"enrichment"	"P. palmiformis"	0.0799243161179576
+"Replication and repair"	"Methylated promoter"	3.14782332562267e-06	0.226299783139665	"***"	"enrichment"	"P. palmiformis"	0.226299783139665

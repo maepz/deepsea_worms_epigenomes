@@ -1,0 +1,127 @@
+"categories"	"comp"	"pvalue"	"diff"	"symbol"	"sign"	"genome"	"diff2"
+"Amino acid transport and metabolism "	"Unmethylated promoter"	0.0236790431730882	-0.0525581054427209	"**"	"depletion"	"P. echinospica"	NA
+"Carbohydrate transport and metabolism "	"Unmethylated promoter"	2.08511101488471e-06	0.00255432947740639	"***"	"enrichment"	"P. echinospica"	-0.00255432947740639
+"Cell cycle control, cell division, chromosome partitioning "	"Unmethylated promoter"	4.23297718119305e-06	-0.0242938944862022	"***"	"depletion"	"P. echinospica"	NA
+"Cell wall/membrane/envelope biogenesis "	"Unmethylated promoter"	1.31580523146978e-05	0.022350382927306	"***"	"enrichment"	"P. echinospica"	-0.022350382927306
+"Chromatin structure and dynamics "	"Unmethylated promoter"	0.000196785855516015	-0.0146596300442455	"***"	"depletion"	"P. echinospica"	NA
+"Coenzyme transport and metabolism "	"Unmethylated promoter"	0.00135832173406516	0.0117998916075839	"***"	"enrichment"	"P. echinospica"	-0.0117998916075839
+"Cytoskeleton "	"Unmethylated promoter"	0.014456391964032	-0.203374602413064	"**"	"depletion"	"P. echinospica"	NA
+"Energy production and conversion "	"Unmethylated promoter"	1.99207270497251e-10	0.0818773655312116	"***"	"enrichment"	"P. echinospica"	-0.0818773655312116
+"Function unknown "	"Unmethylated promoter"	8.91386093302204e-24	0.129687749880058	"***"	"enrichment"	"P. echinospica"	-0.129687749880058
+"General function prediction only "	"Unmethylated promoter"	2.2151964527508e-31	0.0593326314480155	"***"	"enrichment"	"P. echinospica"	-0.0593326314480155
+"Intracellular trafficking, secretion, and vesicular transport "	"Unmethylated promoter"	1.88300673501982e-22	0.153148710841018	"***"	"enrichment"	"P. echinospica"	-0.153148710841018
+"Lipid transport and metabolism "	"Unmethylated promoter"	0.000560760536977278	-0.0670511487819181	"***"	"depletion"	"P. echinospica"	NA
+"Nucleotide transport and metabolism "	"Unmethylated promoter"	0.0251971811687331	-0.0236553121168506	"**"	"depletion"	"P. echinospica"	NA
+"Posttranslational modification, protein turnover, chaperones "	"Unmethylated promoter"	7.58110005694438e-35	0.263206993976224	"***"	"enrichment"	"P. echinospica"	-0.263206993976224
+"Replication, recombination and repair "	"Unmethylated promoter"	3.57752442900254e-08	0.0305408959255113	"***"	"enrichment"	"P. echinospica"	-0.0305408959255113
+"RNA processing and modification "	"Unmethylated promoter"	5.78031301167443e-17	0.116027640066102	"***"	"enrichment"	"P. echinospica"	-0.116027640066102
+"Secondary metabolites biosynthesis, transport and catabolism "	"Unmethylated promoter"	0.0167488395807909	-0.00347055635517173	"**"	"depletion"	"P. echinospica"	NA
+"Signal transduction mechanisms "	"Unmethylated promoter"	4.87992442176429e-14	-0.402806652806653	"***"	"depletion"	"P. echinospica"	NA
+"Transcription "	"Unmethylated promoter"	9.62639208806233e-14	-0.040147395916627	"***"	"depletion"	"P. echinospica"	NA
+"Translation, ribosomal structure and biogenesis "	"Unmethylated promoter"	4.60378772852631e-17	0.133213835136912	"***"	"enrichment"	"P. echinospica"	-0.133213835136912
+"Amino acid transport and metabolism "	"Methylated promoter"	5.46232959941949e-08	0.0496522376162521	"***"	"enrichment"	"P. echinospica"	0.0496522376162521
+"Carbohydrate transport and metabolism "	"Methylated promoter"	2.53038481327367e-06	-0.00241310399402804	"***"	"depletion"	"P. echinospica"	NA
+"Cell cycle control, cell division, chromosome partitioning "	"Methylated promoter"	2.70182917860558e-09	0.0229507173345064	"***"	"enrichment"	"P. echinospica"	0.0229507173345064
+"Cell wall/membrane/envelope biogenesis "	"Methylated promoter"	0.00249944602030719	-0.0211146599477457	"***"	"depletion"	"P. echinospica"	NA
+"Chromatin structure and dynamics "	"Methylated promoter"	4.04737238923181e-06	0.0138491185744222	"***"	"enrichment"	"P. echinospica"	0.0138491185744222
+"Coenzyme transport and metabolism "	"Methylated promoter"	0.03452866476606	-0.0111474912767602	"**"	"depletion"	"P. echinospica"	NA
+"Cytoskeleton "	"Methylated promoter"	6.03290147707661e-26	0.192130290828867	"***"	"enrichment"	"P. echinospica"	0.192130290828867
+"Defense mechanisms "	"Methylated promoter"	9.60066653517803e-05	0.0350162373046468	"***"	"enrichment"	"P. echinospica"	0.0350162373046468
+"Energy production and conversion "	"Methylated promoter"	0.03452866476606	-0.0773504747650961	"**"	"depletion"	"P. echinospica"	NA
+"Extracellular structures "	"Methylated promoter"	4.04737238923181e-06	0.0408916209422804	"***"	"enrichment"	"P. echinospica"	0.0408916209422804
+"Function unknown "	"Methylated promoter"	1.73485305184772e-12	-0.122517486479404	"***"	"depletion"	"P. echinospica"	NA
+"General function prediction only "	"Methylated promoter"	5.21998783423708e-31	-0.0560522090786747	"***"	"depletion"	"P. echinospica"	NA
+"Inorganic ion transport and metabolism "	"Methylated promoter"	2.15492559561025e-09	0.0746226180761948	"***"	"enrichment"	"P. echinospica"	0.0746226180761948
+"Intracellular trafficking, secretion, and vesicular transport "	"Methylated promoter"	5.38020917037196e-08	-0.144681322076727	"***"	"depletion"	"P. echinospica"	NA
+"Lipid transport and metabolism "	"Methylated promoter"	1.33682801540348e-11	0.0633439798432375	"***"	"enrichment"	"P. echinospica"	0.0633439798432375
+"Nuclear structure "	"Methylated promoter"	0.00703790089943707	0.01022946258338	"***"	"enrichment"	"P. echinospica"	0.01022946258338
+"Nucleotide transport and metabolism "	"Methylated promoter"	0.000101794885270663	0.0223474413359992	"***"	"enrichment"	"P. echinospica"	0.0223474413359992
+"Posttranslational modification, protein turnover, chaperones "	"Methylated promoter"	2.24619890117385e-09	-0.248654628949851	"***"	"depletion"	"P. echinospica"	NA
+"Replication, recombination and repair "	"Methylated promoter"	1.93077029829228e-05	-0.0288523303633794	"***"	"depletion"	"P. echinospica"	NA
+"RNA processing and modification "	"Methylated promoter"	8.15381090755357e-06	-0.109612625989602	"***"	"depletion"	"P. echinospica"	NA
+"Secondary metabolites biosynthesis, transport and catabolism "	"Methylated promoter"	0.00703790089943707	0.00327867390492943	"***"	"enrichment"	"P. echinospica"	0.00327867390492943
+"Signal transduction mechanisms "	"Methylated promoter"	1.87561488102351e-68	0.380536008101735	"***"	"enrichment"	"P. echinospica"	0.380536008101735
+"Transcription "	"Methylated promoter"	5.652533532629e-21	0.0379276997322243	"***"	"enrichment"	"P. echinospica"	0.0379276997322243
+"Translation, ribosomal structure and biogenesis "	"Methylated promoter"	0.000490902505281805	-0.125848619166813	"***"	"depletion"	"P. echinospica"	NA
+"Amino acid transport and metabolism "	"Unmethylated promoter"	2.26199331767034e-08	0.0493628183270054	"***"	"enrichment"	"R. piscesae"	-0.0493628183270054
+"Carbohydrate transport and metabolism "	"Unmethylated promoter"	8.05629825600736e-08	0.0241522810259635	"***"	"enrichment"	"R. piscesae"	-0.0241522810259635
+"Cell cycle control, cell division, chromosome partitioning "	"Unmethylated promoter"	2.97103989891391e-05	-0.064108051190289	"***"	"depletion"	"R. piscesae"	NA
+"Cell wall/membrane/envelope biogenesis "	"Unmethylated promoter"	0.00798376311188167	-0.0335212202369086	"***"	"depletion"	"R. piscesae"	NA
+"Chromatin structure and dynamics "	"Unmethylated promoter"	0.000840965643785241	-0.0402635732360245	"***"	"depletion"	"R. piscesae"	NA
+"Coenzyme transport and metabolism "	"Unmethylated promoter"	0.00069873543926799	0.013531609323443	"***"	"enrichment"	"R. piscesae"	-0.013531609323443
+"Cytoskeleton "	"Unmethylated promoter"	1.74876186024457e-05	-0.16878161577265	"***"	"depletion"	"R. piscesae"	NA
+"Defense mechanisms "	"Unmethylated promoter"	0.000915923533248157	0.0209569919959476	"***"	"enrichment"	"R. piscesae"	-0.0209569919959476
+"Energy production and conversion "	"Unmethylated promoter"	4.35013461046261e-19	0.158823453538739	"***"	"enrichment"	"R. piscesae"	-0.158823453538739
+"Extracellular structures "	"Unmethylated promoter"	0.02069846497357	-0.0351012760049623	"**"	"depletion"	"R. piscesae"	NA
+"Function unknown "	"Unmethylated promoter"	3.07497586023032e-24	0.0902654493690331	"***"	"enrichment"	"R. piscesae"	-0.0902654493690331
+"General function prediction only "	"Unmethylated promoter"	1.48109376779347e-38	0.133615847695523	"***"	"enrichment"	"R. piscesae"	-0.133615847695523
+"Intracellular trafficking, secretion, and vesicular transport "	"Unmethylated promoter"	2.29719482259181e-21	0.10418987404112	"***"	"enrichment"	"R. piscesae"	-0.10418987404112
+"Lipid transport and metabolism "	"Unmethylated promoter"	8.94931533681627e-07	-0.0163721919565488	"***"	"depletion"	"R. piscesae"	NA
+"Nucleotide transport and metabolism "	"Unmethylated promoter"	0.00118528567497498	0.000926340672921999	"***"	"enrichment"	"R. piscesae"	-0.000926340672921999
+"Posttranslational modification, protein turnover, chaperones "	"Unmethylated promoter"	1.15081105604822e-34	0.219097157893009	"***"	"enrichment"	"R. piscesae"	-0.219097157893009
+"Replication, recombination and repair "	"Unmethylated promoter"	9.36744612994328e-07	-0.0206491889242488	"***"	"depletion"	"R. piscesae"	NA
+"RNA processing and modification "	"Unmethylated promoter"	1.10972276439659e-13	0.0476215323785381	"***"	"enrichment"	"R. piscesae"	-0.0476215323785381
+"Secondary metabolites biosynthesis, transport and catabolism "	"Unmethylated promoter"	0.0451597680914813	-0.0107936277142368	"**"	"depletion"	"R. piscesae"	NA
+"Signal transduction mechanisms "	"Unmethylated promoter"	4.77046435463237e-11	-0.529125206081485	"***"	"depletion"	"R. piscesae"	NA
+"Transcription "	"Unmethylated promoter"	1.19411235064528e-15	-0.029109376209226	"***"	"depletion"	"R. piscesae"	NA
+"Translation, ribosomal structure and biogenesis "	"Unmethylated promoter"	1.88455061927763e-23	0.183415453238558	"***"	"enrichment"	"R. piscesae"	-0.183415453238558
+"Amino acid transport and metabolism "	"Methylated promoter"	0.00754250325396919	-0.0465762681204267	"***"	"depletion"	"R. piscesae"	NA
+"Carbohydrate transport and metabolism "	"Methylated promoter"	1.99422575127975e-05	-0.0227888754109029	"***"	"depletion"	"R. piscesae"	NA
+"Cell cycle control, cell division, chromosome partitioning "	"Methylated promoter"	5.62973403194788e-14	0.0604891268796016	"***"	"enrichment"	"R. piscesae"	0.0604891268796016
+"Cell motility "	"Methylated promoter"	0.00213419380352396	0.0223075956049196	"***"	"enrichment"	"R. piscesae"	0.0223075956049196
+"Cell wall/membrane/envelope biogenesis "	"Methylated promoter"	7.99803985092434e-07	0.0316289343759771	"***"	"enrichment"	"R. piscesae"	0.0316289343759771
+"Chromatin structure and dynamics "	"Methylated promoter"	4.6791917021018e-09	0.0379906789378266	"***"	"enrichment"	"R. piscesae"	0.0379906789378266
+"Coenzyme transport and metabolism "	"Methylated promoter"	0.0402546518820566	-0.012767744738042	"**"	"depletion"	"R. piscesae"	NA
+"Cytoskeleton "	"Methylated promoter"	2.17223752454116e-28	0.159253828214365	"***"	"enrichment"	"R. piscesae"	0.159253828214365
+"Extracellular structures "	"Methylated promoter"	1.20686737668199e-06	0.0331197953841671	"***"	"enrichment"	"R. piscesae"	0.0331197953841671
+"Function unknown "	"Methylated promoter"	1.0187256143302e-16	-0.0851699298036804	"***"	"depletion"	"R. piscesae"	NA
+"General function prediction only "	"Methylated promoter"	2.24136585934691e-28	-0.126073181360476	"***"	"depletion"	"R. piscesae"	NA
+"Inorganic ion transport and metabolism "	"Methylated promoter"	6.01922473403622e-10	0.0615872193104948	"***"	"enrichment"	"R. piscesae"	0.0615872193104948
+"Intracellular trafficking, secretion, and vesicular transport "	"Methylated promoter"	2.70577892413349e-11	-0.0983083153118479	"***"	"depletion"	"R. piscesae"	NA
+"Lipid transport and metabolism "	"Methylated promoter"	1.57233224260519e-09	0.0154479753817081	"***"	"enrichment"	"R. piscesae"	0.0154479753817081
+"Nuclear structure "	"Methylated promoter"	0.00754250325396919	0.00869899419435492	"***"	"enrichment"	"R. piscesae"	0.00869899419435492
+"Nucleotide transport and metabolism "	"Methylated promoter"	0.00228832979423164	-0.000874048383280165	"***"	"depletion"	"R. piscesae"	NA
+"Posttranslational modification, protein turnover, chaperones "	"Methylated promoter"	2.50003868554931e-11	-0.206729038501139	"***"	"depletion"	"R. piscesae"	NA
+"Replication, recombination and repair "	"Methylated promoter"	5.94535084280225e-10	0.0194835342146378	"***"	"enrichment"	"R. piscesae"	0.0194835342146378
+"RNA processing and modification "	"Methylated promoter"	1.37691621210855e-09	-0.0449332784379317	"***"	"depletion"	"R. piscesae"	NA
+"Secondary metabolites biosynthesis, transport and catabolism "	"Methylated promoter"	0.00389079333136984	0.0101843232507519	"***"	"enrichment"	"R. piscesae"	0.0101843232507519
+"Signal transduction mechanisms "	"Methylated promoter"	1.11366093364122e-89	0.499255883334455	"***"	"enrichment"	"R. piscesae"	0.499255883334455
+"Transcription "	"Methylated promoter"	1.26738935354016e-22	0.0274661406518106	"***"	"enrichment"	"R. piscesae"	0.0274661406518106
+"Translation, ribosomal structure and biogenesis "	"Methylated promoter"	0.0067755679746239	-0.173061579889475	"***"	"depletion"	"R. piscesae"	NA
+"Amino acid transport and metabolism "	"Unmethylated promoter"	4.55289890506841e-09	0.00793336351814595	"***"	"enrichment"	"P. palmiformis"	-0.00793336351814595
+"Carbohydrate transport and metabolism "	"Unmethylated promoter"	1.33606695528292e-12	0.014902923386197	"***"	"enrichment"	"P. palmiformis"	-0.014902923386197
+"Cell cycle control, cell division, chromosome partitioning "	"Unmethylated promoter"	4.23686837186736e-12	-0.0145311416846931	"***"	"depletion"	"P. palmiformis"	NA
+"Cell motility "	"Unmethylated promoter"	0.000977755273238732	0.013662977530275	"***"	"enrichment"	"P. palmiformis"	-0.013662977530275
+"Cell wall/membrane/envelope biogenesis "	"Unmethylated promoter"	1.6389448560216e-10	0.0217795378288723	"***"	"enrichment"	"P. palmiformis"	-0.0217795378288723
+"Chromatin structure and dynamics "	"Unmethylated promoter"	6.95894591410672e-08	-0.0123314332841272	"***"	"depletion"	"P. palmiformis"	NA
+"Coenzyme transport and metabolism "	"Unmethylated promoter"	8.03240545125536e-07	0.0200364743442843	"***"	"enrichment"	"P. palmiformis"	-0.0200364743442843
+"Cytoskeleton "	"Unmethylated promoter"	7.80804576082553e-26	0.0191696572250166	"***"	"enrichment"	"P. palmiformis"	-0.0191696572250166
+"Defense mechanisms "	"Unmethylated promoter"	0.000361953531728332	0.00320998476334867	"***"	"enrichment"	"P. palmiformis"	-0.00320998476334867
+"Energy production and conversion "	"Unmethylated promoter"	5.28999268157634e-18	0.0704708174095537	"***"	"enrichment"	"P. palmiformis"	-0.0704708174095537
+"Extracellular structures "	"Unmethylated promoter"	6.94196396776457e-05	0.00756562292209299	"***"	"enrichment"	"P. palmiformis"	-0.00756562292209299
+"Function unknown "	"Unmethylated promoter"	6.52551788089991e-43	0.0561720392883006	"***"	"enrichment"	"P. palmiformis"	-0.0561720392883006
+"General function prediction only "	"Unmethylated promoter"	1.73646074929712e-62	0.0267420153228608	"***"	"enrichment"	"P. palmiformis"	-0.0267420153228608
+"Inorganic ion transport and metabolism "	"Unmethylated promoter"	6.35108104365402e-09	0.0170110333965373	"***"	"enrichment"	"P. palmiformis"	-0.0170110333965373
+"Intracellular trafficking, secretion, and vesicular transport "	"Unmethylated promoter"	2.04243509476181e-33	0.0664856139171627	"***"	"enrichment"	"P. palmiformis"	-0.0664856139171627
+"Lipid transport and metabolism "	"Unmethylated promoter"	6.4086338054185e-21	0.0607519587995828	"***"	"enrichment"	"P. palmiformis"	-0.0607519587995828
+"Nuclear structure "	"Unmethylated promoter"	8.83481714312353e-08	0.035441168323997	"***"	"enrichment"	"P. palmiformis"	-0.035441168323997
+"Nucleotide transport and metabolism "	"Unmethylated promoter"	1.47655595007029e-06	0.0110504028561186	"***"	"enrichment"	"P. palmiformis"	-0.0110504028561186
+"Posttranslational modification, protein turnover, chaperones "	"Unmethylated promoter"	4.09508076649258e-53	0.133243328934702	"***"	"enrichment"	"P. palmiformis"	-0.133243328934702
+"Replication, recombination and repair "	"Unmethylated promoter"	0.0178084397124019	-0.182839816136437	"**"	"depletion"	"P. palmiformis"	NA
+"RNA processing and modification "	"Unmethylated promoter"	2.27027646685121e-14	-0.0816512091576842	"***"	"depletion"	"P. palmiformis"	NA
+"Secondary metabolites biosynthesis, transport and catabolism "	"Unmethylated promoter"	0.000285221741969281	-0.012194709216364	"***"	"depletion"	"P. palmiformis"	NA
+"Signal transduction mechanisms "	"Unmethylated promoter"	1.72339666031123e-50	-0.0678434253487431	"***"	"depletion"	"P. palmiformis"	NA
+"Transcription "	"Unmethylated promoter"	1.22425622369396e-18	-0.206722075835048	"***"	"depletion"	"P. palmiformis"	NA
+"Translation, ribosomal structure and biogenesis "	"Unmethylated promoter"	2.00874895159002e-18	-0.00751510910395395	"***"	"depletion"	"P. palmiformis"	NA
+"Cell cycle control, cell division, chromosome partitioning "	"Methylated promoter"	0.002867007789662	0.0204196865995019	"***"	"enrichment"	"P. palmiformis"	0.0204196865995019
+"Chromatin structure and dynamics "	"Methylated promoter"	0.0302883139670869	0.0173285766836746	"**"	"enrichment"	"P. palmiformis"	0.0173285766836746
+"Cytoskeleton "	"Methylated promoter"	0.000546403771385227	-0.0269378966393985	"***"	"depletion"	"P. palmiformis"	NA
+"Function unknown "	"Methylated promoter"	2.20356747288661e-05	-0.078934984105912	"***"	"depletion"	"P. palmiformis"	NA
+"General function prediction only "	"Methylated promoter"	3.46984680764276e-11	-0.0375788485021185	"***"	"depletion"	"P. palmiformis"	NA
+"Intracellular trafficking, secretion, and vesicular transport "	"Methylated promoter"	0.00547999058430358	-0.0934279927222816	"***"	"depletion"	"P. palmiformis"	NA
+"Posttranslational modification, protein turnover, chaperones "	"Methylated promoter"	0.00244166945651666	-0.187238351766056	"***"	"depletion"	"P. palmiformis"	NA
+"Replication, recombination and repair "	"Methylated promoter"	9.54636509665483e-16	0.256933131919665	"***"	"enrichment"	"P. palmiformis"	0.256933131919665
+"RNA processing and modification "	"Methylated promoter"	2.34453728764785e-08	0.114739236437739	"***"	"enrichment"	"P. palmiformis"	0.114739236437739
+"Signal transduction mechanisms "	"Methylated promoter"	5.44870717325228e-15	0.0953360385245808	"***"	"enrichment"	"P. palmiformis"	0.0953360385245808
+"Transcription "	"Methylated promoter"	9.65004829734639e-19	0.290493348240951	"***"	"enrichment"	"P. palmiformis"	0.290493348240951
+"Translation, ribosomal structure and biogenesis "	"Methylated promoter"	0.000512138024301086	0.0105605035030008	"***"	"enrichment"	"P. palmiformis"	0.0105605035030008

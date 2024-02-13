@@ -1,0 +1,10 @@
+min 10X methylation call coverage				
+Methylation cov > 0.75 & methylation depth > 0.5				
+		Nanop		
+		TRUE	FALSE	NA
+WGBS	TRUE	11933	237	256
+	FALSE	266	17113	271
+	NA	140	768	719
+	Sensitivity	0.980525883		
+	Specificity	0.984694171		
+	Accuracy	0.982977427		

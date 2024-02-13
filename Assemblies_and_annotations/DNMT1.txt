@@ -1,0 +1,11 @@
+		DMAP1-binding	DNMT1-RDF	Zf-CXXC	BAH1	BAH2	Dcm
+		PF06464	PF12047	PF02008	PF01426	PF01426	PF00145
+P. echinospica	PE_Scaf8378_0.5	5’ partial	present	present			
+	PE_Scaf8378_1.9				present	present	present
+	pe4_TRINITY_DN50770_c0_g1	5’ partial	present	present	present	present	present
+R. piscesae	NP493_146g03046	present	present	present	present	present	present
+							
+P. palmiformis	LSH36_240g01020	present	present	present	present	present	present
+	TRINITY_DN10844_c0_g3_i1				present		
+	TRINITY_DN10844_c0_g2_i1						5’ and 3’ partial
+P.dumerilii	QVX32595.1	present	present	present	present	present	present

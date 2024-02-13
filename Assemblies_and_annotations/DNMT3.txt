@@ -1,0 +1,16 @@
+		PWWP	ADD	Dmc
+		PF00855	PF17980	PF00145
+Pec	PE_Scaf12509_5.1			5' partial
+	reannotation of PE_Scaf12509_5.1	5' partial	present	present
+	Pec_combn_TRINITY_GG_25762_c1_g1_i1	5’ partial		
+	Pec_combn_TRINITY_GG_6065_c2_g1_i1		present	3’ partial
+R07B-5	NP493_663g03006	present	present	present
+				
+P08H-3	LSH36_780g00008	present		
+	LSH36_2519g00000	present	3' patial	
+	LSH36_2519g00013		5' partial	
+	LSH36_3177g00008			3' partial
+	LSH36_3177g00000			3' partial
+	reassembly of DNMT3 contigs	present	present	present
+	TRINITY_DN1240_c1_g1	present		
+Hrob	ESN99160.1	present	present	present

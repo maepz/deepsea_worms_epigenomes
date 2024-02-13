@@ -1,0 +1,4 @@
+clade	test branches	reference branches	selection parameter K	p-value	likelihood ratio
+Vestimentifera	MATb	MATa	0.08	0	18.94
+Terebellidae	MATb	MATa	0.81	0.398	0.72
+Alvinellidae + Amphraetidae	MATb	MATa	0.92	0.428	0.63

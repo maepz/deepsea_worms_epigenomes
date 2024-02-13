@@ -1,0 +1,133 @@
+"ind"	"isgene"	"semiquant_methfreq"	"count"
+"P08H-3"	"Outside of genes"	"high (>75%)"	289960
+"P08H-3"	"Outside of genes"	"intermediate (25-75%)"	1413719
+"P08H-3"	"Outside of genes"	"low (<25%)"	1180473
+"P08H-3"	"Outside of genes"	"no methylation"	7301773
+"P08H-3"	"Within genes"	"high (>75%)"	917483
+"P08H-3"	"Within genes"	"intermediate (25-75%)"	848186
+"P08H-3"	"Within genes"	"low (<25%)"	302764
+"P08H-3"	"Within genes"	"no methylation"	1969758
+"Pec"	"Outside of genes"	"high (>75%)"	2032083
+"Pec"	"Outside of genes"	"intermediate (25-75%)"	1400186
+"Pec"	"Outside of genes"	"low (<25%)"	6198808
+"Pec"	"Outside of genes"	"no methylation"	14459633
+"Pec"	"Within genes"	"high (>75%)"	2537661
+"Pec"	"Within genes"	"intermediate (25-75%)"	715526
+"Pec"	"Within genes"	"low (<25%)"	939088
+"Pec"	"Within genes"	"no methylation"	2128491
+"R07B-5"	"Outside of genes"	"high (>75%)"	943972
+"R07B-5"	"Outside of genes"	"intermediate (25-75%)"	950938
+"R07B-5"	"Outside of genes"	"low (<25%)"	5538949
+"R07B-5"	"Outside of genes"	"no methylation"	5497392
+"R07B-5"	"Within genes"	"high (>75%)"	1617628
+"R07B-5"	"Within genes"	"intermediate (25-75%)"	614479
+"R07B-5"	"Within genes"	"low (<25%)"	1246607
+"R07B-5"	"Within genes"	"no methylation"	1531154
+"P08H-3"	"Overall"	"high (>75%)"	1207443
+"P08H-3"	"Overall"	"intermediate (25-75%)"	2261905
+"P08H-3"	"Overall"	"low (<25%)"	1483237
+"P08H-3"	"Overall"	"no methylation"	9271531
+"Pec"	"Overall"	"high (>75%)"	4569744
+"Pec"	"Overall"	"intermediate (25-75%)"	2115712
+"Pec"	"Overall"	"low (<25%)"	7137896
+"Pec"	"Overall"	"no methylation"	16588124
+"R07B-5"	"Overall"	"high (>75%)"	2561600
+"R07B-5"	"Overall"	"intermediate (25-75%)"	1565417
+"R07B-5"	"Overall"	"low (<25%)"	6785556
+"R07B-5"	"Overall"	"no methylation"	7028546
+"P08H-3"	"Within exons"	"high (>75%)"	622980
+"P08H-3"	"Within exons"	"intermediate (25-75%)"	460884
+"P08H-3"	"Within exons"	"low (<25%)"	191768
+"P08H-3"	"Within exons"	"no methylation"	1506634
+"P08H-3"	"Within introns"	"high (>75%)"	1209384
+"P08H-3"	"Within introns"	"intermediate (25-75%)"	1232936
+"P08H-3"	"Within introns"	"low (<25%)"	412846
+"P08H-3"	"Within introns"	"no methylation"	2428822
+"Pec"	"Within exons"	"high (>75%)"	775146
+"Pec"	"Within exons"	"intermediate (25-75%)"	184776
+"Pec"	"Within exons"	"low (<25%)"	267980
+"Pec"	"Within exons"	"no methylation"	822667
+"Pec"	"Within introns"	"high (>75%)"	1759928
+"Pec"	"Within introns"	"intermediate (25-75%)"	530019
+"Pec"	"Within introns"	"low (<25%)"	670141
+"Pec"	"Within introns"	"no methylation"	1303792
+"R07B-5"	"Within exons"	"high (>75%)"	630851
+"R07B-5"	"Within exons"	"intermediate (25-75%)"	145621
+"R07B-5"	"Within exons"	"low (<25%)"	354166
+"R07B-5"	"Within exons"	"no methylation"	686929
+"R07B-5"	"Within introns"	"high (>75%)"	983996
+"R07B-5"	"Within introns"	"intermediate (25-75%)"	467959
+"R07B-5"	"Within introns"	"low (<25%)"	890811
+"R07B-5"	"Within introns"	"no methylation"	842259
+"P08H-3"	"ClassI_Helicase"	"high (>75%)"	396
+"P08H-3"	"ClassI_Helicase"	"intermediate (25-75%)"	1560
+"P08H-3"	"ClassI_Helicase"	"low (<25%)"	1331
+"P08H-3"	"ClassI_Helicase"	"no methylation"	12285
+"P08H-3"	"ClassI_Transposase"	"high (>75%)"	6848
+"P08H-3"	"ClassI_Transposase"	"intermediate (25-75%)"	28259
+"P08H-3"	"ClassI_Transposase"	"low (<25%)"	25418
+"P08H-3"	"ClassI_Transposase"	"no methylation"	216815
+"P08H-3"	"ClassI_Tyrosine_Recombinase"	"high (>75%)"	211
+"P08H-3"	"ClassI_Tyrosine_Recombinase"	"intermediate (25-75%)"	739
+"P08H-3"	"ClassI_Tyrosine_Recombinase"	"low (<25%)"	537
+"P08H-3"	"ClassI_Tyrosine_Recombinase"	"no methylation"	3167
+"P08H-3"	"LINE"	"high (>75%)"	3653
+"P08H-3"	"LINE"	"intermediate (25-75%)"	11402
+"P08H-3"	"LINE"	"low (<25%)"	7692
+"P08H-3"	"LINE"	"no methylation"	38313
+"P08H-3"	"LTR_retrotransposon"	"high (>75%)"	423
+"P08H-3"	"LTR_retrotransposon"	"intermediate (25-75%)"	1611
+"P08H-3"	"LTR_retrotransposon"	"low (<25%)"	1553
+"P08H-3"	"LTR_retrotransposon"	"no methylation"	6804
+"P08H-3"	"SINE"	"high (>75%)"	289
+"P08H-3"	"SINE"	"intermediate (25-75%)"	1031
+"P08H-3"	"SINE"	"low (<25%)"	2635
+"P08H-3"	"SINE"	"no methylation"	3549
+"Pec"	"ClassI_Helicase"	"high (>75%)"	2421
+"Pec"	"ClassI_Helicase"	"intermediate (25-75%)"	1151
+"Pec"	"ClassI_Helicase"	"low (<25%)"	1599
+"Pec"	"ClassI_Helicase"	"no methylation"	3007
+"Pec"	"ClassI_Transposase"	"high (>75%)"	15808
+"Pec"	"ClassI_Transposase"	"intermediate (25-75%)"	6743
+"Pec"	"ClassI_Transposase"	"low (<25%)"	19063
+"Pec"	"ClassI_Transposase"	"no methylation"	46142
+"Pec"	"ClassI_Tyrosine_Recombinase"	"high (>75%)"	599
+"Pec"	"ClassI_Tyrosine_Recombinase"	"intermediate (25-75%)"	308
+"Pec"	"ClassI_Tyrosine_Recombinase"	"low (<25%)"	329
+"Pec"	"ClassI_Tyrosine_Recombinase"	"no methylation"	567
+"Pec"	"LINE"	"high (>75%)"	8452
+"Pec"	"LINE"	"intermediate (25-75%)"	4383
+"Pec"	"LINE"	"low (<25%)"	18828
+"Pec"	"LINE"	"no methylation"	32299
+"Pec"	"LTR_retrotransposon"	"high (>75%)"	36687
+"Pec"	"LTR_retrotransposon"	"intermediate (25-75%)"	12830
+"Pec"	"LTR_retrotransposon"	"low (<25%)"	97780
+"Pec"	"LTR_retrotransposon"	"no methylation"	344064
+"Pec"	"SINE"	"high (>75%)"	565
+"Pec"	"SINE"	"intermediate (25-75%)"	333
+"Pec"	"SINE"	"low (<25%)"	3509
+"Pec"	"SINE"	"no methylation"	5107
+"R07B-5"	"ClassI_Helicase"	"high (>75%)"	2790
+"R07B-5"	"ClassI_Helicase"	"intermediate (25-75%)"	1804
+"R07B-5"	"ClassI_Helicase"	"low (<25%)"	4741
+"R07B-5"	"ClassI_Helicase"	"no methylation"	7049
+"R07B-5"	"ClassI_Transposase"	"high (>75%)"	23172
+"R07B-5"	"ClassI_Transposase"	"intermediate (25-75%)"	14861
+"R07B-5"	"ClassI_Transposase"	"low (<25%)"	63175
+"R07B-5"	"ClassI_Transposase"	"no methylation"	132334
+"R07B-5"	"ClassI_Tyrosine_Recombinase"	"high (>75%)"	495
+"R07B-5"	"ClassI_Tyrosine_Recombinase"	"intermediate (25-75%)"	383
+"R07B-5"	"ClassI_Tyrosine_Recombinase"	"low (<25%)"	1551
+"R07B-5"	"ClassI_Tyrosine_Recombinase"	"no methylation"	847
+"R07B-5"	"LINE"	"high (>75%)"	10741
+"R07B-5"	"LINE"	"intermediate (25-75%)"	11391
+"R07B-5"	"LINE"	"low (<25%)"	61461
+"R07B-5"	"LINE"	"no methylation"	46032
+"R07B-5"	"LTR_retrotransposon"	"high (>75%)"	2111
+"R07B-5"	"LTR_retrotransposon"	"intermediate (25-75%)"	1568
+"R07B-5"	"LTR_retrotransposon"	"low (<25%)"	11612
+"R07B-5"	"LTR_retrotransposon"	"no methylation"	9546
+"R07B-5"	"SINE"	"high (>75%)"	437
+"R07B-5"	"SINE"	"intermediate (25-75%)"	241
+"R07B-5"	"SINE"	"low (<25%)"	3513
+"R07B-5"	"SINE"	"no methylation"	3758

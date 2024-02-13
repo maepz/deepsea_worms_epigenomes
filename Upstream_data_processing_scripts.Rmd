@@ -1,0 +1,3226 @@
+---
+title: "Upstream data processing scripts"
+author: "Maeva Perez"
+geometry: left=2cm,right=2cm,top=2cm,bottom=2cm
+output:
+  bookdown::pdf_document2:
+    toc: true
+    lot: true
+    lof: true
+    toc_depth: 3
+    keep_tex: yes
+    df_print: kable
+    latex_engine: xelatex
+  word_document: default
+  html_document: default
+  pdf_document: bookdown::pdf_document2
+mainfont: Times New Roman
+monofont: Courier
+urlcolor: blue
+bibliography: Methods_Softwares.bib
+bib-humanities: yes
+header-includes:
+- \usepackage{fvextra}
+- \usepackage{caption}
+- \usepackage[justification=raggedright,labelfont=bf,singlelinecheck=false]{caption}
+- \DefineVerbatimEnvironment{Highlighting}{Verbatim}{breaksymbolleft={},showspaces
+  = false,showtabs = false,breaklines,commandchars=\\\{\}}
+- \renewcommand{\figurename}{Figure S}
+- \renewcommand{\tablename}{Table S}
+- \makeatletter
+- \def\fnum@figure{\figurename\thefigure}
+- \def\fnum@table{\tablename\thetable}
+- \makeatother
+- \usepackage{pdflscape}
+- \newcommand{\blandscape}{\begin{landscape}}
+- \newcommand{\elandscape}{\end{landscape}}
+- \usepackage[titles]{tocloft}
+- \renewcommand{\cftdotsep}{2} 
+- \renewcommand{\cftfigindent}{0em}  
+- \renewcommand{\cftfignumwidth}{5em}  
+- \renewcommand{\cftfigpresnum}{Figure S} 
+- \renewcommand{\cfttabindent}{0em}  
+- \renewcommand{\cfttabnumwidth}{5em}
+- \renewcommand{\cfttabpresnum}{Table S} 
+# toc: yes
+editor_options:
+  chunk_output_type: console
+---
+
+# Decontamination and read trimming/correction
+
+## Binning illumina data with bbsplit.sh from BBMap tools
+
+BBmap [@bushnell2014] manual:
+
+<https://jgi.doe.gov/data-and-tools/software-tools/bbtools/bb-tools-user-guide/bbmap-guide/>
+
+```{r, engine = 'bash', eval = FALSE}
+
+SAMPLE='R07B-5'
+path_to_assemblies=~/Tubeworms/data/assemblies
+symbiont_reference=$path_to_assemblies/LDXT01.1.fasta
+mitochondrial_reference=$path_to_assemblies/NC_024653.fasta
+R1=~/Tubeworms/data/raw_reads/${ind}/Illumina_library_DNA_${ind}_R1.fq.gz
+R2=~/Tubeworms/data/raw_reads/${ind}/Illumina_library_DNA_${ind}_R2.fq.gz
+
+## Map to refs and extract reads with bbsplit
+bbsplit.sh usejni=t -Xmx1000m in1=${R1} in2=${R2} ref_symb=${symbiont_reference} ref_mito=${mitochondrial_reference} out_symb=tmp.symb_${SAMPLE}.fq.gz out_mito=tmp.mito_${SAMPLE}.fq.gz outu1=tmp.nucl_${SAMPLE}.fq.gz refstats=${SAMPLE}_mapping.out ambig2=split overwrite=true
+
+## Re-pair reads with bbmap tool reformat.sh
+
+reformat.sh usejni=t -Xmx1000m vpair in=tmp.nucl_${SAMPLE}.fq.gz out1=nucl_${SAMPLE}_R1.fq.gz out2=nucl_${SAMPLE}_R2.fq.gz overwrite=true
+
+reformat.sh usejni=t -Xmx1000m vpair in=tmp.symb_${SAMPLE}.fq.gz out1=mapped.symb_${SAMPLE}_R1.fq.gz out2=mapped.symb_${SAMPLE}_R2.fq.gz overwrite=true
+
+reformat.sh usejni=t -Xmx1000m vpair in=tmp.mito_${SAMPLE}.fq.gz out1=mapped.mito_${SAMPLE}_R1.fq.gz out2=mapped.mito_${SAMPLE}_R2.fq.gz overwrite=true
+
+rm tmp.*${SAMPLE}*
+rm AMBIGUOUS*${SAMPLE}*
+
+```
+
+## Trimming and filtering Illumina reads
+
+Trimmomatic [@bolger2014a] manual: http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf
+
+```{r, engine = 'bash', eval = FALSE}
+SAMPLE=R07B-5
+Illumina_reads_path=~/scratch/Tubeworms/Map/bbmap_genome/${ind} # Path to Illumina reads
+BIN=mapped.mito # other bins are nucl, and mapped.symb (for sample R07B-5)
+
+java -jar $EBROOTTRIMMOMATIC/trimmomatic-0.39.jar PE -threads $SLURM_CPUS_PER_TASK -trimlog trim.log -validatePairs ${Illumina_reads_path}/${BIN}_${SAMPLE}_R1.fastq.gz ${Illumina_reads_path}/${BIN}_${SAMPLE}_R2.fastq.gz ${Illumina_reads_path}/${BIN}_${SAMPLE}_filtered_R1.fastq.gz ${Illumina_reads_path}/${BIN}_${SAMPLE}_filtered_R1_singletons.fastq.gz ${Illumina_reads_path}/${BIN}_${SAMPLE}_filtered_R2.fastq.gz ${Illumina_reads_path}/${BIN}_${SAMPLE}_filtered_R2_singletons.fastq.gz ILLUMINACLIP:${Illumina_reads_path}/TruSeq3_PE-2.fa:2:30:10:2:keepBothReads LEADING:5 TRAILING:5 MINLEN:50
+
+cat ${Illumina_reads_path}/${BIN}_${SAMPLE}_filtered_R1_singletons.fastq.gz ${Illumina_reads_path}/${BIN}_${SAMPLE}_filtered_R2_singletons.fastq.gz > ${Illumina_reads_path}/${BIN}_${SAMPLE}_filtered_singletons.fastq.gz
+
+
+```
+
+## Binning ONT data
+
+minimap2 [@li2018] manual:
+
+<https://github.com/lh3/minimap2#readme>
+
+```{r, engine = 'bash', eval = FALSE}
+SAMPLE='R07B-5'
+REF_SYMB=~/Tubeworms/data/assemblies/LDXT01.1.fasta
+REF_MITO=~/Tubeworms/data/assemblies/NC_024653.fasta
+R=~/Tubeworms/data/raw_reads/${ind}/ONT_library_DNA_${ind}.fq.gz
+
+cd ~/scratch/Tubeworms/Map/map_nanopore/${SAMPLE}
+
+#### Map to mitochondrial genome and export list of mapped reads
+minimap2 -ax map-ont ${REF_MITO} ${R} | samtools view -F 4 - | cut -f 1 | sort | uniq > mapped.mito_${SAMPLE}.txt
+
+#### Filter libraries by name to keep only reads that mapped to mitochondrial genome
+filterbyname.sh usejni=t ignorebadquality=t overwrite=t qin=33 in=$R out=mapped.mito_$SAMPLE.fq.gz names=mapped.mito_${SAMPLE}.txt include=t
+
+#### Map to symbiont genome (only for Ridgeia libraries) and filter library based on mapped reads
+
+minimap2 -ax map-ont ${REF_SYMB} ${R} | samtools view -F 4 - | cut -f 1 | sort | uniq > mapped.symb_${SAMPLE}.txt
+
+filterbyname.sh usejni=t ignorebadquality=t overwrite=t qin=33 in=$R out=mapped.symb_$SAMPLE.fq.gz names=mapped.symb_${SAMPLE}.txt include=t
+
+
+#### filter read list to remove reads mapped to either mitochondria of symbionts
+
+cat mapped.symb_${SAMPLE}.txt mapped.mito_${SAMPLE}.txt | sort | uniq > reads_to_exclude.${SAMPLE}.txt
+
+filterbyname.sh -Xmx800m usejni=t qin=33 ignorebadquality=f overwrite=t case=t minlen=1 in=${R} out=nucl_$SAMPLE.fq.gz substring=f names=reads_to_exclude.${SAMPLE}.txt include=f
+
+mv mapped.mito_$SAMPLE.fq.gz ~/Tubeworms/data/parsed_reads/${SAMPLE}/.
+mv mapped.symb_$SAMPLE.fq.gz ~/Tubeworms/data/parsed_reads/${SAMPLE}/.
+mv nucl_$SAMPLE.fq.gz ~/Tubeworms/data/parsed_reads/${SAMPLE}/.
+
+
+```
+
+## Correcting ONT reads with FMLRC
+
+
+```{r, engine = 'bash', eval = FALSE}
+SAMPLE=R07B-5
+Illumina_reads_path=~/scratch/Tubeworms/Map/bbmap_genome/${SAMPLE} # Path to Illumina reads
+Nanopore_reads_path=~/Tubeworms/data/parsed_reads/${SAMPLE}/
+
+BIN=nucl # other bins are mapped.mito and mapped.symb (for sample R07B-5)
+
+R1=${Illumina_reads_path}/${BIN}_${SAMPLE}_filtered_R1.fastq.gz
+R2=${Illumina_reads_path}/${BIN}_${SAMPLE}_filtered_R2.fastq.gz
+RS=${Illumina_reads_path}/${BIN}_${SAMPLE}_filtered_singletons.fastq.gz
+
+N=${Nanopore_reads_path}/$BIN_$SAMPLE.fq.gz
+
+########
+
+
+cd ~/scratch/Tubeworms/Map/map_nanopore/${SAMPLE}
+SLURM_CPUS_PER_TASK=40
+
+#### Step1 create MSBWT
+
+
+cat $R1 $R2 $RS > tmp.reads.fq.gz
+
+gunzip -c tmp.reads.fq.gz | \
+    awk 'NR % 4 == 2' | \
+    tr NT TN | \
+    ropebwt2 -LR | \
+    tr NT TN | \
+    fmlrc2-convert comp_msbwt.npy
+
+#### Step2 run FMLRC and compress resulting fasta file
+
+fmlrc2 --threads $SLURM_CPUS_PER_TASK --cache_size 10 comp_msbwt.npy $N tmp.${BIN}_${SAMPLE}.fmlrc_out.fasta
+
+pigz --processes $SLURM_CPUS_PER_TASK --stdout tmp.${BIN}_${SAMPLE}.fmlrc_out.fasta > ${BIN}_${SAMPLE}.corrected.fasta.gz
+
+```
+
+# Assembly pipelines
+## Platanus + LINKS
+
+Platanus [@kajitani2014] manual: http://platanus.bio.titech.ac.jp/platanus-assembler/sample-page
+
+LINKS [@warren2015] manual: https://github.com/bcgsc/LINKS
+
+```{r, engine = 'bash', eval = FALSE}
+
+#### Running platanus ####
+ind=R07B-5
+trial=platanus1
+
+OUTDIR=~/scratch/Tubeworms/Nucl_assembly/${ind}
+mkdir $OUTDIR
+cd $OUTDIR
+
+Illumina_reads_path=~/scratch/Tubeworms/Map/bbmap_genome/${ind} # Path to Illumina reads
+
+################
+
+MEM=500 # memory requested (Gb)
+SLURM_CPUS_PER_TASK=40 # number of cores
+
+## assemble
+
+platanus assemble -o $trial -f <(zcat ${Illumina_reads_path}/nucl_${ind}_trimmed_dedup_R1.fastq.gz) <(zcat ${Illumina_reads_path}/nucl_${ind}_trimmed_dedup_R2.fastq.gz) <(zcat ${Illumina_reads_path}/nucl_${ind}_trimmed_dedup_singletons.fastq.gz) -t $SLURM_CPUS_PER_TASK -m $MEM -k 21 -s 10 -u 0.2 2> assemble.log 
+
+## scaffold with untrimmed reads
+
+platanus scaffold -o ${trial} -c ${trial}_contig.fa -b ${trial}_contigBubble.fa -IP1 <(zcat ${READSPATH}/nuclear_${ind}_R1.fq.gz) <(zcat ${READSPATH}/nucl_${ind}_R2.fq.gz) -n1 150 -a1 350 -d1 100 -n2 150 -a2 350 -d2 100 -t $SLURM_CPUS_PER_TASK 2> scaffold.log
+
+## gap_close with untrimmed reads
+platanus gap_close -o ${trial} -c ${trial}_scaffold.fa -IP1 <(zcat ${READSPATH}/nuclear_${ind}_R1.fq.gz) <(zcat ${Illumina_reads_path}/nuclear_${ind}_R2.fq.gz) -t $SLURM_CPUS_PER_TASK 2> gapclose.log
+
+#### running LINKS iterations ####
+
+reads_ind=R07B-5
+trial=LINKS
+
+PATH_TO_ASSEMBLY=~/scratch/Tubeworms/Nucl_assembly/${ind}/platanus1
+PATH_TO_NANOPORE=
+
+sequence_to_scaffold=$PATH_TO_ASSEMBLY/${ind}_platanus1_gapClosed.fa
+
+OUTDIR=$PATH_TO_ASSEMBLY/SCAFFOLDING/${trial}
+mkdir ${OUTDIR}
+
+ls ~/scratch/Tubeworms/Map/map_nanopore/${reads_ind}*/nucl_${ind}_corrected${reads_ind}*.fa.gz \
+> ${OUTDIR}/filelist_Nanop # list of Nanopore libraries
+
+
+LINKS -f $1 -s filelist_Nanop -b tmplinks1 -d 1000 -t 100 -k 15 -z 250
+LINKS -f tmplinks1.scaffolds.fa -s filelist_Nanop -b tmplinks2 -r tmplinks1.bloom -d 2000 -t 50 -k 15 -z 250
+LINKS -f tmplinks2.scaffolds.fa -s filelist_Nanop -b tmplinks3 -r tmplinks1.bloom -d 5000 -t 20 -k 15 -z 250
+LINKS -f tmplinks3.scaffolds.fa -s filelist_Nanop -b tmplinks4 -r tmplinks1.bloom -d 10000 -t 10 -k 15 -z 250
+LINKS -f tmplinks4.scaffolds.fa -s filelist_Nanop -b tmplinks5 -r tmplinks1.bloom -d 15000 -t 10 -k 15 -z 250
+LINKS -f tmplinks5.scaffolds.fa -s filelist_Nanop -b tmplinks6 -r tmplinks1.bloom -d 20000 -t 8 -k 15 -z 250
+LINKS -f tmplinks6.scaffolds.fa -s filelist_Nanop -b tmplinks7 -r tmplinks1.bloom -d 50000 -t 8 -k 15 -z 250
+LINKS -f tmplinks7.scaffolds.fa -s filelist_Nanop -b tmplinks8 -r tmplinks1.bloom -d 100000 -t 8 -k 15 -z 250
+LINKS -f tmplinks8.scaffolds.fa -s filelist_Nanop -b tmplinks9 -r tmplinks1.bloom -d 200000 -t 8 -k 15 -z 250
+LINKS -f tmplinks9.scaffolds.fa -s filelist_Nanop -b tmplinks10 -r tmplinks1.bloom -d 500000 -t 8 -k 15 -z 250
+
+```
+
+## SMARTdenovo
+
+SMARTdenovo [@liu2021] manual: https://github.com/ruanjue/smartdenovo/blob/master/README.md
+
+```{r, engine = 'bash', eval = FALSE}
+
+ind=R07B-5
+reads_ind=R07B-5
+trial=smartdenovo
+genome_size=600m
+
+OUTDIR=~/scratch/Tubeworms/Nucl_assembly/${ind}/${trial}
+mkdir ${OUTDIR}
+cd ${OUTDIR}
+
+Nanop_reads=~/scratch/Tubeworms/Map/map_nanopore/nucl_${ind}.corrected.fasta.gz # corrected ONT reads
+
+
+###############
+
+SLURM_CPUS_PER_TASK=32
+
+
+# assemble long reads
+smartdenovo.pl -t $SLURM_CPUS_PER_TASK -p ${ind}_${trial} -J 1000 -c 1 -e dmo ${Nanop_reads} > ${ind}_${trial}.mak
+make -f ${ind}_${trial}.mak
+
+```
+
+## wtdbg2
+
+wtdbg2 [@ruan2020] manual: https://github.com/ruanjue/wtdbg2#readme
+
+
+```{r, engine = 'bash', eval = FALSE}
+
+ind=R07B-5
+reads_ind=R07B-5
+trial=wtdbg2
+genome_size=600m
+
+OUTDIR=~/scratch/Tubeworms/Nucl_assembly/${ind}/${trial}
+mkdir ${OUTDIR}
+cd ${OUTDIR}
+
+Illumina_reads_path=~/scratch/Tubeworms/Map/bbmap_genome/${ind} 
+Illumina_reads=$(ls $Illumina_reads_path/nucl_${ind}_filtered_dedup_*.fastq.gz | tr '\n' ' ')
+
+Nanop_reads=~/scratch/Tubeworms/Map/map_nanopore/nucl_${ind}.corrected.fasta.gz # corrected ONT reads
+
+###############################
+SLURM_CPUS_PER_TASK=32 # number of cores
+
+# assemble long reads
+wtdbg2 -t $SLURM_CPUS_PER_TASK -x corrected -g 600m -X 50 -i ${Nanop_reads} -t 16 -fo ${ind}_${trial}
+
+# derive consensus
+wtpoa-cns -t $SLURM_CPUS_PER_TASK -i ${ind}_${trial}.ctg.lay.gz -fo ${ind}_${trial}.contigs.fa
+
+```
+
+## Canu
+
+Canu [@koren2017] manual: https://canu.readthedocs.io/en/latest/quick-start.html 
+
+```{r, engine = 'bash', eval = FALSE}
+
+ind=R07B-5
+trial=canu_correctedreads
+sample=${ind}_canu1
+
+OUTDIR=~/scratch/Tubeworms/Nucl_assembly/${ind}
+cd $OUTDIR
+
+Nanop_reads=~/scratch/Tubeworms/Map/map_nanopore/nucl_${ind}.corrected.fasta.gz #
+
+#canu parameters setting: low error rate tolerated
+
+canu -d ${trial} -p ${sample} -assemble gridOptions="--time=5:59:00" genomesize=600m batMemory=500 oeaMemory=32 redMemory=32 correctedErrorRate=0.01 maxInputCoverage=500 corMhapSensitivity=high minReadLength=500 -corrected -trimmed -nanopore $Nanop_reads
+
+```
+
+## Pilon
+
+Pilon [@walker2014] manual: https://github.com/broadinstitute/pilon/wiki 
+
+```{r, engine = 'bash', eval = FALSE}
+ind=R07B-5
+trial=wtdbg2 #In this exemple, polishing with pilon is performed onto the wtdbg2 assembly
+
+Illumina_R1=~/scratch/Tubeworms/Map/bbmap_genome/${ind}/nucl_${ind}_filtered_dedup_R1.fastq.gz
+Illumina_R2=`echo "$R1" | sed s/R1/R2/g`
+Illumina_RS=`echo "$R1" | sed s/R1/singletons/g`
+
+OUTDIR=~/scratch/Tubeworms/Nucl_assembly/${ind}/${trial}/Pilon
+mkdir ${OUTDIR}
+cd ${OUTDIR}
+
+########
+
+SLURM_CPUS_PER_TASK=40
+
+
+#### First the Illumina reads are mapped onto the assembly. This is done with bowtie and samtools
+
+bowtie2-build ../${ind}_${trial}.contigs.fa ${ind}_${trial}
+
+bowtie2 --threads $SLURM_CPUS_PER_TASK -x ${ind}_${trial} -1 $R1 -2 $R2 -s $RS --very-fast-local | samtools view -@ $SLURM_CPUS_PER_TASK -bS - | samtools sort -@ SLURM_CPUS_PER_TASK - -o ${ind}_${trial}.sorted.bam
+
+samtools index -@ $SLURM_CPUS_PER_TASK ${ind}_${trial}.sorted.bam
+
+#### Then, Pilon is run using for reference the sorted.bam file
+
+java -Xmx120G -jar $EBROOTPILON/pilon.jar --threads $SLURM_CPUS_PER_TASK --genome ../${ind}_${trial}.contigs.fa --fix all --changes --frags ${ind}_${trial}.sorted.bam --output ${OUTDIR}/${ind}_${trial}_pilon1 | tee ${OUTDIR}/${ind}_${trial}_round1.pilon
+
+```
+
+## MaSuRCA
+
+MaSuRCA [@zimin2017] manual: https://github.com/alekseyzimin/masurca#readme 
+
+```{r, engine = 'bash', eval = FALSE}
+
+sample=R07B-5
+trial=masurca2_correctednano
+
+OUPUT_DIR=~/scratch/Tubeworms/Nucl_assembly/${sample}/${trial}
+mkdir ${OUTDIR}
+cd ${OUTDIR}
+
+#############3
+
+
+masurca masurca_conf_R07B-5-Nucl_corrected.txt
+
+
+#### masurca_conf_R07B-5-Nucl_corrected.txt ####
+
+## Masurca configuration file
+DATA
+
+PE= a1 350 50  ~/scratch/Tubeworms/Map/bbmap_genome/R07B-5/nucl_R07B-5_R1.fq.gz  ~/scratch/Tubeworms/Map/bbmap_genome/R07B-5/nucl_R07B-5_R2.fq.gz # untrimmed reads are used
+NANOPORE=~/scratch/Tubeworms/Map/map_nanopore/nucl_R07B-5.corrected.fasta.gz
+
+END
+
+PARAMETERS
+
+EXTEND_JUMP_READS=0
+GRAPH_KMER_SIZE = auto
+USE_LINKING_MATES = 0
+USE_GRID=0
+GRID_ENGINE=SGE
+GRID_QUEUE=all.q
+GRID_BATCH_SIZE=500000000
+LHE_COVERAGE=25
+LIMIT_JUMP_COVERAGE = 300
+CA_PARAMETERS =  cgwErrorRate=0.15
+CLOSE_GAPS=1
+NUM_THREADS = 40
+JF_SIZE = 6000000000
+SOAP_ASSEMBLY=0
+FLYE_ASSEMBLY=1
+
+END
+
+#################################################
+
+```
+
+## HASLR
+
+HASLR [@haghshenas2020] manual: https://github.com/vpc-ccg/haslr#readme
+
+```{r, engine = 'bash', eval = FALSE}
+
+ind=R07B-5
+trial=haslr
+genome_size=600m
+
+
+OUTDIR=~/scratch/Tubeworms/Nucl_assembly/${ind}/${trial}
+mkdir ${OUTDIR}
+cd ${OUTDIR}
+
+######
+Illumina_reads_path=~/scratch/Tubeworms/Map/bbmap_genome/${ind}/nucl_${ind}_trimmed_dedup_*.fastq.gz
+Nanop_reads=~/scratch/Tubeworms/Map/map_nanopore/nucl_${ind}.corrected.fasta.gz 
+
+ls ${Illumina_reads_path} > filelist_Illumina
+ls ${Nanop_reads} > filelist_Nanop
+
+
+# using default parameters with two exceptions: amount of long read coverage to use for assembly=10 --minia-kmer=107 (optimal kmer size was determined using kmergenie)
+
+haslr.py --threads $SLURM_CPUS_PER_TASK --out ${trial} --genome ${genome_size} --long filelist_Nanop --long-fofn --type corrected --short filelist_Illumina --short-fofn --cov-lr 10 --aln-block 1000 --aln-sim 0.90 --minia-kmer 107
+
+```
+
+
+# Annotations
+
+## Repeat masking
+
+RepeaMasker
+RepeatRunner manual: https://www.yandell-lab.org/software/repeatrunner.html
+
+
+```{r, engine = 'bash', eval = FALSE}
+
+ind=R07B-5
+if [ $ind == "Pec" ]; then echo $ind; fasta_prefix=${ind}_contigs; else fasta_prefix=${ind}_wtdbg2; fi
+
+assembly=~/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.fasta
+
+dfam_db=~/Tubeworms/data/repbase_db/Dfam3.3/Dfam.fasta
+repbase_db=~/Tubeworms/data/repbase_db/RepBaseRepeatMaskerEdition-20181026/RMRBSeqs.fasta
+cousin_db=~/Tubeworms/data/repbase_db/Paraescarpia.consensi.fa.classified # only used for the Ridgeia genome
+
+cd ~/Tubeworms/data/repbase_db/${ind}
+
+###########
+
+#### Getting species specific repeat models ####
+
+BuildDatabase -name ${ind} -engine ncbi ${assembly}
+
+RepeatModeler -database ${ind} -engine ncbi -pa 6 -genomeSampleSizeMax 81000000 # due to computing limitations, 13.5% of the genome was sampled prior repeat modeling 
+
+my_repeats = ~/Tubeworms/data/repbase_db/R07B-5/RM_2660.MonJun72332142021/consensi.fa.classified # output of RepeatModeler
+
+#### Merging species specific repeat database to the others ####
+
+cat $dfam_db $repbase_db $cousin_db $my_repeats > ${ind}_libs.fasta  
+
+dedupe.sh usejni=t -Xmx850M overwrite=t in=${ind}_libs.fasta out=unique_${ind}_libs.fasta # removing duplicated repeats; dedupe.sh from the bbmap suite
+
+#### Masking the repeats in the genome; the output is a gff file
+
+RepeatMasker ${assembly} -e ncbi -pa 6 -qq -gff -lib unique_${ind}_libs.fasta -dir ./t
+
+
+```
+
+## Training of ab-initio predictor with Braker
+
+bowtie2
+
+minimap2
+
+sambamba
+
+braker
+
+### R07B-5
+```{r, engine = 'bash', eval = FALSE}
+
+ind=R07B-5
+OUTDIR=~/scratch/Tubeworms/Annot_nucl/${ind}/braker/
+ref=~/Tubeworms/data/assemblies/nucl_assemblies/${ind}_wtdbg2.fasta
+trial=raw_transcriptome_plus_prot2.8
+
+###############
+
+export JAVA_TOOL_OPTIONS="-Xmx18g"
+SLURM_CPUS_PER_TASK=40
+cd $OUTDIR
+
+###############
+
+#### Map binned and trimmed raw RNA-Seq data to reference genome assembly with bowtie2 
+
+query1_R1=~/Tubeworms/data/transcriptomes/nucl_all8_filtered_1.fastq.gz
+query1_R2=~/Tubeworms/data/transcriptomes/nucl_all8-G_filtered_2.fastq.gz
+query1_RS=~/Tubeworms/data/transcriptomes/nucl_all8_filtered_singletons.fastq.gz
+
+sambamba index -t $SLURM_CPUS_PER_TASK -F $ref
+
+bowtie2-build --threads $SLURM_CPUS_PER_TASK $ref $ind
+
+bowtie2 --threads $SLURM_CPUS_PER_TASK -x ${ind} -1 $query1_R1 -2 $query1_R2 -U $query1_RS --very-fast-local | sambamba view -t $SLURM_CPUS_PER_TASK -S -f bam /dev/stdin > ${query}_${ind}.bam
+
+sambamba sort -t $SLURM_CPUS_PER_TASK -o all8_${ind}.sorted.bam all8_${ind}.bam
+
+sambamba index -t $SLURM_CPUS_PER_TASK all8_${ind}.sorted.bam
+
+sambamba flagstat -t $SLURM_CPUS_PER_TASK all8_${ind}}.sorted.bam > all8_${ind}.sorted.stats
+
+
+#### Map assembeled and additional Roche 454 sequencing libraries of Ridgeia to reference genome assembly with minimap2 ####
+
+query2=~/Tubeworms/data/assemblies/transcripto_assemblies/all8_Trinity_TMP_nonnull.fasta # De novo assembly contigs without expression evidence removed
+query3=~/Tubeworms/data/assemblies/transcripto_assemblies/all8_Trinity-GG_TMP_nonnull.fasta # Genome guided assembly contigs without expression evidence removed
+query4=~/Tubeworms/data/transcriptomes/RidPisc/Ridgeia_transcriptome_SRR346554.2.fastq # Genome guided assembly contigs without expression evidence removed
+query5=~/Tubeworms/data/assemblies/transcripto_assemblies/Ridgeia_assembeled_454_SAMN00153321.fasta # Genome guided assembly contigs without expression evidence removed
+
+for query in $query2 $query3 $query4 $query5
+do
+
+outname=$(echo ${query%.*} | awk -F'/' '{print $NF}')_${ind}
+
+minimap2 -ax splice -uf -t $SLURM_CPUS_PER_TASK $ref $query | sambamba view -t $SLURM_CPUS_PER_TASK -S -f bam /dev/stdin > ${outname}.bam
+
+sambamba sort -t $SLURM_CPUS_PER_TASK -o ${outname}.sorted.bam ${outname}.bam
+
+sambamba index -t $SLURM_CPUS_PER_TASK ${outname}.sorted.bam
+
+sambamba flagstat -t $SLURM_CPUS_PER_TASK ${outname}.sorted.bam > ${outname}.sorted.stats
+
+done
+
+#### Run Braker #### 
+cousin_prot=~/Tubeworms/data/annotations/${ind}/aligned_evidences/protein/cousin_cov80id85_proteins.fasta # best alignments of closely-related species proteins
+
+
+braker.pl --cores $SLURM_CPUS_PER_TASK \
+--species=${ind}_${trial} \
+--genome=${ind}_wtdbg2_softmasked.fasta \
+--bam=all8_${ind}.sorted.bam \
+--bam=all8_Trinity_TMP_nonnull_${ind}.sorted.bam \
+--bam=all8_Trinity-GG_TMP_nonnull_${ind}.sorted.bam \
+--bam=Ridgeia_transcriptome_SRR346554.2_${ind}.sorted.bam \
+--bam=Ridgeia_assembeled_454_SAMN00153321_${ind}.sorted.bam \
+--prot_seq=${cousin_prot} \
+--softmasking \
+--verbosity=3 \
+--etpmode \
+--AUGUSTUS_ab_initio \
+--useexisting \
+--UTR=on \
+--workingdir=${trial}
+
+```
+
+### P08H-3
+
+```{r, engine = 'bash', eval = FALSE}
+
+ind=P08H-3
+OUTDIR=~/scratch/Tubeworms/Annot_nucl/${ind}/braker/
+ref=~/Tubeworms/data/assemblies/nucl_assemblies/${ind}_wtdbg2.fasta
+trial=raw_plus_prot3_utr
+
+
+###############
+
+export JAVA_TOOL_OPTIONS="-Xmx18g"
+SLURM_CPUS_PER_TASK=40
+cd $OUTDIR
+
+###############
+
+### Map binned and trimmed raw RNA-Seq data to reference genome assembly with bowtie2
+
+query1_R1=~/Tubeworms/data/transcriptomes/nucl_ParPal-G_filtered_1.fastq.gz
+query1_R2=~/Tubeworms/data/transcriptomes/nucl_ParPal-G_filtered_2.fastq.gz
+query1_RS=~/Tubeworms/data/transcriptomes/nucl_ParPal-G_filtered_singletons.fastq.gz
+
+sambamba index -t $SLURM_CPUS_PER_TASK -F $ref
+
+bowtie2-build --threads $SLURM_CPUS_PER_TASK $ref $ind
+
+bowtie2 --threads $SLURM_CPUS_PER_TASK -x ${ind} -1 $query1_R1 -2 $query1_R2 -U $query1_RS --very-fast-local | sambamba view -t $SLURM_CPUS_PER_TASK -S -f bam /dev/stdin > ${query}_${ind}.bam
+
+sambamba sort -t $SLURM_CPUS_PER_TASK -o ParPal-G_${ind}.sorted.bam ParPal-G_${ind}.bam
+
+sambamba index -t $SLURM_CPUS_PER_TASK ParPal-G_${ind}.sorted.bam
+
+sambamba flagstat -t $SLURM_CPUS_PER_TASK ParPal-G_${ind}}.sorted.bam > ParPal-G_${ind}.sorted.stats
+
+#### Map assembeled transcriptome to reference genome assembly with minimap2 ####
+
+query2=~/Tubeworms/data/assemblies/transcripto_assemblies/ParPal-G_Trinity_TMP_nonnull.fasta
+query3=~/Tubeworms/data/assemblies/transcripto_assemblies/ParPal-G_Trinity-GG_TMP_nonnull.fasta
+
+for query in $query2 $query3
+do
+
+outname=$(echo ${query%.*} | awk -F'/' '{print $NF}')_${ind}
+
+minimap2 -ax splice -uf -t $SLURM_CPUS_PER_TASK $ref $query | sambamba view -t $SLURM_CPUS_PER_TASK -S -f bam /dev/stdin > ${outname}.bam
+
+sambamba sort -t $SLURM_CPUS_PER_TASK -o ${outname}.sorted.bam ${outname}.bam
+
+sambamba index -t $SLURM_CPUS_PER_TASK ${outname}.sorted.bam
+
+sambamba flagstat -t $SLURM_CPUS_PER_TASK ${outname}.sorted.bam > ${outname}.sorted.stats
+
+done
+
+#### Run Braker #### 
+cousin_prot=~/Tubeworms/data/annotations/${ind}/aligned_evidences/protein/cousin_cov80id85_proteins.fasta # best alignments of closely-related species proteins
+
+
+braker.pl --cores $SLURM_CPUS_PER_TASK \
+--species=${ind}_${trial} \
+--genome=${ind}_wtdbg2_softmasked.fasta \
+--bam=ParPal-G_${ind}.sorted.bam \
+--bam=ParPal-G_Trinity_TMP_nonnull_${ind}.sorted.bam \
+--bam=ParPal-G_Trinity-GG_TMP_nonnull_${ind}.sorted.bam \
+--prot_seq=${cousin_prot} \
+--softmasking \
+--verbosity=3 \
+--etpmode \
+--AUGUSTUS_ab_initio \
+--useexisting \
+--UTR=on \
+--workingdir=${trial}
+
+```
+
+## Annotation with maker2
+
+maker_bopts_conservative.ctl
+```{r, engine = 'bash', eval = FALSE}
+#-----BLAST and Exonerate Statistics Thresholds
+blast_type=ncbi+ #set to 'ncbi+', 'ncbi' or 'wublast'
+use_rapsearch=0 #use rapsearch instead of blastx, 1 = yes, 0 = no
+
+pcov_blastn=0.8 #Blastn Percent Coverage Threhold EST-Genome Alignments
+pid_blastn=0.85 #Blastn Percent Identity Threshold EST-Genome Aligments
+eval_blastn=1e-10 #Blastn eval cutoff
+bit_blastn=40 #Blastn bit cutoff
+depth_blastn=0 #Blastn depth cutoff (0 to disable cutoff)
+
+pcov_blastx=0.8 #Blastx Percent Coverage Threhold Protein-Genome Alignments
+pid_blastx=0.85 #Blastx Percent Identity Threshold Protein-Genome Aligments
+eval_blastx=1e-06 #Blastx eval cutoff
+bit_blastx=30 #Blastx bit cutoff
+depth_blastx=0 #Blastx depth cutoff (0 to disable cutoff)
+
+pcov_tblastx=0.8 #tBlastx Percent Coverage Threhold alt-EST-Genome Alignments
+pid_tblastx=0.85 #tBlastx Percent Identity Threshold alt-EST-Genome Aligments
+eval_tblastx=1e-10 #tBlastx eval cutoff
+bit_tblastx=40 #tBlastx bit cutoff
+depth_tblastx=0 #tBlastx depth cutoff (0 to disable cutoff)
+
+pcov_rm_blastx=0.5 #Blastx Percent Coverage Threhold For Transposable Element Masking
+pid_rm_blastx=0.4 #Blastx Percent Identity Threshold For Transposbale Element Masking
+eval_rm_blastx=1e-06 #Blastx eval cutoff for transposable element masking
+bit_rm_blastx=30 #Blastx bit cutoff for transposable element masking
+
+ep_score_limit=20 #Exonerate protein percent of maximal score threshold
+en_score_limit=20 #Exonerate nucleotide percent of maximal score threshold
+
+
+ep_score_limit=20 #Exonerate protein percent of maximal score threshold
+en_score_limit=20 #Exonerate nucleotide percent of maximal score threshold
+
+```
+
+### R07B-5
+
+```{r, engine = 'bash', eval = FALSE}
+ind=R07B-5
+trial=maker2ndpass.30
+augustus=raw_transcriptome_plus_prot2.8
+
+OUTDIR=~/scratch/Tubeworms/Annot_nucl/${ind}/${trial}
+mkdir $OUTDIR
+cd $OUTDIR
+
+##########
+
+maker -base tmp maker2_R07.opts.ctl maker_bopts_conservative.ctl maker_exe.ctl
+
+### clean up
+
+gff3_merge -d ./tmp.maker.output/tmp_master_datastore_index.log -o ${ind}.maker.gff
+
+fasta_merge -d ./tmp.maker.output/tmp_master_datastore_index.log -o ${ind}.maker.fasta
+
+
+rm -r tmp.maker.output
+
+
+```
+
+maker2_R07.opts.ctl
+```{r, engine = 'bash', eval = FALSE}
+#-----Genome (these are always required)
+genome=~/Tubeworms/data/assemblies/nucl_assemblies/R07B-5_wtdgb2.fasta #(fasta file or fasta embeded in GFF3 file)
+organism_type=eukaryotic #eukaryotic or prokaryotic. Default is eukaryotic
+
+#-----Re-annotation Using MAKER Derived GFF3
+maker_gff= #MAKER derived GFF3 file
+est_pass=0 #use ESTs in maker_gff: 1 = yes, 0 = no
+altest_pass=0 #use alternate organism ESTs in maker_gff: 1 = yes, 0 = no
+protein_pass=0 #use protein alignments in maker_gff: 1 = yes, 0 = no
+rm_pass=0 #use repeats in maker_gff: 1 = yes, 0 = no
+model_pass=0 #use gene models in maker_gff: 1 = yes, 0 = no
+pred_pass=0 #use ab-initio predictions in maker_gff: 1 = yes, 0 = no
+other_pass=0 #passthrough anyything else in maker_gff: 1 = yes, 0 = no
+
+#-----EST Evidence (for best results provide a file for at least one)
+est=~/Tubeworms/data/assemblies/transcripto_assemblies/all8_Trinity_TMP_nonnull.fasta, \
+~/Tubeworms/data/assemblies/transcripto_assemblies/all8_Trinity-GG_TMP_nonnull.fasta, \
+~/Tubeworms/data/assemblies/transcripto_assemblies/Ridgeia_assembeled_454_SAMN00153321.fasta #set of ESTs or assembled mRNA-seq in fasta format
+
+altest= #EST/cDNA sequence file in fasta format from an alternate organism
+
+est_gff= #aligned ESTs or mRNA-seq from an external GFF3 file
+altest_gff= #aligned ESTs from a closly relate species in GFF3 format
+
+#-----Protein Homology Evidence (for best results provide a file for at least one)
+protein=~/Tubeworms/data/assemblies/transcripto_assemblies/Ridgeiapiscesae_annotated_AA.fasta, \
+~/Tubeworms/data/assemblies/transcripto_assemblies/Lamellibrachialuymesi_annotated_AA.fasta, \
+~/Tubeworms/data/assemblies/transcripto_assemblies/Escarpiaspicata_annotated_AA.fasta, \
+~/Tubeworms/data/assemblies/transcripto_assemblies/Riftiapachyptila_annotated_AA.fasta, \
+~/Tubeworms/data/assemblies/transcripto_assemblies/Riftia_proteome.fasta, \
+~/Tubeworms/data/assemblies/RIFPA/RIFPA_reference_based_merged_transcriptomes_transdecoder.prot.fasta, \
+~/Tubeworms/data/assemblies/transcripto_assemblies/Pec_ragoo_v1.0.pep.fasta #protein sequence file in fasta format (i.e. from mutiple organisms)
+
+protein_gff= #aligned protein homology evidence from an external GFF3 file
+
+#-----Repeat Masking (leave values blank to skip repeat masking)
+model_org= #select a model organism for RepBase masking in RepeatMasker
+rmlib= #provide an organism specific repeat library in fasta format for RepeatMasker
+repeat_protein=~/software/maker/3.01.03/data/te_proteins.fasta #provide a fasta file of transposable element proteins for RepeatRunner
+rm_gff=~/Tubeworms/data/repbase_db/R07B-5.repeats.gff #pre-identified repeat elemenßts from an external GFF3 file
+prok_rm=0 #forces MAKER to repeatmask prokaryotes (no reason to change this), 1 = yes, 0 = no
+softmask=1 #use soft-masking rather than hard-masking in BLAST (i.e. seg and dust filtering)
+
+#-----Gene Prediction
+snaphmm= #SNAP HMM file
+gmhmm= #GeneMark HMM file
+augustus_species=raw_transcriptome_plus_prot2.8 #Augustus gene prediction species model
+fgenesh_par_file= #FGENESH parameter file
+pred_gff= #ab-initio predictions from an external GFF3 file
+model_gff= #annotated gene models from an external GFF3 file (annotation pass-through)
+run_evm=0 #run EvidenceModeler, 1 = yes, 0 = no
+est2genome=1 #infer gene predictions directly from ESTs, 1 = yes, 0 = no
+protein2genome=1 #infer predictions from protein homology, 1 = yes, 0 = no
+trna=0 #find tRNAs with tRNAscan, 1 = yes, 0 = no
+snoscan_rrna= #rRNA file to have Snoscan find snoRNAs
+snoscan_meth= #-O-methylation site fileto have Snoscan find snoRNAs
+unmask=1 #also run ab-initio prediction programs on unmasked sequence, 1 = yes, 0 = no
+allow_overlap= #allowed gene overlap fraction (value from 0 to 1, blank for default)
+
+#-----Other Annotation Feature Types (features MAKER doesn't recognize)
+other_gff= #extra features to pass-through to final MAKER generated GFF3 file
+
+#-----External Application Behavior Options
+alt_peptide=C #amino acid used to replace non-standard amino acids in BLAST databases
+cpus=1 #max number of cpus to use in BLAST and RepeatMasker (not for MPI, leave 1 when using MPI)
+
+#-----MAKER Behavior Options
+max_dna_len=100000 #length for dividing up contigs into chunks (increases/decreases memory usage)
+min_contig=1 #skip genome contigs below this length (under 10kb are often useless)
+
+pred_flank=200 #flank for extending evidence clusters sent to gene predictors
+pred_stats=0 #report AED and QI statistics for all predictions as well as models
+AED_threshold=1 #Maximum Annotation Edit Distance allowed (bound by 0 and 1)
+min_protein=0 #require at least this many amino acids in predicted proteins
+alt_splice=0 #Take extra steps to try and find alternative splicing, 1 = yes, 0 = no
+always_complete=1 #extra steps to force start and stop codons, 1 = yes, 0 = no
+map_forward=0 #map names and attributes forward from old GFF3 genes, 1 = yes, 0 = no
+keep_preds=0 #Concordance threshold to add unsupported gene prediction (bound by 0 and 1)
+
+split_hit=10000 #length for the splitting of hits (expected max intron size for evidence alignments)
+min_intron=20 #minimum intron length (used for alignment polishing)
+single_exon=0 #consider single exon EST evidence when generating annotations, 1 = yes, 0 = no
+single_length=250 #min length required for single exon ESTs if 'single_exon is enabled'
+correct_est_fusion=0 #limits use of ESTs in annotation to avoid fusion genes
+
+tries=2 #number of times to try a contig if there is a failure for some reason
+clean_try=0 #remove all data from previous run before retrying, 1 = yes, 0 = no
+clean_up=0 #removes theVoid directory with individual analysis files, 1 = yes, 0 = no
+TMP= #specify a directory other than the system default temporary directory for temporary files
+
+```
+
+### P08H-3
+
+```{r, engine = 'bash', eval = FALSE}
+ind=P08H-3
+trial=maker2ndpass.14
+augustus=raw_plus_prot3_utr
+
+OUTDIR=~/scratch/Tubeworms/Annot_nucl/${ind}/${trial}
+mkdir $OUTDIR
+cd $OUTDIR
+
+##########
+
+maker -base tmp maker2_P08.opts.ctl maker_bopts_conservative.ctl maker_exe.ctl
+
+### clean up
+
+gff3_merge -d ./tmp.maker.output/tmp_master_datastore_index.log -o ${ind}.maker.gff
+
+fasta_merge -d ./tmp.maker.output/tmp_master_datastore_index.log -o ${ind}.maker.fasta
+
+
+rm -r tmp.maker.output
+
+
+```
+
+maker2_P08.opts.ctl
+```{r, engine = 'bash', eval = FALSE}
+#-----Genome (these are always required)
+genome=~/Tubeworms/data/assemblies/nucl_assemblies/P08H-3_wtdgb2.fasta #(fasta file or fasta embeded in GFF3 file)
+organism_type=eukaryotic #eukaryotic or prokaryotic. Default is eukaryotic
+
+#-----Re-annotation Using MAKER Derived GFF3
+maker_gff= #MAKER derived GFF3 file
+est_pass=0 #use ESTs in maker_gff: 1 = yes, 0 = no
+altest_pass=0 #use alternate organism ESTs in maker_gff: 1 = yes, 0 = no
+protein_pass=0 #use protein alignments in maker_gff: 1 = yes, 0 = no
+rm_pass=0 #use repeats in maker_gff: 1 = yes, 0 = no
+model_pass=0 #use gene models in maker_gff: 1 = yes, 0 = no
+pred_pass=0 #use ab-initio predictions in maker_gff: 1 = yes, 0 = no
+other_pass=0 #passthrough anyything else in maker_gff: 1 = yes, 0 = no
+
+#-----EST Evidence (for best results provide a file for at least one)
+est=~/Tubeworms/data/assemblies/transcripto_assemblies/ParPal-G_Trinity_TMP_nonnull.fasta, \
+~/Tubeworms/data/assemblies/transcripto_assemblies/ParPal-G_Trinity-GG_TMP_nonnull.fasta #set of ESTs or assembled mRNA-seq in fasta format
+
+altest=~/Tubeworms/data/assemblies/transcripto_assemblies/Alvinella_cDNA.fasta #EST/cDNA sequence file in fasta format from an alternate organism
+
+est_gff= #aligned ESTs or mRNA-seq from an external GFF3 file
+altest_gff= #aligned ESTs from a closly relate species in GFF3 format
+
+#-----Protein Homology Evidence (for best results provide a file for at least one)
+protein=~/Tubeworms/data/assemblies/transcripto_assemblies/ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta, \ ~/Tubeworms/data/assemblies/transcripto_assemblies/Phess.final.pep.fasta, \
+~/Tubeworms/data/assemblies/transcripto_assemblies/ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta, \
+~/Tubeworms/data/assemblies/transcripto_assemblies/ParGra2_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta #protein sequence file in fasta format (i.e. from mutiple organisms)
+
+protein_gff= #aligned protein homology evidence from an external GFF3 file
+
+#-----Repeat Masking (leave values blank to skip repeat masking)
+model_org= #select a model organism for RepBase masking in RepeatMasker
+rmlib= #provide an organism specific repeat library in fasta format for RepeatMasker
+repeat_protein=~/software/maker/3.01.03/data/te_proteins.fasta #provide a fasta file of transposable element proteins for RepeatRunner
+rm_gff=~/Tubeworms/data/repbase_db/P08H-3.repeats.gff #pre-identified repeat elemenßts from an external GFF3 file
+prok_rm=0 #forces MAKER to repeatmask prokaryotes (no reason to change this), 1 = yes, 0 = no
+softmask=1 #use soft-masking rather than hard-masking in BLAST (i.e. seg and dust filtering)
+
+#-----Gene Prediction
+snaphmm= #SNAP HMM file
+gmhmm= #GeneMark HMM file
+augustus_species=raw_plus_prot3_utr #Augustus gene prediction species model
+fgenesh_par_file= #FGENESH parameter file
+pred_gff= #ab-initio predictions from an external GFF3 file
+model_gff= #annotated gene models from an external GFF3 file (annotation pass-through)
+run_evm=0 #run EvidenceModeler, 1 = yes, 0 = no
+est2genome=1 #infer gene predictions directly from ESTs, 1 = yes, 0 = no
+protein2genome=1 #infer predictions from protein homology, 1 = yes, 0 = no
+trna=0 #find tRNAs with tRNAscan, 1 = yes, 0 = no
+snoscan_rrna= #rRNA file to have Snoscan find snoRNAs
+snoscan_meth= #-O-methylation site fileto have Snoscan find snoRNAs
+unmask=1 #also run ab-initio prediction programs on unmasked sequence, 1 = yes, 0 = no
+allow_overlap= #allowed gene overlap fraction (value from 0 to 1, blank for default)
+
+#-----Other Annotation Feature Types (features MAKER doesn't recognize)
+other_gff= #extra features to pass-through to final MAKER generated GFF3 file
+
+#-----External Application Behavior Options
+alt_peptide=C #amino acid used to replace non-standard amino acids in BLAST databases
+cpus=1 #max number of cpus to use in BLAST and RepeatMasker (not for MPI, leave 1 when using MPI)
+
+#-----MAKER Behavior Options
+max_dna_len=100000 #length for dividing up contigs into chunks (increases/decreases memory usage)
+min_contig=1 #skip genome contigs below this length (under 10kb are often useless)
+
+pred_flank=200 #flank for extending evidence clusters sent to gene predictors
+pred_stats=0 #report AED and QI statistics for all predictions as well as models
+AED_threshold=1 #Maximum Annotation Edit Distance allowed (bound by 0 and 1)
+min_protein=0 #require at least this many amino acids in predicted proteins
+alt_splice=0 #Take extra steps to try and find alternative splicing, 1 = yes, 0 = no
+always_complete=1 #extra steps to force start and stop codons, 1 = yes, 0 = no
+map_forward=0 #map names and attributes forward from old GFF3 genes, 1 = yes, 0 = no
+keep_preds=0 #Concordance threshold to add unsupported gene prediction (bound by 0 and 1)
+
+split_hit=10000 #length for the splitting of hits (expected max intron size for evidence alignments)
+min_intron=20 #minimum intron length (used for alignment polishing)
+single_exon=0 #consider single exon EST evidence when generating annotations, 1 = yes, 0 = no
+single_length=250 #min length required for single exon ESTs if 'single_exon is enabled'
+correct_est_fusion=0 #limits use of ESTs in annotation to avoid fusion genes
+
+tries=2 #number of times to try a contig if there is a failure for some reason
+clean_try=0 #remove all data from previous run before retrying, 1 = yes, 0 = no
+clean_up=0 #removes theVoid directory with individual analysis files, 1 = yes, 0 = no
+TMP= #specify a directory other than the system default temporary directory for temporary files
+
+```
+
+
+
+## Final annotations with functional inferences
+
+Final_annotations.txt
+```{r, eval = FALSE}
+### R07B-5
+# KEGG
+R07_annots=read.csv('~/Tubeworms/data/annotations/R07B-5_maker2ndpass.30/Blast2Go/R07B-5_annots_summary.txt',header=T,sep='\t') # Blast2go output 
+R07_annots$genome='R. piscesae'
+R07_annots %>% head
+
+KO_R07=read.csv('~/Tubeworms/data/annotations/R07B-5_maker2ndpass.30/Blast2Go/R07B-5_KO_annots.txt',header=F,sep='\t')
+colnames(KO_R07)=c('qseqid','KO')
+R07_annots=merge(R07_annots,KO_R07, by='qseqid',all.x=T) 
+
+example=R07_annots %>% head
+
+#KOG
+kog_R07=read.csv('~/Tubeworms/data/annotations/R07B-5_maker2ndpass.30/Blast2Go/R07B-5_KOG_annots.txt',header=F,sep='\t')
+kog_R07=kog_R07[,c('V1','V14','V15')] %>% group_by(V1) %>% summarise(KOG = toString(V14), KOG_longname=toString(V15)) %>% as.data.frame
+colnames(kog_R07)[1]='qseqid'
+R07_annots=merge(R07_annots,kog_R07, by='qseqid',all.x=T)
+
+#tigrfam
+tigrfam_R07=read.csv('~/Tubeworms/data/annotations/R07B-5_maker2ndpass.30/Blast2Go/R07B-5_TIGRFAM_annots.txt',header=F,sep='\t')
+colnames(tigrfam_R07)=c('tigrfam','qseqid')
+tigrfam_meta=read.csv('~/Tubeworms/data/annotations/R07B-5_maker2ndpass.30/Blast2Go/R07B-5_TIGRFAM_meta.txt',header=T,sep='\t')
+tigrfam_meta=tigrfam_meta[,c('Name','Description')]
+colnames(tigrfam_meta)=c('tigrfam','tigrfam_longname')
+tigrfam_meta$tigrfam_longname=sapply(strsplit(tigrfam_meta$tigrfam_longname, ":"),function(x) paste0(tail(x, -1), collapse = ""))
+tigrfam_R07=merge(tigrfam_R07,tigrfam_meta, by='tigrfam', all.x=T)
+tigrfam_R07=tigrfam_R07 %>% group_by(qseqid) %>% summarise(tigrfam = toString(tigrfam), tigrfam_longname=toString(tigrfam_longname)) %>% as.data.frame
+R07_annots=merge(R07_annots,tigrfam_R07, by='qseqid',all.x=T)
+
+#pfam
+pfam_R07=read.csv('~/Tubeworms/data/annotations/R07B-5_maker2ndpass.30/Blast2Go/R07B-5_PFAM_annots.txt',header=F,sep='\t')
+colnames(pfam_R07)=c('pfam','qseqid')
+pfam_meta=read.csv('~/Tubeworms/data/annotations/R07B-5_maker2ndpass.30/Blast2Go/R07B-5_PFAM_meta.txt',header=T,sep='\t')
+pfam_meta=pfam_meta[,c('X.Accession','Description')]
+colnames(pfam_meta)=c('pfam','pfam_longname')
+pfam_R07=merge(pfam_R07,pfam_meta, by='pfam', all.x=T)
+pfam_R07=pfam_R07 %>% group_by(qseqid) %>% summarise(pfam = toString(pfam), pfam_longname=toString(pfam_longname)) %>% as.data.frame
+R07_annots=merge(R07_annots,pfam_R07, by='qseqid',all.x=T)
+
+#### P08 #####
+
+P08_annots=read.csv('~/Tubeworms/data/annotations/P08H-3_maker2ndpass.12/Blast2Go/P08H-3_annots_summary.txt',header=T,sep='\t')
+P08_annots$genome='P. palmiformis'
+
+KO_P08=read.csv('~/Tubeworms/data/annotations/P08H-3_maker2ndpass.12/Blast2Go/P08H-3_KO_annots.txt',header=F,sep='\t')
+colnames(KO_P08)=c('qseqid','KO')
+P08_annots=merge(P08_annots,KO_P08, by='qseqid',all.x=T)
+
+kog_P08=read.csv('~/Tubeworms/data/annotations/P08H-3_maker2ndpass.12/Blast2Go/P08H-3_KOG_annots.txt',header=F,sep='\t')
+kog_P08=kog_P08[,c('V1','V14','V15')] %>% group_by(V1) %>% summarise(KOG = toString(V14), KOG_longname=toString(V15)) %>% as.data.frame
+colnames(kog_P08)[1]='qseqid'
+P08_annots=merge(P08_annots,kog_P08, by='qseqid',all.x=T)
+
+tigrfam_P08=read.csv('~/Tubeworms/data/annotations/P08H-3_maker2ndpass.12/Blast2Go/P08H-3_TIGRFAM_annots.txt',header=F,sep='\t')
+colnames(tigrfam_P08)=c('tigrfam','qseqid')
+tigrfam_meta=read.csv('~/Tubeworms/data/annotations/P08H-3_maker2ndpass.12/Blast2Go/P08H-3_TIGRFAM_meta.txt',header=T,sep='\t')
+tigrfam_meta=tigrfam_meta[,c('Name','Description')]
+colnames(tigrfam_meta)=c('tigrfam','tigrfam_longname')
+tigrfam_meta$tigrfam_longname=sapply(strsplit(tigrfam_meta$tigrfam_longname, ":"),function(x) paste0(tail(x, -1), collapse = ""))
+tigrfam_P08=merge(tigrfam_P08,tigrfam_meta, by='tigrfam', all.x=T)
+tigrfam_P08=tigrfam_P08 %>% group_by(qseqid) %>% summarise(tigrfam = toString(tigrfam), tigrfam_longname=toString(tigrfam_longname)) %>% as.data.frame
+P08_annots=merge(P08_annots,tigrfam_P08, by='qseqid',all.x=T)
+
+pfam_P08=read.csv('~/Tubeworms/data/annotations/P08H-3_maker2ndpass.12/Blast2Go/P08H-3_PFAM_annots.txt',header=F,sep='\t')
+colnames(pfam_P08)=c('pfam','qseqid')
+pfam_meta=read.csv('~/Tubeworms/data/annotations/P08H-3_maker2ndpass.12/Blast2Go/P08H-3_PFAM_meta.txt',header=T,sep='\t')
+pfam_meta=pfam_meta[,c('X.Accession','Description')]
+colnames(pfam_meta)=c('pfam','pfam_longname')
+pfam_P08=merge(pfam_P08,pfam_meta, by='pfam', all.x=T)
+pfam_P08=pfam_P08 %>% group_by(qseqid) %>% summarise(pfam = toString(pfam), pfam_longname=toString(pfam_longname)) %>% as.data.frame
+P08_annots=merge(P08_annots,pfam_P08, by='qseqid',all.x=T)
+
+### Pec
+# KEGG
+Pec_annots=read.csv('~/Tubeworms/data/annotations/Pec/Blast2Go/Pec_annots.txt',header=T,sep='\t')
+
+Pec_annots$genome='P. echinospica'
+Pec_annots=Pec_annots[,c('seqid','blast','EC.Codes','GO','go_des','genome','ko')]
+colnames(Pec_annots)=c('qseqid','Description','Enzyme.Codes','GO.IDs','GO.Names','genome','KO')
+Pec_annots$qseqid=gsub('pec\\|','', Pec_annots$qseqid)
+Pec_annots[setdiff(colnames(example),colnames(Pec_annots))] <- NA
+Pec_annots[Pec_annots$KO==0,'KO'] <- NA
+Pec_annots[Pec_annots$GO.IDs==0,'GO.IDs'] <- NA
+Pec_annots[Pec_annots$GO.Names==0,'GO.Names'] <- NA
+Pec_annots[Pec_annots$Enzyme.Codes==0,'GO.Names'] <- NA
+
+Pec_annots=Pec_annots[,colnames(example)]
+
+
+#KOG
+
+kog_Pec=read.csv('~/Tubeworms/data/annotations/Pec/Blast2Go/Pec_KOG_annots.txt',header=F,sep='\t')
+kog_Pec=kog_Pec[,c('V1','V14','V15')] %>% group_by(V1) %>% summarise(KOG = toString(V14), KOG_longname=toString(V15)) %>% as.data.frame
+colnames(kog_Pec)[1]='qseqid'
+Pec_annots=merge(Pec_annots,kog_Pec, by='qseqid',all.x=T)
+
+#tigrfam
+tigrfam_Pec=read.csv('~/Tubeworms/data/annotations/Pec/Blast2Go/Pec_TIGRFAM_annots.txt',header=F,sep='\t')
+colnames(tigrfam_Pec)=c('tigrfam','qseqid')
+tigrfam_meta=read.csv('~/Tubeworms/data/annotations/Pec/Blast2Go/Pec_TIGRFAM_meta.txt',header=T,sep='\t')
+tigrfam_meta=tigrfam_meta[,c('Name','Description')]
+colnames(tigrfam_meta)=c('tigrfam','tigrfam_longname')
+tigrfam_meta$tigrfam_longname=sapply(strsplit(tigrfam_meta$tigrfam_longname, ":"),function(x) paste0(tail(x, -1), collapse = ""))
+tigrfam_Pec=merge(tigrfam_Pec,tigrfam_meta, by='tigrfam', all.x=T)
+tigrfam_Pec=tigrfam_Pec %>% group_by(qseqid) %>% summarise(tigrfam = toString(tigrfam), tigrfam_longname=toString(tigrfam_longname)) %>% as.data.frame
+Pec_annots=merge(Pec_annots,tigrfam_Pec, by='qseqid',all.x=T)
+
+#pfam
+pfam_Pec=read.csv('~/Tubeworms/data/annotations/Pec/Blast2Go/Pec_PFAM_annots.txt',header=F,sep='\t')
+colnames(pfam_Pec)=c('pfam','qseqid')
+pfam_meta=read.csv('~/Tubeworms/data/annotations/Pec/Blast2Go/Pec_PFAM_meta.txt',header=T,sep='\t')
+pfam_meta=pfam_meta[,c('X.Accession','Description')]
+colnames(pfam_meta)=c('pfam','pfam_longname')
+pfam_Pec=merge(pfam_Pec,pfam_meta, by='pfam', all.x=T)
+pfam_Pec=pfam_Pec %>% group_by(qseqid) %>% summarise(pfam = toString(pfam), pfam_longname=toString(pfam_longname)) %>% as.data.frame
+Pec_annots=merge(Pec_annots,pfam_Pec, by='qseqid',all.x=T)
+Pec_annots$`flag`='good_annot'
+
+#########
+df=rbind(R07_annots,P08_annots)
+
+df$flag=''
+df[df$eAED<1 | df$phylum=='Annelida','flag']='good_annot'
+df[df$eAED==1 & (is.na(df$staxid) & df$InterPro.IDs=='no IPS match'),'flag']='bad_annot'
+
+df=rbind(df,Pec_annots)
+
+rm(P08_annots)
+rm(R07_annots)
+rm(KO_P08)
+rm(KO_R07)
+rm(kog_R07)
+rm(kog_P08)
+
+
+write.table(df,'~/Tubeworms/data/annotations/Final_annotations.txt',col.names=T,sep='\t',quote=F,row.names=F)
+
+```
+
+Final_blast_summary.txt
+```{r eval=FALSE, echo=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+R07_annots=read.csv('~/Tubeworms/data/annotations/R07B-5_maker2ndpass.30/Blast2Go/R07B-5_annots_summary.txt',header=T,sep='\t')
+R07_annots$genome='R07B-5 vs nr'
+R07_annots$flag=''
+R07_annots[R07_annots$eAED<1 | R07_annots$phylum=='Annelida','flag']='good_annot'
+
+R07plus_annots=read.csv('~/Tubeworms/data/annotations/R07B-5_maker2ndpass.30/Blast2Go/R07B-5_annots_with_pec_and_rifpa_summary.txt',header=T,sep='\t')
+R07plus_annots$flag=''
+R07plus_annots$genome='R07B-5 vs nr\n+ Riftia gene models \n+ Paraescarpia gene models'
+R07plus_annots[R07plus_annots$qseqid %in% (R07_annots[R07_annots$flag=='good_annot','qseqid']),'flag']='good_annot'
+
+P08_annots=read.csv('~/Tubeworms/data/annotations/P08H-3_maker2ndpass.12/Blast2Go/P08H-3_annots_summary.txt',header=T,sep='\t')
+P08_annots$genome='P08H-3 vs nr'
+P08_annots$flag=''
+P08_annots[P08_annots$eAED<1 | P08_annots$phylum=='Annelida','flag']='good_annot'
+
+df=rbind(R07_annots,P08_annots,R07plus_annots)
+
+df$taxonomic_breakdown=factor(df$taxonomic_breakdown, levels=c('Annelida','Other Invertebrates','Other Metazoa','Other','No Blast'), labels = c('Annelida','Other Invertebrates','Other Metazoa','Other Organisms','No Blast'))
+df$hypothetical=F
+df[grepl('hypothetical protein', df$Description),"hypothetical"]=T
+df$contig=(unlist(lapply(strsplit(df$qseqid,'-'), '[[', 2)))
+
+df %>% str
+df$genome %>% unique
+
+rm(P08_annots)
+rm(R07_annots)
+rm(R07plus_annots)
+rm(R07_chunk)
+rm(P08_chunk)
+
+write.table(df,'~/Tubeworms/data/annotations/Final_blast_summary.txt',col.names=T,sep='\t',quote=T,row.names=F)
+```
+
+# Methylation detection from Whole-Genome Bisultite Sequencing
+
+## Trimming and filtering BS-Seq library
+
+Trimmomatic [@bolger2014a] manual: http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf
+
+```{r, engine = 'bash', eval = FALSE}
+SLURM_CPUS_PER_TASK=8
+ind=R07B-5
+READSPATH=~/Tubeworms/data/parsed_reads/WGBS
+R1=~/Tubeworms/data/raw_reads/${ind}-V_WGBS_R1.fq.gz
+R2=~/Tubeworms/data/raw_reads/${ind}-V_WGBS_R2.fq.gz
+
+
+java -jar trimmomatic-0.39.jar PE -threads $SLURM_CPUS_PER_TASK -trimlog trim.log -validatePairs ${R1} ${R2} ${READSPATH}/${ind}_WGBS_filtered_R1.fastq.gz ${READSPATH}/${ind}_WGBS_filtered_singletons_R1.fastq.gz ${READSPATH}/${ind}_WGBS_filtered_R2.fastq.gz ${READSPATH}/${ind}_WGBS_filtered_singletons_R2.fastq.gz ILLUMINACLIP:~/Tubeworms/data/parsed_reads/TruSeq3_PE-2.fa:2:30:10:2:keepBothReads LEADING:10 TRAILING:10 MINLEN:50
+
+cat ${READSPATH}/${ind}_WGBS_filtered_singletons_R1.fastq.gz ${READSPATH}/${ind}_WGBS_filtered_singletons_R2.fastq.gz > ${READSPATH}/${ind}_WGBS_filtered_singletons.fastq.gz
+
+rm ${READSPATH}/${ind}_WGBS_filtered_singletons_R*.fastq.gz
+
+```
+
+## Methylation detection with bismark
+
+Bismark [@krueger2011a] manual: https://github.com/FelixKrueger/Bismark/tree/master/Docs#readme
+
+```{r, engine = 'bash', eval = FALSE}
+SLURM_CPUS_PER_TASK=12
+ind=R07B-5
+genome_folder=~/Tubeworms/data/Epig/WGBS/genome
+
+R1=~/Tubeworms/data/parsed_reads/WGBS/${ind}_WGBS_filtered_R1.fastq.gz
+R2=~/Tubeworms/data/parsed_reads/WGBS/${ind}_WGBS_filtered_R2.fastq.gz
+RS=~/Tubeworms/data/parsed_reads/WGBS/${ind}_WGBS_filtered_singletons.fastq.gz
+
+cd ~/scratch/Tubeworms/Epig/WGBS
+
+# Indexing the genome
+bismark_genome_preparation --parallel $SLURM_CPUS_PER_TASK $genome_folder
+
+# Running bismark
+bismark --parallel $SLURM_CPUS_PER_TASK --genome $genome_folder -1 $R1 -2 $R2 $RS
+
+# Removing duplicated sequences
+deduplicate_bismark --bam R07B-5_WGBS_filtered_R1_bismark_bt2_pe.bam -o R07B-5_WGBS_filtered_R1_bismark_bt2_pe
+
+# Extracting context-dependent (CpG/CHG/CHH) methylation
+bismark_methylation_extractor --comprehensive --merge_non_CpG --no_header --parallel $SLURM_CPUS_PER_TASK --bedGraph R07B-5_WGBS_filtered_R1_bismark_bt2_pe.deduplicated.bam
+
+# Getting per-pb methylation coverage
+bismark2bedGraph -o CpG_context_R07B-5_WGBS_filtered_R1_bismark_bt2_pe.deduplicated --ample_memory CpG_context_R07B-5_WGBS_filtered_R1_bismark_bt2_pe.deduplicated.txt 
+
+coverage2cytosine -o CpG_context_R07B-5_WGBS_filtered_R1_bismark_bt2_pe.deduplicated -genome_folder $genome_folder CpG_context_R07B-5_WGBS_filtered_R1_bismark_bt2_pe.deduplicated.txt
+
+# Get bedgraph (bigwig format) of high quality WGBS methylation calls; for publication to GEO
+
+zcat ${ind}_WGBS_filtered_R1_bismark_bt2_pe.deduplicated.bismark.cov.gz | awk -F"\t" -v OFS="\t" '{if ($5+$6>9) print $1,$2-1,$3,$4}' > tmp.${ind}_wgbs_methylation_frequency.cov10.bedgraph # had to remove 1 because 1-based start instead of 0-based
+sort -k1,1 -k2,2n tmp.${ind}_wgbs_methylation_frequency.cov10.bedgraph > ${ind}_wgbs_methylation_frequency.cov10.bedgraph
+
+bedGraphToBigWig ${ind}_wgbs_methylation_frequency.cov10.bedgraph ../${ind}/${ind}_wtdbg2.chrsizes ${ind}_wgbs_methylation_frequency.cov10.bigwig # bedGraphToBigWig available at https://github.com/ENCODE-DCC/kentUtils
+rm tmp.${ind}_wgbs_methylation_frequency.cov10.bedgraph 
+
+# Get tsv of whole-genome methylation call summary for C in CpG context (both strand); for publication to GEO
+echo '' | awk -F'\t' -vOFS='\t' '{print "chromosome","start","end","methcall_coverage","meth_frequency"}' > ${ind}_WGBS.perCinCpGcontext_methylation.sorted.txt
+zcat ${ind}_WGBS_filtered_R1_bismark_bt2_pe.deduplicated.bismark.cov.gz | awk -F"\t" -v OFS="\t" '{if ($5+$6>0) print $1,$2-1,$3,$5+$6,$4}' | sort -k1,1 -k2,2n >>  ${ind}_WGBS.perCinCpGcontext_methylation.sorted.txt
+gzip ${ind}_WGBS.perCinCpGcontext_methylation.sorted.txt
+
+```
+
+# Methylation detection from ONT data
+
+## Calling methylation with Nanopolish
+
+Nanopolish [@simpson2017] manual: https://nanopolish.readthedocs.io/en/latest/quickstart_call_methylation.html#
+
+```{r, engine = 'bash', eval = FALSE}
+
+ind=R07B-5 #  R07B-5 for R.piscesae, P08H-3 for P.palmiformis; Pec for P.echinospica;
+
+if [ $ind == "Pec" ]; then echo $ind; fasta_prefix=${ind}_contigs; else fasta_prefix=${ind}_wtdbg2; fi
+if [ $ind == "P08H-3" ]; then echo $ind; trial=nanopolish_callmethylation; else trial=nanopolish_callmethylation_raw;fi
+
+REF_ASSEMBLY=~/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.fasta
+PATH_TO_FAST5=~/Tubeworms/data/raw_reads/Nanopore
+PATH_TO_FASTQ=~/Tubeworms/data/parsed_reads/${ind}
+
+nanop_lib=raw.map-ont
+N=nucl_${ind}.raw.fasta.gz
+
+PATHOUT=~/Tubeworms/data/Epig/${ind}_raw_reads
+cd $PATHOUT
+
+######
+
+SLURM_CPUS_PER_TASK=40
+
+### indexing reads
+
+SUMMARY_FILE=$PATH_TO_FAST5/${ind}_sequencing_summary.txt #Sequencing summary file created during basecalling of Nanopore reads
+
+nanopolish index --verbose -d $PATH_TO_FAST5/ -s $SUMMARY_FILE $N
+
+### mapping reads to reference
+
+minimap2 -t $SLURM_CPUS_PER_TASK -K 1G --secondary=no -ax map-ont $REF_ASSEMBLY $N | sambamba view -t $SLURM_CPUS_PER_TASK -S -f bam /dev/stdin > ${ind}_${nanop_lib}.bam
+
+sambamba sort -t $SLURM_CPUS_PER_TASK -o ${ind}_${nanop_lib}.sorted.bam
+
+sambamba index -t $SLURM_CPUS_PER_TASK ${ind}_${nanop_lib}.sorted.bam
+
+### calling methylation
+
+mkdir $PATHOUT
+
+nanopolish call-methylation --progress -t $SLURM_CPUS_PER_TASK -K 736 --reads $N -b ${ind}_${nanop_lib}.sorted.bam -g $REF_ASSEMBLY > ${ind}_${trial}_methylation_calls.tsv
+
+~/software/nanopolish/scripts/calculate_methylation_frequency.py ${ind}_${trial}_methylation_calls.tsv > ${ind}_${trial}_methylation_frequency.tsv
+
+##############################################################################################
+#### For R07B-5 also detect methylation on dataset with simulated lower sequencing effort ####
+##############################################################################################
+
+if [ $ind == "R07B-5" ]; then 
+
+# subsample reads in bam file to 10% and 20% of original library
+
+sambamba view -h -t $SLURM_CPUS_PER_TASK -s 0.1 -f bam --subsampling-seed=666 ${ind}_${nanop_lib}.sorted.bam -o ${ind}_${nanop_lib}_10x.sorted.bam
+sambamba index -t $SLURM_CPUS_PER_TASK ${ind}_${nanop_lib}_10x.sorted.bam
+
+sambamba view -h -t $SLURM_CPUS_PER_TASK -s 0.2 -f bam --subsampling-seed=666 ${ind}_${nanop_lib}.sorted.bam -o ${ind}_${nanop_lib}_20x.sorted.bam
+sambamba index -t $SLURM_CPUS_PER_TASK ${ind}_${nanop_lib}_20x.sorted.bam
+
+### calling methylation ... 20x
+
+trial=nanopolish_callmethylation_raw_20x
+mkdir $PATHOUT/$trial
+
+echo "
+nanopolish call-methylation --progress -t $SLURM_CPUS_PER_TASK -K 736 --reads $N -b ${ind}_${nanop_lib}_20x.sorted.bam -g $REF_ASSEMBLY > ${ind}_${trial}_methylation_calls.tsv
+"
+
+nanopolish call-methylation --progress -t $SLURM_CPUS_PER_TASK -K 736 --reads $N -b ${ind}_${nanop_lib}_20x.sorted.bam -g $REF_ASSEMBLY > ${ind}_${trial}_methylation_calls.tsv
+
+/home/maeperez/software/nanopolish/scripts/calculate_methylation_frequency.py ${ind}_${trial}_methylation_calls.tsv > ${ind}_${trial}_methylation_frequency.tsv
+
+### calling methylation ... 10x
+
+trial=nanopolish_callmethylation_raw_10x
+mkdir $PATHOUT/$trial
+
+echo "
+nanopolish call-methylation --progress -t $SLURM_CPUS_PER_TASK -K 736 --reads $N -b ${ind}_${nanop_lib}_10x.sorted.bam -g $REF_ASSEMBLY > ${ind}_${trial}_methylation_calls.tsv
+"
+
+nanopolish call-methylation --progress -t $SLURM_CPUS_PER_TASK -K 736 --reads $N -b ${ind}_${nanop_lib}_10x.sorted.bam -g $REF_ASSEMBLY > ${ind}_${trial}_methylation_calls.tsv
+
+/home/maeperez/software/nanopolish/scripts/calculate_methylation_frequency.py ${ind}_${trial}_methylation_calls.tsv > ${ind}_${trial}_methylation_frequency.tsv
+
+fi
+
+```
+
+## Generating summary files
+
+methcall_coverage_distribution.txt
+```{r, engine = 'bash', eval = FALSE}
+
+for ind in Pec R07B-5 P08H-3
+do
+
+if [ $ind == "P08H-3" ]; then trial=nanopolish_callmethylation; else trial=nanopolish_callmethylation_raw;fi
+
+cd ~/Tubeworms/data/Epig/${ind}_raw_reads/
+
+resamplingdepth=""
+
+echo $ind $trial $resamplingdepth
+tail -n +2 ${ind}_${trial}_methylation_frequency.tsv| awk -F"\t" -v OFS="\t" '{print $5/$4,$4}'| awk -F"\t" -v OFS="\t" -v ind="$ind" -v resamplingdepth="$resamplingdepth" '{arr[$1]+=$2} END { for (key in arr) printf("%s\t%s\t%s\t%s\n", key, arr[key], ind, resamplingdepth) }' | sort -k1,1n > ${ind}_${trial}.methcall_coverage_distribution.txt
+
+if [ $ind == "R07B-5" ]; then
+
+for resamplingdepth in "_20x" "_10x"
+do
+
+echo $ind $trial $resamplingdepth
+tail -n +2 ${ind}_${trial}${resamplingdepth}_methylation_frequency.tsv| awk -F"\t" -v OFS="\t" '{print $5/$4,$4}'| awk -F"\t" -v OFS="\t" -v ind="$ind" -v resamplingdepth="$resamplingdepth" '{arr[$1]+=$2} END { for (key in arr) printf("%s\t%s\t%s\t%s\n", key, arr[key], ind, resamplingdepth) }' | sort -k1,1n > ${ind}_${trial}${resamplingdepth}.methcall_coverage_distribution.txt
+
+done
+fi
+
+done
+
+cd ~/Tubeworms/data/Epig/
+
+cat *_raw_reads/*.methcall_coverage_distribution.txt > methcall_coverage_distribution.txt
+```
+
+ind_trial_nanoporetotal_all_genome_C_report.txt
+ind_trial_methcallcov.padded.bigwig
+ind_trial_frequency.cov1.padded.bigwig
+ind_trial_frequency.cov10.padded.bigwig
+ind_trial.perCpG_methylation.allCpG.sorted.padded.txt
+ind_trial.perCpG_methylation.allCpG.sorted.padded.bed
+ind_trial.perCpG_methylation.sorted.padded.txt
+ind_trial.perCpG_methylation.sorted.padded.bed
+ind_trial.perCpG_methylation.sorted.padded.cov1.txt
+ind_trial.perCpG_methylation.sorted.padded.cov1.bed
+ind_trial.perCpG_methylation.sorted.padded.cov10.txt
+ind_trial.perCpG_methylation.sorted.padded.cov10.bed
+```{r, engine = 'bash', eval = FALSE}
+
+module load perl
+module load bedtools
+module load seqkit
+
+for ind in Pec R07B-5 P08H-3
+do
+
+if [ $ind == "Pec" ]; then echo $ind; fasta_prefix=${ind}_contigs; else fasta_prefix=${ind}_wtdbg2; fi
+if [ $ind == "P08H-3" ]; then echo $ind; trial=nanopolish_callmethylation; else trial=nanopolish_callmethylation_raw;fi
+fasta=/home/maeperez/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.fasta
+
+
+cd ~/Tubeworms/data/Epig/${ind}_raw_reads/
+
+ln -s /home/maeperez/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.sorted.chrsizes ${ind}.chrsizes
+
+
+### get methylation report with mean methylated and unmethylated read counts per CpGs (a Nanopore call group may include more than one CpG motif) ####
+
+echo "" | awk -v OFS="\t" '{print "chromosome","start","end","meancountmethylated","meancountunmethylated","nummotifs"}' > ${ind}_${trial}_nanoporetotal_all_genome_C_report.txt
+
+awk -F"\t" -v OFS="\t" '{print $1,$2,$3,$6/$4,($5-$6)/$4,$4}' ${ind}_${trial}_methylation_frequency.tsv | sort -k1,1 -k2,2n >> ${ind}_${trial}_nanoporetotal_all_genome_C_report.txt
+
+#### get methylation call summary ####
+
+tail -n +2 ${ind}_${trial}_methylation_frequency.tsv| awk -F"\t" -v OFS="\t" '{print $1,$2,$3,$5/$4,$4}' | sort -k1,4 | bedtools groupby -g 4 -c 5 -o sum | head
+
+#### get methylation call coverage (padded) bedgraph files ####
+
+file=${ind}_${trial}_nanoporetotal_all_genome_C_report.txt
+
+tail -n +2 $file | awk -F"\t" -v OFS="\t" '{print $1,$2,$3+2,($4+$5)}' >> ${ind}_${trial}_methcallcov.padded.bedgraph # Note that the Nanopore position indexing is adjusted to match that of the bed file format.
+
+bedGraphToBigWig ${ind}_${trial}_methcallcov.padded.bedgraph ${ind}.chrsizes ${ind}_${trial}_methcallcov.padded.bigwig # a lighter file format readable in IGV, bedGraphToBigWig available at https://github.com/ENCODE-DCC/kentUtils
+
+#### get methylation frequencies (padded) bedgraph files ####
+
+file=${ind}_${trial}_nanoporetotal_all_genome_C_report.txt
+
+tail -n+2 $file | awk -F"\t" -v OFS="\t" '{if ($5>0) print $1,$2,$3+2,$4/($4+$5)*100}' | tail -n +2 | sort -k1,1 -k2,2n > ${ind}_frequency.cov1.padded.bedgraph
+
+bedGraphToBigWig ${ind}_frequency.cov1.padded.bedgraph ${ind}.chrsizes ${ind}_${trial}_frequency.cov1.padded.bigwig
+
+tail -n+2 $file | awk -F"\t" -v OFS="\t" '{if ($5>=10) print $1,$2,$3+2,$4/($4+$5)*100}' | tail -n +2 | sort -k1,1 -k2,2n > ${ind}_frequency.cov10.padded.bedgraph
+
+bedGraphToBigWig ${ind}_frequency.cov10.padded.bedgraph ${ind}.chrsizes ${ind}_${trial}_methylation_frequency.cov10.bigwig
+gzip ${ind}_${trial}_methylation_frequency.cov10.bigwig
+
+rm ${ind}_frequency.cov1.padded.bedgraph ${ind}_frequency.cov10.padded.bedgraph
+
+
+### Get per-CpG methylation call coverage and frequencies by mapping Nanopore info to genome-wide CpG map ####
+
+seqkit locate -p CG $fasta --bed --only-positive-strand --validate-seq-length 0 --non-greedy --max-mismatch 0 | sort -k1,1 -k2,2n > ${ind}_CG.bed #get genome-wide CpG map
+
+
+awk -F"\t" -v OFS="\t" '{print $1,$2,$3+2,".",$4,$5,$6}' ${ind}_${trial}_nanoporetotal_all_genome_C_report.txt | tail -n +2 | sort -k1,1 -k2,2n > ${ind}_${trial}_nanoporetotal_all_genome_C_report.sorted.padded.bed
+
+echo "" | awk -v OFS="\t" '{print "chromosome","start","end","methcall_coverage", "meth_frequency"}' > ${ind}_${trial}.perCpG_methylation.allCpG.sorted.padded.txt
+
+bedtools map -a ${ind}_CG.bed -b ${ind}_${trial}_nanoporetotal_all_genome_C_report.sorted.padded.bed -c 5,6,7 -o collapse | awk -F"\t" -v OFS="\t" '{if ($9 != ".") print $1,$2,$3,$7+$8,$7/($7+$8); else print $1,$2,$3,0,0}' >> ${ind}_${trial}.perCpG_methylation.allCpG.sorted.padded.txt
+
+tail -n+2 ${ind}_${trial}.perCpG_methylation.allCpG.sorted.padded.txt | awk -F"\t" -v OFS="\t" '{print $1,$2,$3,".",$4,$5}' > ${ind}_${trial}.perCpG_methylation.allCpG.sorted.padded.bed
+
+# only CpGs called for methylation
+awk -F'\t' -vOFS='\t' '{if ($4>0) print}' ${ind}_${trial}.perCpG_methylation.allCpG.sorted.padded.txt > ${ind}_${trial}.perCpG_methylation.sorted.padded.txt
+
+ln -s ${ind}_${trial}.perCpG_methylation.sorted.padded.txt ${ind}_${trial}.perCpG_methylation.sorted.padded.cov1.txt
+
+tail -n+2 ${ind}_${trial}.perCpG_methylation.sorted.padded.txt | awk -F"\t" -v OFS="\t" '{print $1,$2,$3,".",$4,$5}' > ${ind}_${trial}.perCpG_methylation.sorted.padded.bed
+ln -s ${ind}_${trial}.perCpG_methylation.sorted.padded.bed ${ind}_${trial}.perCpG_methylation.sorted.padded.cov1.bed
+
+
+awk -F'\t' -vOFS='\t' '{if ($4>=10) print}' ${ind}_${trial}.perCpG_methylation.sorted.padded.cov1.txt > ${ind}_${trial}.perCpG_methylation.sorted.padded.cov10.txt
+
+tail -n+2 ${ind}_${trial}.perCpG_methylation.sorted.padded.cov10.txt | awk -F"\t" -v OFS="\t" '{print $1,$2,$3,".",$4,$5}' > ${ind}_${trial}.perCpG_methylation.sorted.padded.cov10.bed
+
+done
+
+```
+
+
+Pec.windowavg1000.CpGoe.bigwig
+R07B-5.windowavg1000.CpGoe.bigwig
+P08H-3.windowavg1000.CpGoe.bigwig
+```{r, engine = 'bash', eval = FALSE}
+
+#windowsize=1000 (no overlap)
+
+module load bedtools
+
+for ind in Pec R07B-5 P08H-3
+do
+if [ $ind == "Pec" ]; then echo $ind; fasta_prefix=${ind}_contigs; else echo $ind; fasta_prefix=${ind}_wtdbg2; fi
+
+cd ~/Tubeworms/data/Epig/${ind}_raw_reads
+
+fasta=/home/maeperez/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.fasta
+
+rm ${ind}.chrsizes
+ln -s /home/maeperez/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.sorted.chrsizes ${ind}.chrsizes
+
+
+bedtools makewindows -b <(awk -F'\t' -vOFS='\t' '{print $1,0,$2}' ${ind}.chrsizes) -w 1000 -i winnum >  tmp.${ind}.windows.bed
+
+
+bedtools nuc -fi $fasta -pattern "CG" -bed tmp.${ind}.windows.bed | tail -n +2 | awk -F"\t" -v OFS="\t" '{ if (!($(NF-6)==0 || $(NF-5)==0)) print $1,$2,$3,($NF/($(NF-6)*$(NF-5)))*($(NF-1)^2/($(NF-1)-1))}' | sort -k1,1 -k2,2n > tmp.${ind}.windows.CpGoe.bedgraph
+
+bedGraphToBigWig tmp.${ind}.windows.CpGoe.bedgraph ${ind}.chrsizes ${ind}.windows.CpGoe.bigwig 
+
+rm tmp.${ind}.windows.CpGoe.bedgraph tmp.${ind}.windows.bed
+
+done
+
+
+
+```
+
+# Comparing Nanopore to WGBS methylation calls
+
+## Mapping WGBS to Nanopore calls
+
+```{r, engine = 'bash', eval = FALSE}
+module load perl
+module load bedtools
+
+ind=R07B-5
+filtering=raw_reads
+path_to_nanopore_result_folder=/home/maeperez/Tubeworms/data/Epig/${ind}_${filtering}
+trial=nanopolish_callmethylation_raw
+
+### Get WGBS genome-wide summary and bed files #######
+cd ~/Tubeworms/data/Epig/WGBS/
+
+# get bedfile with methylated and unmethylated read counts (for mapping to Nanopore data)
+
+echo "" | awk -vOFS="\t" '{print "chromosome","start","end","." "call_methylated","call_unmethylated"}' > ${ind}_wgbs.perCpG_methylation.sorted.padded.bed
+zcat ${ind}_WGBS_filtered_R1_bismark_bt2_pe.deduplicated.bismark.cov.gz | awk -F"\t" -v OFS="\t" '{if ($5+$6>0) print $1,$2-1,$3,".",$5,$6}' | sort -k1,1 -k2,2n  >> ${ind}_wgbs.perCpG_methylation.sorted.padded.bed
+
+
+for trial in nanopolish_callmethylation_raw nanopolish_callmethylation_raw_20x nanopolish_callmethylation_raw_10x
+do
+
+### Map WBGS data to genome-wide CpG map (all CpGs) that includes Nanopore data ###
+
+echo "" | awk -vOFS="\t" '{print "chromosome","start","end","nanop_methcall_coverage","nanop_meth_frequency","wgbs_meth_call_coverage","wgbs_meth_frequency"}' > ${ind}_${trial}_wgbs.perCpG_methylation.sorted.padded.tsv
+
+bedtools map -a ../${ind}_${trial}.perCpG_methylation.allCpG.sorted.padded.bed -b <(tail -n+2 ${ind}_wgbs.perCpG_methylation.sorted.padded.bed) -c 5,6 -o sum | awk -F'\t' -vOFS='\t' '{gsub(/\./,0,$7);gsub(/\./,0,$8); if (($7+$8)>0) print $1,$2,$3,$5,$6,$7+$8,$7/($7+$8); else print $1,$2,$3,$5,$6,0,0}' >> ${ind}_${trial}_wgbs.perCpG_methylation.sorted.padded.tsv
+
+done
+
+```
+
+## Getting correlation statistics
+
+R07B-5_wgbs_methylation_frequency.map_to_nanop.cov10.window1.txt
+R07B-5_wgbs_methylation_frequency.map_to_nanop.cov10.window10000.txt
+R07B-5_wgbs_methylation_frequency.map_to_nanop.cov10.window1000000.txt
+R07B-5_wgbs_methylation_frequency.map_to_nanop_10x.cov1.window1.txt
+R07B-5_wgbs_methylation_frequency.map_to_nanop_10x.cov1.window10000.txt
+R07B-5_wgbs_methylation_frequency.map_to_nanop_10x.cov1.window1000000.txt
+
+```{r, engine = 'python', eval = FALSE}
+import pandas as pd
+import numpy as np
+from os import listdir
+from scipy.stats import pearsonr
+
+for resamplingdepth in ['','_20x','_10x']:
+    path='~/Tubeworms/data/Epig/WGBS/'
+    df_master=pd.read_csv(path+'R07B-5_nanopolish_callmethylation_raw'+resamplingdepth+'_wgbs.perCpG_methylation.sorted.padded.tsv',
+                   sep='\t',header=0,na_values='.',
+                   dtype={'contig': str, 'start': "Int64", 'end': "Int64", 'nanop_methcall_coverage': "Int64",'nanop_meth_frequency': float,
+                          'wgbs_meth_call_coverage': "Int64",'wgbs_meth_frequency': float })
+    df_master['step']=df_master.end-df_master.start-1
+    df_master['cov']=df_master.nanop_methcall_coverage
+
+    # get threshold values
+    thresh_dic={}
+    for i in [0,1,5,10]:
+        thresh_dic['q'+str(100-i)]={'thrmin':df_master[df_master.nanop_methcall_coverage>0]['nanop_methcall_coverage'].quantile(i/100/2),'thrmax':df_master[df_master.nanop_methcall_coverage>0]['nanop_methcall_coverage'].quantile(1-i/100/2)}
+    for i in [1,5,10]:
+        thresh_dic[i]={'thrmin':i,'thrmax':thresh_dic['q100']['thrmax']}
+    # for cov_wgbs in [1,5,10]:
+    for cov_wgbs in [1,5,10]:
+
+        print('cov_wgbs',cov_wgbs)
+        for nanop_threshold in [1,5,10,'q99','q95','q90']:
+            thrmin_nanop=thresh_dic[nanop_threshold]['thrmin']
+            thrmax_nanop=thresh_dic[nanop_threshold]['thrmax']
+
+            print('nanop_threshold',nanop_threshold)
+
+            df=df_master[(df_master.wgbs_meth_call_coverage>=cov_wgbs) & (df_master.nanop_methcall_coverage>=thrmin_nanop) & (df_master.nanop_methcall_coverage<=thrmax_nanop)]
+
+            mean_step=df.step.mean()
+            median_step=df.step.median()
+            mean_CpGs=1
+            median_CpGs=1
+            n=len(df)
+            window=1
+            if (nanop_threshold in [1,10]) and (cov_wgbs in [10]):
+                df[['chromosome','start','end','nanop_meth_frequency','wgbs_meth_frequency']].to_csv(path+'R07B-5_wgbs_methylation_frequency.map_to_nanop'+resamplingdepth+'.cov'+str(nanop_threshold)+'.window'+str(window)+'.txt',header=True,index=False,sep='\t')
+                print(" file "+'R07B-5_wgbs_methylation_frequency.map_to_nanop'+resamplingdepth+'.cov'+str(nanop_threshold)+'.window'+str(window)+".txt written")  
+
+
+            corr, pval = pearsonr(df['nanop_meth_frequency'],
+                                  df['wgbs_meth_frequency'])
+            print('r=',corr, 'pval=',pval) 
+            dic={'window_size':1,'corr':corr,'mean_step':mean_step,'median_step':median_step,'mean_CpGs':mean_CpGs,'median_CpGs':median_CpGs,'n':n}
+
+            res=pd.DataFrame([],columns=dic.keys())
+            res=res.append(dic,ignore_index=True)
+
+
+            for window in [50,100,500,1000,5000,10000,50000,100000,500000,1000000,5000000,100000000,500000000]:
+
+                df['windox_idx']=np.floor((df.start-0.1)/window)
+                dat=df.groupby(['chromosome','windox_idx']).agg({'start': ['min', 'max'],'end':['min','max'], 
+                                                                 'nanop_meth_frequency':['mean','count'],'wgbs_meth_frequency':'mean'})
+                dat['step']=dat[('end','max')]-dat[('start','min')]
+
+                dat=dat[~(dat[('nanop_meth_frequency','mean')].isna()) & ~(dat[('wgbs_meth_frequency','mean')].isna())]
+
+
+                mean_step=dat.step.mean()
+                median_step=dat.step.median()
+                mean_CpGs=int(dat[('nanop_meth_frequency','count')].mean())
+                median_CpGs=int(dat[('nanop_meth_frequency','count')].median())
+                n=len(dat)
+                
+                
+                if window in [10000,1000000]: # write detailed table of per-window methylation
+                    if (nanop_threshold in [1,10]) and (cov_wgbs in [10]):
+                        dat.iloc[:,[4,6]].to_csv(path+'R07B-5_wgbs_methylation_frequency.map_to_nanop'+resamplingdepth+'.cov'+str(nanop_threshold)+'.window'+str(window)+'.txt',header=True,index=True,sep='\t')
+                        print(" file "+'R07B-5_wgbs_methylation_frequency.map_to_nanop'+resamplingdepth+'.cov'+str(nanop_threshold)+'.window'+str(window)+".txt written")  
+
+
+                corr, pval = pearsonr(dat[('nanop_meth_frequency','mean')], dat[('wgbs_meth_frequency','mean')])
+                dic={'window_size':window,'corr':corr,'mean_step':mean_step,'median_step':median_step,'mean_CpGs':int(mean_CpGs),'median_CpGs':int(median_CpGs),'n':n}
+
+                res=res.append(dic,ignore_index=True)
+
+            res['cov_nanop']=str(nanop_threshold)
+            res['cov_wgbs']=str(cov_wgbs)
+            res.to_csv(path+'R07B-5_wgbs_nanop'+resamplingdepth+'.correlation_per_window_size_'+str(cov_wgbs)+'_'+str(nanop_threshold)+'.txt',header=True,index=False,sep='\t')
+            print(" file "+'R07B-5_wgbs_nanop'+resamplingdepth+'.correlation_per_window_size_'+str(cov_wgbs)+'_'+str(nanop_threshold)+'.txt'+" written")
+
+  
+```
+
+R07B-5_raw_reads/WGBS/R07B-5_wgbs_nanop.correlation_per_window_size.txt
+R07B-5_raw_reads/WGBS/R07B-5_wgbs_nanop_10x.correlation_per_window_size.txt
+R07B-5_raw_reads/WGBS/R07B-5_wgbs_nanop_20x.correlation_per_window_size.txt
+```{r, engine = 'bash', eval = FALSE}
+for resamplingdepth in "" "_20x" "_10x"
+do
+
+cat ~/Tubeworms/data/Epig/WGBS/R07B-5_wgbs_nanop${resamplingdepth}.correlation_per_window_size*.txt > 
+
+done
+```
+
+## Getting statistics per gene models
+
+```{r}
+cd ~/Tubeworms/data/Epig/WGBS/
+
+ind=R07B-5
+trial=nanopolish_callmethylation_raw
+
+### get bed file of genes (bed=0-based start + 1-based end (inclusive), gff=1-based with inclusive end)
+gff=~/Tubeworms/data/annotations/${ind}/mrna.${ind}.final_gene_models.withintrons.withrepeats.withinterg.sorted.gff
+
+awk -F"\t|=|;" -vOFS='\t' '{if ($3=="gene") print $1,$4-1,$5,".",$10}' $gff  | sort -k1,1 -k2,2n > genes.${ind}.bed
+
+### add CpG counts and CpGo/e per feature
+fasta_prefix=${ind}_wtdbg2
+fasta=/home/maeperez/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.fasta
+bed=genes.${ind}.bed
+#($NF/($9*$10))*($(NF-1)/($(NF-1)-1)) CpG o/e calculation from Gavery and Roberts (2010); (CpGs_count/(C_count*G_count))*(seq_length^2/(seq_length-1))
+
+bedtools nuc -fi $fasta -pattern "CG" -bed $bed | tail -n +2 | awk -F"\t" -v OFS="\t" '{ if ($(NF-6)==0 || $(NF-5)==0) print $1,$2,$3,$4,$5,$NF,0; else print $1,$2,$3,$4,$5,$NF,($NF/($(NF-6)*$(NF-5)))*($(NF-1)^2/($(NF-1)-1))}' > tmp2.${bed} # add annotations for CpGs
+
+### Add Nanopore and WGBS methylation info
+trial=nanopolish_callmethylation_raw
+file=${ind}_${trial}_wgbs.perCpG_methylation.sorted.padded.tsv
+awk -F'\t' -vOFS='\t' '{print $1,$2,$3,".",$4,$5,$6,$7}'  $file | tail -n +2 > tmp.${ind}_${trial}_wgbs.perCpG_methylation.sorted.padded.bed
+file=tmp.${ind}_${trial}_wgbs.perCpG_methylation.sorted.padded.bed
+
+head $file
+head tmp2.${bed}
+
+bedtools map -a tmp2.${bed} -b $file -c 5,7 -o count > tmp3.cov1.${bed}
+
+bedtools map -a tmp3.cov1.${bed} -b $file -c 5,6,7,8 -o collapse > tmp4.cov1.${bed}
+
+bedtools map -a tmp4.cov1.${bed} -b $file -c 5,6,7,8 -o mean > tmp5.cov1.${bed}
+
+cat <(echo "" | awk -v OFS="\t" '{print "contig","start","end",".","locus_tag","CpG","CpGoe","nanop_callCpGs_count","wgbs_callCpGs_count","nanop_meth_callcovs","nanop_meth_freqs","wgbs_meth_callcovs","wgbs_meth_freqs","nanop_meth_meancallcov","nanop_meth_meanfreq","wgbs_meth_meancallcov","wgbs_meth_meanfreq"}') tmp5.cov1.${bed} > ${ind}.nanop_wgbs.downstream.cov1.genes.tsv
+
+#### Get meth depth and meth cov
+
+cd ~/Tubeworms/data/Epig/
+source ~/virtualenv/py38/bin/activate
+
+
+python -c "import pandas as pd
+import numpy as np
+from os import listdir
+import re
+
+
+
+pd.set_option('display.float_format','{:.1f}'.format)
+
+
+genome_dic={'Pec':'P. echinospica','R07B-5':'R. piscesae','P08H-3':'P. palmiformis'}
+fastaprefix_dic={'Pec':'Pec_contigs','R07B-5':'R07B-5_wtdbg2','P08H-3':'P08H-3_wtdbg2'}
+
+df=pd.DataFrame([],columns=['contig','start','end','.','locus_tag','CpG','CpGoe','nanop_callCpGs_count','wgbs_callCpGs_count','nanop_meth_callcovs','nanop_meth_freqs','wgbs_meth_meancallcov','wgbs_meth_meanfreq'])
+
+ind='R07B-5'
+cov='cov1'
+
+    
+file='/home/maeperez/Tubeworms/data/Epig/WGBS/'+ind+'.nanop_wgbs.downstream.cov1.genes.tsv'
+df=pd.read_csv(file,header=0,sep='\t',index_col=None)
+
+
+df['nanop_meth_callcovs']=df['nanop_meth_callcovs'].apply(lambda x : np.array([float(i) for i in x.split(',') if x!='.' ]))
+df['wgbs_meth_callcovs']=df['wgbs_meth_callcovs'].apply(lambda x : np.array([float(i) for i in x.split(',') if x!='.' ]))
+
+df['nanop_meth_freqs']=df['nanop_meth_freqs'].apply(lambda x : np.array([float(i) for i in x.split(',') if x!='.' ]))
+df['wgbs_meth_freqs']=df['wgbs_meth_freqs'].apply(lambda x : np.array([float(i) for i in x.split(',') if x!='.' ]))
+
+df['nanop_meth_cov']=df['nanop_meth_freqs'].apply(lambda x: (x>0).astype(int).mean())
+df['wgbs_meth_cov']=df['wgbs_meth_freqs'].apply(lambda x: (x>0).astype(int).mean())
+
+df['nanop_meth_depth']=df['nanop_meth_freqs'].apply(lambda x: x[x>0].mean())
+df['wgbs_meth_depth']=df['wgbs_meth_freqs'].apply(lambda x: x[x>0].mean())
+
+df['nanop_meth_meanfreq']=df['nanop_meth_meanfreq'].apply(lambda x: float(x) if x != '.' else np.nan)
+df['wgbs_meth_meanfreq']=df['wgbs_meth_meanfreq'].apply(lambda x: float(x) if x != '.' else np.nan)
+
+
+coverage_threshold=10
+
+# create a tmp column with indices of motifs that passed the coverage threshold
+for soure in ['nanop_','wgbs_']:
+    df[soure+'tmp']=df[soure+'meth_callcovs'].apply(lambda x : np.where(x >= coverage_threshold)[0] if len(np.where(x >= coverage_threshold)[0]) else np.nan)
+
+    # filter the columns meth_callCpGs meth_callcovs and meth_freqs to keep only the motifs that passed the coverage threshold
+
+    def index_parse(list_to_parse,list_of_idx):
+        try:
+            if type(list_of_idx)==float:
+                return np.array([])
+            else:
+                return list_to_parse[list_of_idx]
+        except IndexError:
+            print(list_to_parse,list_of_idx)
+
+    df[soure+'meth_freqs_cov10'] = df.apply(lambda x: index_parse(x[soure+'meth_freqs'], x[soure+'tmp']), axis=1)
+    df[soure+'meth_callcovs_covs10'] = df.apply(lambda x: index_parse(x[soure+'meth_callcovs'], x[soure+'tmp']), axis=1)
+    df[soure+'callCpGs_count_cov10']=df[soure+'meth_callcovs_covs10'].apply(lambda x: len(x))
+
+     # recompute meth_meancallcov and callCpGs_count for coverage thershold 10 (_cov10 suffix)
+
+    df[soure+'meth_meancallcov_cov10']=df[soure+'meth_callcovs_covs10'].apply(lambda x: x.mean() ) #if type(x) == np.ndarray and len(x) > 0 else np.nan
+
+    # compute methylation coverage and methylation depth per feature
+
+    df[soure+'meth_cov_per_CpG']=df[soure+'meth_freqs'].apply(lambda x: (x>0).astype(int).mean())
+    df[soure+'meth_depth_per_CpG']=df[soure+'meth_freqs'].apply(lambda x: x[x>0].mean())
+    df.loc[df[soure+'meth_cov_per_CpG']==0,soure+'meth_depth_per_CpG']=0
+
+    df[soure+'meth_cov_per_CpG_cov10']=df[soure+'meth_freqs_cov10'].apply(lambda x: (x>0).astype(int).mean())
+    df[soure+'meth_depth_per_CpG_cov10']=df[soure+'meth_freqs_cov10'].apply(lambda x: x[x>0].mean())
+    df.loc[df[soure+'meth_cov_per_CpG_cov10']==0,soure+'meth_depth_per_CpG_cov10']=0
+
+df[:3]
+
+df1=df[['contig', 'start', 'end', 'locus_tag', 'CpG', 'CpGoe',
+       'nanop_callCpGs_count_cov10', 'nanop_meth_meancallcov_cov10', 
+        'nanop_meth_cov_per_CpG_cov10', 'nanop_meth_depth_per_CpG_cov10',
+        'wgbs_callCpGs_count_cov10', 'wgbs_meth_meancallcov_cov10',
+        'wgbs_meth_cov_per_CpG_cov10', 'wgbs_meth_depth_per_CpG_cov10']]
+df1.columns=['contig', 'start', 'end', 'locus_tag', 'CpG', 'CpGoe',
+       'nanop_callCpGs_count', 'nanop_meth_meancallcov', 
+        'nanop_meth_cov', 'nanop_meth_depth',
+        'wgbs_callCpGs_count', 'wgbs_meth_meancallcov',
+        'wgbs_meth_cov', 'wgbs_meth_depth']
+df1.to_csv('/home/maeperez/Tubeworms/data/Epig/WGBS/'+ind+'.nanop_wgbs.downstream.cov10.genes.summary.tsv',header=True,sep='\t',index=False)
+
+df2=df[['contig', 'start', 'end', 'locus_tag', 'CpG', 'CpGoe',
+       'nanop_callCpGs_count', 'nanop_meth_meancallcov', 
+        'nanop_meth_cov_per_CpG', 'nanop_meth_depth_per_CpG',
+        'wgbs_callCpGs_count', 'wgbs_meth_meancallcov',
+        'wgbs_meth_cov_per_CpG', 'wgbs_meth_depth_per_CpG']]
+df2.columns=['contig', 'start', 'end', 'locus_tag', 'CpG', 'CpGoe',
+       'nanop_callCpGs_count', 'nanop_meth_meancallcov', 
+        'nanop_meth_cov', 'nanop_meth_depth',
+        'wgbs_callCpGs_count', 'wgbs_meth_meancallcov',
+        'wgbs_meth_cov', 'wgbs_meth_depth']
+df2.to_csv('/home/maeperez/Tubeworms/data/Epig/WGBS/'+ind+'.nanop_wgbs.downstream.cov1.genes.summary.tsv',header=True,sep='\t',index=False)"
+
+
+```
+
+# Annotating methylation calls for genome-wide, genes, TEs, and LTR methylation analyses
+
+## Step 1: Prepare gff and bed files of features
+
+```{r, engine = 'bash', eval = FALSE}
+#!/bin/bash 
+### some steps (e.g sort) need more than 2G mem (give 10G)
+module load perl
+module load StdEnv/2020
+module load bedtools/2.29.2
+
+
+ind=Pec
+cd ~/Tubeworms/data/annotations/${ind}/
+
+if [ $ind == "Pec" ]; then echo $ind; fasta_prefix=${ind}_contigs; else fasta_prefix=${ind}_wtdbg2; fi
+
+ln -s /home/maeperez/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.sorted.chrsizes ${ind}.sorted.chrsizes
+ln -s /home/maeperez/Tubeworms/data/Epig/LTR/clean_${fasta_prefix}.fasta.pass.list.gff3 clean_${ind}.ltr.gff3
+
+tail -n +2 ~/Tubeworms/data/repbase_db/clean_${ind}.repeats.gff |  \
+awk -F"\t" -v OFS="\t" '{print $1,$2,"dispersed_repeat",$4,$5,$6,$7,$8,$9}'| sort -k1,1 -k4,4n > clean_${ind}.repeats.gff
+
+tail -n+2 /home/maeperez/Tubeworms/data/repbase_db/clean_${ind}.minlen1.nonLTRrepeats.withmotifs.withhierarchy.tsv |\
+awk -F"\t" -v OFS="\t" '{print $3,"RepeatMasker","similarity",$4,$5,".",".",".","element_type="$NF}' > clean_${ind}.nonLTRrepeats.gff
+
+tail -n+2 /home/maeperez/Tubeworms/data/repbase_db/clean_${ind}.minlen1.nonLTRrepeats.withmotifs.withhierarchy.tsv |\
+awk -F"\t" -v OFS="\t" '{print $3,$4,$5,".",$NF}' > clean_${ind}.nonLTRrepeats.bed
+
+# copy chrsizes sorted into alphabetical order
+
+##############################################
+#### PREPARE GFF OF FEATURES #####
+###############################################
+
+### add missing features to GFF (introns, repeats, intergenic regions)
+gff_prefix=mrna.${ind}.final_gene_models
+
+agat_sp_add_introns.pl -gff ${gff_prefix}.gff -out tmp.${gff_prefix}.withintrons.gff # add annotations for introns # INTRONS
+tail -n +2 tmp.${gff_prefix}.withintrons.gff | sort --stable -k1,1 -k4,4n > ${gff_prefix}.withintrons.gff
+
+### turn gff to bed and merge overlapping annots (bed=0-based start + 1-based end (inclusive), gff=1-based with inclusive end)
+
+awk -F"\t" -v OFS="\t" '{print $1, $4-1, $5}' ${gff_prefix}.withintrons.gff > tmp.${gff_prefix}.withintrons.bed #turn with_introns to bed
+
+awk -F"\t" -v OFS="\t" '{print $1, $4-1, $5}' clean_${ind}.repeats.gff > tmp.clean_${ind}.repeats.bed #turn RepeatMasker repeats to bed
+
+awk -F'\t' -vOFS='\t' '{ if ($3=="repeat_region") print }' /home/maeperez/Tubeworms/data/Epig/LTR/clean_${fasta_prefix}.fasta.pass.list.gff3 | awk -F"\t" -v OFS="\t" '{print $1,$4-1,$5,".","LTR_retrotransposon"}' > tmp.clean_${ind}.LTRtransposons.bed #turn well defined (Aroh et Halanych's protocol) repeats to bed
+
+cat tmp.${gff_prefix}.withintrons.bed tmp.clean_${ind}.repeats.bed <(awk -F'\t' -vOFS='\t' '{print $1,$2,$3}' tmp.clean_${ind}.LTRtransposons.bed) | sort -k1,1 -k2,2n | bedtools merge -i - > tmp.${gff_prefix}.withintrons.withrepeats.bed # merge with introns and with repeats ans LTRs bed files
+
+bedtools complement -i tmp.${gff_prefix}.withintrons.withrepeats.bed -g ${ind}.sorted.chrsizes | awk -F"\t" -v OFS="\t" '{print $1,"Bedtools","uncharacterized_intergenic_region",$2+1,$3,".",".",".","."}' > ${gff_prefix}.intergenic.gff # INTERGENIC
+
+#### put together genes annotations with introns, dispersed_repeat annotations (raw output from RepeatMasker), complete LTR retrotransposons annotations, intergenic regions ####
+
+### as GFF file
+cat ${gff_prefix}.withintrons.gff \
+clean_${ind}.repeats.gff \
+clean_${ind}.ltr.gff3 \
+${gff_prefix}.intergenic.gff \
+> tmp.${gff_prefix}.withintrons.withrepeats.withinterg.gff # REPEATS
+
+sort --stable -k1,1 -k4,4n tmp.${gff_prefix}.withintrons.withrepeats.withinterg.gff > ${gff_prefix}.withintrons.withrepeats.withinterg.sorted.gff # features are sorted by contig (alphabetical order) then by start position (position in initial gff is kept)
+
+head ${gff_prefix}.withintrons.withrepeats.withinterg.sorted.gff 
+tail ${gff_prefix}.withintrons.withrepeats.withinterg.sorted.gff 
+rm tmp.*
+
+### as bed file
+
+awk -F"\t" -v OFS="\t" '{print $1,$4-1,$5,".",$3}' ${gff_prefix}.withintrons.withrepeats.withinterg.sorted.gff > tmp1.${ind}_features.bed # features from maker2 annotations
+
+awk -F'\t' -vOFS='\t' '{ if ($3=="repeat_region") print $1,$4-1,$5,".","LTR_retrotransposon"}' /home/maeperez/Tubeworms/data/Epig/LTR/clean_${fasta_prefix}.fasta.pass.list.gff3 > tmp2.${ind}_features.bed #LTRs identified through Aroh et Halanych's protocol
+
+tail -n+2 /home/maeperez/Tubeworms/data/repbase_db/clean_${ind}.minlen1.nonLTRrepeats.withmotifs.withhierarchy.tsv |\
+awk -F"\t" -v OFS="\t" '{print $3,$4,$5,".",$NF}'> ${ind}.TE.bed #Other TE features identified with repeat masker (features not well defined; may be fragmented or erroneously merged)
+
+cat tmp1.${ind}_features.bed tmp2.${ind}_features.bed ${ind}.TE.bed | sort -k1,1 -k2,2n > ${ind}_features.bed
+
+cat tmp2.${ind}_features.bed ${ind}.TE.bed | sort -k1,1 -k2,2n > ${ind}_TEfeatures.bed
+
+
+```
+
+## Step 2: Add genomic feature info to methylation calls (per-CpG resolution)
+
+all features
+```{r, engine = 'bash', eval = FALSE}
+#!/bin/bash 
+module load perl
+module load bedtools
+module load seqkit
+
+for ind in Pec R07B-5 P08H-3
+
+nanopolish_folder=raw_reads
+if [ $ind == "Pec" ]; then echo $ind; fasta_prefix=${ind}_contigs; else fasta_prefix=${ind}_wtdbg2; fi
+if [ $ind == "P08H-3" ]; then echo $ind; trial=nanopolish_callmethylation; else trial=nanopolish_callmethylation_raw;fi
+if [ $ind == "P08H-3" ]; then echo $ind; cov=1; else cov=10; fi
+if [ $ind == "Pec" ]; then transcripto_coverage_bedgraph="/home/maeperez/rrg_Tubeworms_data/Map/transcripto/Pec/Pec-V/Pec_contigs_Pec-V.sorted.coverage.bedgraph"; else if [ $ind == "R07B-5" ] transcripto_coverage_bedgraph="/home/maeperez/rrg_Tubeworms_data/Map/transcripto/all8/all8_genome.sorted.bedgraph"; else transcripto_coverage_bedgraph="/home/maeperez/rrg_Tubeworms_data/Map/transcripto/ParPal-G/ParPal-G_genome.sorted.coverage.bedgraph"
+
+gff=mrna.${ind}.final_gene_models.withintrons.withrepeats.withinterg.sorted.gff
+
+cd ~/Tubeworms/data/Epig/${ind}_${nanopolish_folder}
+
+tail -n+2 ~/Tubeworms/data/annotations/${ind}/mrna.${ind}.final_gene_models.withintrons.withrepeats.withinterg.sorted.gff > mrna.${ind}.final_gene_models.withintrons.withrepeats.withinterg.sorted.gff
+
+
+ln -s /home/maeperez/Tubeworms/data/annotations/${ind}/${ind}_features.bed .
+
+awk -F'\t' -vOFS='\t' '{print $1,$2,$3,".",$4}' $transcripto_coverage_bedgraph > Pec.transcripto.bed
+
+############ breakdown feature type per CpG ############
+source ~/virtualenv/py38/bin/activate
+
+echo "" | awk -v OFS="\t" '{print "chromosome","start","end","features"}' > ${ind}_${trial}.perCpG_feature.txt
+
+bedtools map -a ${ind}_CG.bed -b ${ind}_features.bed -c 5 -o collapse | awk -F"\t" -v OFS="\t" '{if ($7 != ".") print $1,$2,$3,$7}' >> ${ind}_${trial}.perCpG_feature.txt
+
+# this next step needs at least 10Gb memory for P08H-3 and 16Gb of mem for the other genomes...
+
+export ind
+export trial
+
+python -c "import pandas as pd
+from sklearn.preprocessing import MultiLabelBinarizer
+import os
+
+ind=os.getenv('ind')
+trial=os.getenv('trial')
+file='/home/maeperez/Tubeworms/data/Epig/'+ind+'_raw_reads/'+ind+'_'+trial+'.perCpG_feature.txt'
+df=pd.read_csv(file,header=0,sep='\t')
+df['features']=df.features.str.split(',')
+mlb = MultiLabelBinarizer()
+df = df.join(pd.DataFrame(mlb.fit_transform(df.pop('features')),
+                          columns=mlb.classes_,
+                          index=df.index))
+df.to_csv(file[:-3]+'bed',header=True,sep='\t',index=False)"
+
+#### add methylation info to feature map
+head -n1 ${ind}_${trial}.perCpG_feature.bed | awk -F'\t' -vOFS='\t' '{print $0,"methcall_coverage","meth_frequency"}' > ${ind}.perCpG_methylation_withfeatures.tsv
+
+bedtools map -a <(tail -n+2 ${ind}_${trial}.perCpG_feature.bed) -b ${ind}_${trial}.perCpG_methylation.sorted.padded -c 5,6 -o collapse >> ${ind}.perCpG_methylation_withfeatures.tsv
+
+#### add expression ####
+
+#mv tmp.transcripto.bed ${ind}.transcripto.bed
+
+head -n1 ${ind}.perCpG_methylation_withfeatures.tsv | awk -F'\t' -vOFS='\t' '{print $0,"sametissue_coverage"}' > ${ind}.perCpG_methylation_withfeatures_withtranscripto.tsv
+
+bedtools map -a <(tail -n+2 ${ind}.perCpG_methylation_withfeatures.tsv) -b ${ind}.transcripto.bed -o mean >> ${ind}.perCpG_methylation_withfeatures_withtranscripto.tsv
+
+head ${ind}.perCpG_methylation_withfeatures_withtranscripto.tsv
+wc -l ${ind}.perCpG_methylation_withfeatures_withtranscripto.tsv
+
+
+awk -F"\t" '{if ($(NF-2) != ".") print}' ${ind}.perCpG_methylation_withfeatures_withtranscripto.tsv > ${ind}.perCpG_methylation_withfeatures_withtranscripto.methylated_only.tsv
+
+wc -l ${ind}.perCpG_methylation_withfeatures_withtranscripto.methylated_only.tsv
+
+done
+```
+
+within and outside genes:
+
+perCpG_isgene_methylation_cov1P08_cov10PecR07.tsv.gz
+```{r, engine = 'bash', eval = FALSE}
+cd ~/Tubeworms/data/Epig
+
+for ind in 'Pec' 'R07B-5' 'P08H-3'
+do
+
+echo $ind
+
+file=~/Tubeworms/data/Epig/${ind}_raw_reads/${ind}.perCpG_methylation_withfeatures_withtranscripto.methylated_only.tsv
+#$(NF-2) = meth_callcoverage, $14 = gene, $(NF-1) = methylation frequency
+awk -F'\t' -vOFS='\t' -v ind="$ind" -v gene="gene" -v cov=10 'NR==1 {for (i=1; i<=NF; i++) {ix[$i] = i}} NR>1 {if ($(NF-2)>=cov) print $ix[gene],$(NF-1),ind}' $file > ${ind}_raw_reads/perCpG_isgene_methylation_cov10${ind}.tsv
+
+awk -F'\t' -vOFS='\t' -v ind="$ind" -v gene="gene" -v cov=1 'NR==1 {for (i=1; i<=NF; i++) {ix[$i] = i}} NR>1 {if ($(NF-2)>=cov) print $ix[gene],$(NF-1),ind}' $file > ${ind}_raw_reads/perCpG_isgene_methylation_cov1${ind}.tsv
+
+done
+
+cat Pec_raw_reads/perCpG_isgene_methylation_cov10Pec.tsv R07B-5_raw_reads/perCpG_isgene_methylation_cov10R07B-5.tsv P08H-3_raw_reads/perCpG_isgene_methylation_cov1P08H-3.tsv > perCpG_isgene_methylation_cov1P08_cov10PecR07.tsv
+
+gzip perCpG_isgene_methylation_cov1P08_cov10PecR07.tsv
+```
+
+subsample of introns-exons:
+
+perCpG_isexon_methylation_cov1P08_cov10PecR07.tsv.gz
+```{r, engine = 'bash', eval = FALSE}
+cd ~/Tubeworms/data/Epig
+
+# Get perCpG methylation on exons and introns
+
+
+cat cov.awk
+
+#NR==1 {
+#    for (i=1; i<=NF; i++) {
+#        ix[$i] = i
+#    }
+#}
+#NR>1 {if ($(NF-2)>=cov && ($ix[c1]==1 || $ix[c2]==1))
+#    print $ix[c1],$(NF-1),ind
+#}
+
+cd ~/Tubeworms/data/Epig
+
+for ind in 'Pec' 'R07B-5' 'P08H-3'
+do
+
+file=~/Tubeworms/data/Epig/${ind}_raw_reads/${ind}.perCpG_methylation_withfeatures_withtranscripto.methylated_only.tsv
+awk -f cov.awk -vOFS='\t' c1="exon" c2="intron" ind="$ind" cov=1 $file > ~/Tubeworms/data/Epig/${ind}_raw_reads/perCpG_isexon_methylation_cov1${ind}.tsv
+awk -f cov.awk -vOFS='\t' c1="exon" c2="intron" ind="$ind" cov=10 $file > ~/Tubeworms/data/Epig/${ind}_raw_reads/perCpG_isexon_methylation_cov10${ind}.tsv
+
+done
+
+cat Pec_raw_reads/perCpG_isexon_methylation_cov10Pec.tsv R07B-5_raw_reads/perCpG_isexon_methylation_cov10R07B-5.tsv P08H-3_raw_reads/perCpG_isexon_methylation_cov1P08H-3.tsv > perCpG_isexon_methylation_cov1P08_cov10PecR07.tsv
+
+gzip perCpG_isexon_methylation_cov1P08_cov10PecR07.tsv
+```
+
+subsample of transposable elements within and outside genes:
+
+perCpG_withingenes_TE_methylation_cov1P08_cov10PecR07.tsv perCpG_outsidegenes_TE_methylation_cov1P08_cov10PecR07.tsv perCpG_TE_methylation_cov1P08_cov10PecR07.tsv.gz
+```{r, engine = 'bash', eval = FALSE}
+cd ~/Tubeworms/data/Epig
+
+# Get perCpG methylation on transposable elements
+
+cat cov_1col_withingenes.awk
+#NR==1 {
+#    for (i=1; i<=NF; i++) {
+#        ix[$i] = i
+#    }
+#}
+#NR>1 {if ($(NF-2)>=cov && $ix[c1]==1 && $ix[c2]==1)
+#    print c1,$(NF-1),ind
+#}
+
+cat cov_1col_outsidegenes.awk
+#NR==1 {
+#    for (i=1; i<=NF; i++) {
+#        ix[$i] = i
+#    }
+#}
+#NR>1 {if ($(NF-2)>=cov && ($ix[c1]==1 && $ix[c2]==0))
+#    print c1,$(NF-1),ind
+#}
+
+for ind in 'Pec' 'R07B-5' 'P08H-3'
+do
+if [ $ind == "P08H-3" ]; then echo $ind; cov=1; else cov=10; fi
+echo $ind,$cov
+rm ${ind}_raw_reads/perCpG_withingenes_TE_methylation_cov${cov}.tsv
+rm ${ind}_raw_reads/perCpG_outsidegenes_TE_methylation_cov${cov}.tsv
+
+file=${ind}_raw_reads/${ind}.perCpG_methylation_withfeatures_withtranscripto.methylated_only.tsv
+
+for class in ClassI_Helicase ClassI_Transposase ClassI_Tyrosine_Recombinase LINE LTR_retrotransposon SINE
+do
+echo $class
+
+
+awk -f cov_1col_withingenes.awk -vOFS='\t' c1="$class" c2="gene" ind="$ind" cov="$cov" $file >> ${ind}_raw_reads/perCpG_withingenes_TE_methylation_cov${cov}.tsv
+
+awk -f cov_1col_outsidegenes.awk -vOFS='\t' c1="$class" c2="gene" ind="$ind" cov="$cov" $file >> ${ind}_raw_reads/perCpG_outsidegenes_TE_methylation_cov${cov}.tsv
+
+done
+done
+
+
+cat Pec_raw_reads/perCpG_withingenes_TE_methylation_cov10.tsv R07B-5_raw_reads/perCpG_withingenes_TE_methylation_cov10.tsv P08H-3_raw_reads/perCpG_withingenes_TE_methylation_cov1.tsv > perCpG_withingenes_TE_methylation_cov1P08_cov10PecR07.tsv
+
+cat Pec_raw_reads/perCpG_outsidegenes_TE_methylation_cov10.tsv R07B-5_raw_reads/perCpG_outsidegenes_TE_methylation_cov10.tsv P08H-3_raw_reads/perCpG_outsidegenes_TE_methylation_cov1.tsv  > perCpG_outsidegenes_TE_methylation_cov1P08_cov10PecR07.tsv
+
+# all TEs
+
+cat perCpG_withingenes_TE_methylation_cov1P08_cov10PecR07.tsv perCpG_outsidegenes_TE_methylation_cov1P08_cov10PecR07.tsv > perCpG_TE_methylation_cov1P08_cov10PecR07.tsv
+
+gzip perCpG_TE_methylation_cov1P08_cov10PecR07.tsv
+#mean methylation frequency on TEs = 
+#awk '{ total += $2 } END { print total/NR }' perCpG_TE_methylation_cov1P08_cov10PecR07.tsv
+#awk '{ total += $2 } END { print total/NR }' P08H-3_raw_reads/perCpG_TE_methylation_cov1P08H-3.tsv
+#awk '{ total += $2 } END { print total/NR }' R07B-5_raw_reads/perCpG_TE_methylation_cov10R07B-5.tsv
+#awk '{ total += $2 } END { print total/NR }' Pec_raw_reads/perCpG_TE_methylation_cov10Pec.tsv
+#median methylation frequency on TEs = 
+#sort -k2,2 perCpG_TE_methylation_cov1P08_cov10PecR07.tsv | awk ' { a[i++]=$2; } END { print a[int(i/2)]; }'
+
+```
+
+##### repeat masked
+```{r}
+#### masking repeats CpGs from gene methylation data ####
+
+module load bedtools
+
+for ind in R07B-5 P08H-3
+do
+
+if [ $ind == "Pec" ]; then echo $ind; fasta_prefix=${ind}_contigs; else fasta_prefix=${ind}_wtdbg2; fi
+if [ $ind == "P08H-3" ]; then echo $ind; trial=nanopolish_callmethylation; else trial=nanopolish_callmethylation_raw;fi
+fasta=/home/maeperez/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.fasta
+if [ $ind == "P08H-3" ]; then cov=1; else cov=10; fi
+
+cd ~/Tubeworms/data/Epig/${ind}_raw_reads/
+
+# Removing repeats CpGs from perCpG_methylation bedfile
+  
+awk -F'\t' -vOFS='\t' '{if (($5+$6+$7+$8+$9+$10+$11)>0) print $1,$2,$3}'  ${ind}.perCpG_methylation_withfeatures_withtranscripto.tsv > ${ind}_${trial}.repeat_and_TE_CpGs.bed
+
+rpt_bed=${ind}_${trial}.repeat_and_TE_CpGs.bed
+
+meth_bed=${ind}_${trial}.perCpG_methylation.sorted.padded.cov${cov}.bed
+
+bedtools subtract -a $meth_bed -b $rpt_bed > ${ind}_${trial}.perCpG_methylation.masked.sorted.padded.cov${cov}.bed
+
+
+# Recomputing gene methylation
+
+## get bed file of genes (bed=0-based start + 1-based end (inclusive), gff=1-based with inclusive end)
+gff=~/Tubeworms/data/annotations/${ind}/mrna.${ind}.final_gene_models.withintrons.withrepeats.withinterg.sorted.gff
+
+awk -F"\t|=|;" -vOFS='\t' '{if ($3=="gene") print $1,$4-1,$5,".",$10}' $gff  | sort -k1,1 -k2,2n > genes.${ind}.bed
+
+## add CpG counts and CpGo/e per feature
+fasta_prefix=${ind}_wtdbg2
+fasta=/home/maeperez/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.fasta
+bed=genes.${ind}.bed
+
+#($NF/($9*$10))*($(NF-1)/($(NF-1)-1)) CpG o/e calculation from Gavery and Roberts (2010); (CpGs_count/(C_count*G_count))*(seq_length^2/(seq_length-1))
+
+bedtools nuc -fi $fasta -pattern "CG" -bed $bed | tail -n +2 | awk -F"\t" -v OFS="\t" '{ if ($(NF-6)==0 || $(NF-5)==0) print $1,$2,$3,$4,$5,$NF,0; else print $1,$2,$3,$4,$5,$NF,($NF/($(NF-6)*$(NF-5)))*($(NF-1)^2/($(NF-1)-1))}' > tmp2.${bed} # add annotations for CpGs
+
+
+## add CpG methylation call and freq
+
+file=${ind}_${trial}.perCpG_methylation.masked.sorted.padded.cov${cov}.bed
+
+head $file
+head tmp2.${bed}
+
+bedtools map -a tmp2.${bed} -b $file -c 5 -o count > tmp3.cov${cov}.${bed}
+
+bedtools map -a tmp3.cov${cov}.${bed} -b $file -c 5,6 -o collapse > tmp4.cov${cov}.${bed}
+
+bedtools map -a tmp4.cov${cov}.${bed} -b $file -c 5,6 -o mean > tmp5.cov${cov}.${bed}
+
+cat <(echo "" | awk -v OFS="\t" '{print "contig","start","end",".","locus_tag","CpG","CpGoe","callCpGs_count","meth_callcovs","meth_freqs","meth_meancallcov","meth_meanfreq"}') tmp5.cov${cov}.${bed} > ${ind}.downstream.cov${cov}.masked_genes.tsv
+
+rm tmp*.cov${cov}.${bed}
+  
+
+done
+
+### get summary file 
+
+cd ~/Tubeworms/data/Epig/
+source ~/virtualenv/py38/bin/activate
+
+
+python -c "import pandas as pd
+import numpy as np
+import re
+
+pd.set_option('display.float_format','{:.1f}'.format)
+
+
+genome_dic={'Pec':'P. echinospica','R07B-5':'R. piscesae','P08H-3':'P. palmiformis'}
+fastaprefix_dic={'Pec':'Pec_contigs','R07B-5':'R07B-5_wtdbg2','P08H-3':'P08H-3_wtdbg2'}
+
+df=pd.DataFrame([],columns=['contig', 'start', 'end', 'TE_class', 'CpG', 'CpGoe',
+       'callCpGs_count', 'meth_callcovs', 'meth_freqs', 'meth_meancallcov',
+       'meth_meanfreq', 'meth_cov', 'meth_depth','genome'])
+
+for ind in genome_dic.keys():
+    print(ind)
+    cov='cov10' if ind != 'P08H-3' else 'cov1'
+    
+    file='/home/maeperez/Tubeworms/data/Epig/'+ind+'_raw_reads/'+ind+'.downstream.'+cov+'.masked_genes.tsv'
+    tmp=pd.read_csv(file,header=0,sep='\t')
+
+    tmp['meth_callcovs']=tmp['meth_callcovs'].apply(lambda x : np.array([float(i) for i in x.split(',') if x!='.' ]))
+    tmp['meth_freqs']=tmp['meth_freqs'].apply(lambda x : np.array([float(i) for i in x.split(',') if x!='.' ]))
+    tmp['meth_cov']=tmp['meth_freqs'].apply(lambda x: (x>0).astype(int).mean())
+    tmp['meth_depth']=tmp['meth_freqs'].apply(lambda x: x[x>0].mean())
+    tmp['meth_meanfreq']=tmp['meth_meanfreq'].apply(lambda x: float(x) if x != '.' else np.nan)
+    tmp['genome']=genome_dic[ind]
+    df=df.append(tmp,ignore_index=True)
+
+df[['contig', 'start', 'end', 'locus_tag', 'CpG', 'CpGoe',
+       'callCpGs_count', 'meth_meancallcov',
+       'meth_meanfreq', 'meth_cov', 'meth_depth','genome']].to_csv('/home/maeperez/Tubeworms/data/Epig/ALL.downstream.masked_genes.tsv',header=True,sep='\t',index=False)"
+
+
+
+```
+
+
+summary statistics for genomic windows:
+
+all.windowavg1000.tsv
+```{python, eval=FALSE, echo=TRUE, results='hide', error=FALSE, warning=FALSE,message=FALSE}
+
+import pandas as pd
+import numpy as np
+
+dic_file={'Pec':
+  '~/Tubeworms/data/Epig/Pec_raw_reads/Pec_nanopolish_callmethylation_raw.perCpG_methylation.sorted.padded.cov10.txt',
+'R07B-5':
+  '~/Tubeworms/data/Epig/R07B-5_raw_reads/R07B-5_nanopolish_callmethylation_raw.perCpG_methylation.sorted.padded.cov10.txt',
+'P08H-3':
+  '~/Tubeworms/data/Epig/P08H-3_raw_reads/P08H-3_nanopolish_callmethylation.perCpG_methylation.sorted.padded.cov1.txt'}
+
+dic_genome={'Pec':'P. echinospica','R07B-5':'R. piscesae','P08H-3': 'P. palmiformis'}
+
+df=pd.DataFrame([],columns=[])
+for windows in [1000,5000,10000]:
+  for ind in dic_genome.keys():
+
+    genome=dic_genome[ind]
+    print(genome)
+
+    tmp=pd.read_csv(dic_file[ind],header=0, sep='\t')
+
+    def depth(b):
+        return np.mean(b[b>0])
+    def cov(b):
+        return len(b[b>0])/len(b)
+
+    tmp.columns=['chromosome','start','end','meth']
+    tmp['window_idx']=np.floor((tmp.start-0.1)/window)
+
+    tmp=tmp.groupby(['chromosome','window_idx']).agg({'meth':['mean',depth,cov]})
+
+    tmp.columns = ['_'.join(col).rstrip('_') for col in tmp.columns.values]
+    tmp['genome']=genome
+    
+    df=df.append(tmp,ignore_index=True)
+    
+  df.to_csv('/home/maeperez/Tubeworms/data/Epig/all.windowavg'+str(window)+'.tsv',header=True,sep='\t')
+
+```
+
+## Step 3a: add methylation info to TE features bed (per TE resolution)
+ALL.downstream.TE.tsv
+```{r, engine = 'bash', eval = FALSE}
+#!/bin/bash 
+module load perl
+module load bedtools
+module load seqkit
+
+for ind in Pec R07B-5 P08H-3
+do
+if [ $ind == "Pec" ]; then echo $ind; fasta_prefix=${ind}_contigs; else fasta_prefix=${ind}_wtdbg2; fi
+if [ $ind == "P08H-3" ]; then echo $ind; trial=nanopolish_callmethylation; else trial=nanopolish_callmethylation_raw; fi
+
+nanopolish_folder=raw_reads
+fasta=/home/maeperez/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.fasta
+
+cd ~/Tubeworms/data/Epig/${ind}_${nanopolish_folder}
+
+## add CG count and CpG o/e calculation
+bed=${ind}_TEfeatures.bed
+
+#($NF/($9*$10))*($(NF-1)/($(NF-1)-1)) CpG o/e calculation from Gavery and Roberts (2010); (CpGs_count/(C_count*G_count))*(seq_length^2/(seq_length-1))
+
+bedtools nuc -fi $fasta -pattern "CG" -bed $bed | tail -n +2 | awk -F"\t" -v OFS="\t" '{ if ($(NF-6)==0 || $(NF-5)==0) print $1,$2,$3,$4,$5,$NF,0; else print $1,$2,$3,$4,$5,$NF,($NF/($(NF-6)*$(NF-5)))*($(NF-1)^2/($(NF-1)-1))}' > tmp2.${bed} # add annotations for CpGs
+
+
+### add methylation info per feature
+
+file=${ind}_${trial}.perCpG_methylation.sorted.padded.bed
+
+head $file
+head tmp2.${bed}
+
+bedtools map -a tmp2.${bed} -b $file -c 5 -o count > tmp3.cov1.${bed}
+
+bedtools map -a tmp3.cov1.${bed} -b $file -c 5,6 -o collapse > tmp4.cov1.${bed}
+
+bedtools map -a tmp4.cov1.${bed} -b $file -c 5,6 -o mean > tmp5.cov1.${bed}
+
+cat <(echo "" | awk -v OFS="\t" '{print "contig","start","end",".","TE_class","CpG","CpGoe","callCpGs_count","meth_callcovs","meth_freqs","meth_meancallcov","meth_meanfreq"}') tmp5.cov1.${bed} > ${ind}.downstream.cov1.TE.tsv
+
+
+
+##
+
+file=${ind}_${trial}.perCpG_methylation.sorted.padded.cov10.bed
+
+head $file
+head tmp2.${bed}
+
+bedtools map -a tmp2.${bed} -b $file -c 5 -o count > tmp3.cov10.${bed}
+
+bedtools map -a tmp3.cov10.${bed} -b $file -c 5,6 -o collapse > tmp4.cov10.${bed}
+
+bedtools map -a tmp4.cov10.${bed} -b $file -c 5,6 -o mean > tmp5.cov10.${bed}
+
+cat <(echo "" | awk -v OFS="\t" '{print "contig","start","end",".","TE_class","CpG","CpGoe","callCpGs_count","meth_callcovs","meth_freqs","meth_meancallcov","meth_meanfreq"}') tmp5.cov10.${bed} > ${ind}.downstream.cov10.TE.tsv
+
+rm tmp*
+
+done
+
+#awk -F'\t' '{if ($8>=10) print $NF}' ${ind}.downstream.cov1.TE.tsv | head
+
+# mean methylation for TEs with at least 10 called CpGs
+#awk -F'\t' '{if ($8>=10) total += $NF; count+=1} END {print total/count}' ${ind}.downstream.cov1.TE.tsv
+
+#awk -F'\t' '{if ($8>=10) tot+=1} {if ($8>=10 && $NF<0.1) unmeth+=1} END {print unmeth/tot}' ${ind}.downstream.cov1.TE.tsv
+
+
+cd ~/Tubeworms/data/Epig/
+source ~/virtualenv/py38/bin/activate
+
+
+python -c "import pandas as pd
+import numpy as np
+import re
+
+pd.set_option('display.float_format','{:.1f}'.format)
+
+
+genome_dic={'Pec':'P. echinospica','R07B-5':'R. piscesae','P08H-3':'P. palmiformis'}
+fastaprefix_dic={'Pec':'Pec_contigs','R07B-5':'R07B-5_wtdbg2','P08H-3':'P08H-3_wtdbg2'}
+
+df=pd.DataFrame([],columns=['contig', 'start', 'end', 'TE_class', 'CpG', 'CpGoe',
+       'callCpGs_count', 'meth_callcovs', 'meth_freqs', 'meth_meancallcov',
+       'meth_meanfreq', 'meth_cov', 'meth_depth','genome'])
+
+for ind in genome_dic.keys():
+    print(ind)
+    cov='cov10' if ind != 'P08H-3' else 'cov1'
+    
+    file='/home/maeperez/Tubeworms/data/Epig/'+ind+'_raw_reads/'+ind+'.downstream.'+cov+'.TE.tsv'
+    tmp=pd.read_csv(file,header=0,sep='\t')
+
+    tmp['meth_callcovs']=tmp['meth_callcovs'].apply(lambda x : np.array([float(i) for i in x.split(',') if x!='.' ]))
+    tmp['meth_freqs']=tmp['meth_freqs'].apply(lambda x : np.array([float(i) for i in x.split(',') if x!='.' ]))
+    tmp['meth_cov']=tmp['meth_freqs'].apply(lambda x: (x>0).astype(int).mean())
+    tmp['meth_depth']=tmp['meth_freqs'].apply(lambda x: x[x>0].mean())
+    tmp['meth_meanfreq']=tmp['meth_meanfreq'].apply(lambda x: float(x) if x != '.' else np.nan)
+    tmp['genome']=genome_dic[ind]
+    df=df.append(tmp,ignore_index=True)
+
+df[['contig', 'start', 'end', 'TE_class', 'CpG', 'CpGoe',
+       'callCpGs_count', 'meth_meancallcov',
+       'meth_meanfreq', 'meth_cov', 'meth_depth','genome']].to_csv('/home/maeperez/Tubeworms/data/Epig/ALL.downstream.TE.tsv',header=True,sep='\t',index=False)"
+
+```
+
+## Step 3b: add methylation info to features gff (per feature resolution)
+
+${ind}.MASTER.gff
+${ind}.MASTER.tsv
+```{r, engine = 'bash', eval = FALSE}
+#!/bin/bash 
+module load perl
+module load bedtools
+module load seqkit
+source ~/virtualenv/py38/bin/activate
+
+ind=P08H-3
+for ind in Pec R07B-5 P08H-3
+do
+if [ $ind == "Pec" ]; then echo $ind; fasta_prefix=${ind}_contigs; else fasta_prefix=${ind}_wtdbg2; fi
+if [ $ind == "P08H-3" ]; then echo $ind; trial=nanopolish_callmethylation; else trial=nanopolish_callmethylation_raw; fi
+
+nanopolish_folder=raw_reads
+gff=mrna.${ind}.final_gene_models.withintrons.withrepeats.withinterg.sorted.gff
+
+fasta=/home/maeperez/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.fasta
+
+cd ~/Tubeworms/data/Epig/${ind}_${nanopolish_folder}
+
+ln -s ~/Tubeworms/data/annotations/${ind}/mrna.${ind}.final_gene_models.withintrons.withrepeats.withinterg.sorted.gff .
+
+
+#--------------------------------------------------------------------------
+##############################################
+#### ADD METHYLATION AND COVERAGE TO GFF #####
+###############################################
+
+
+### add CpG counts and CpGo/e per feature
+bedtools nuc -fi $fasta -pattern "CG" -bed $gff | tail -n +2 | awk -F"\t" -v OFS="\t" '{ if ($(NF-6)==0 || $(NF-5)==0 ) $9=$9";CpGs_count=0;CpGoe=0"; else $9=$9";CpGs_count="$NF";CpGoe="($NF/($(NF-6)*$(NF-5)))*($(NF-1)^2/($(NF-1)-1)); print $1,$2,$3,$4,$5,$6,$7,$8,$9 }' > tmp2.${gff} # add annotations for CpGs
+
+
+############ add methylation info to gff ##############
+
+### add methylation call coverage per feature
+
+file=${ind}_${trial}.perCpG_methylation.sorted.padded.bed
+
+bedtools map -a tmp2.${gff} -b ${file} -c 5 -o count | awk -F"\t" -v OFS="\t" '{$9=$9";callCpGs_count="$NF; print $1,$2,$3,$4,$5,$6,$7,$8,$9}' > tmp3.${trial}.${gff}
+
+bedtools map -a tmp3.${trial}.${gff} -b ${file} -c 5 -o mean | awk -F"\t" -v OFS="\t" '{var=sprintf("%.1f",$NF);$9=$9";meth_meancallcov="var; print $1,$2,$3,$4,$5,$6,$7,$8,$9}' > tmp4a.${trial}.${gff}
+
+bedtools map -a tmp4a.${trial}.${gff} -b ${file} -c 5 -o collapse | awk -F"\t" -v OFS="\t" '{$9=$9";meth_callcovs="$NF; print $1,$2,$3,$4,$5,$6,$7,$8,$9}' > tmp4b.${trial}.${gff}
+
+### add methylation_freq per feature
+head tmp4b.${trial}.${gff}
+
+bedtools map -a tmp4b.${trial}.${gff} -b $file -c 6 -o mean | awk -F"\t" -v OFS="\t" '{var=sprintf("%.1f",$NF) ; $9=$9";meth_meanfreq="var; print $1,$2,$3,$4,$5,$6,$7,$8,$9}' >  tmp5.${trial}.${gff}
+
+head tmp5.${trial}.${gff}
+bedtools map -a tmp5.${trial}.${gff} -b $file -c 6 -o collapse | awk -F"\t" -v OFS="\t" '{$9=$9";meth_freqs="$NF; print $1,$2,$3,$4,$5,$6,$7,$8,$9}' > tmp6.${trial}.${gff}
+
+head tmp6.${trial}.${gff}
+mv tmp6.${trial}.${gff} ${ind}.MASTER.gff
+
+### turn gff to tsv
+
+export ind
+python -c "
+import pandas as pd
+import numpy as np
+import gffpandas.gffpandas as gffpd
+import os
+
+ind=os.getenv('ind')
+trial='raw_reads'
+
+print(ind)
+in_file='/home/maeperez/Tubeworms/data/Epig/'+ind+'_'+trial+'/'+ind+'.MASTER.gff'
+df=gffpd.read_gff3(in_file)
+
+df.df['attributes']=df.df['attributes'].str.replace('^.;','')
+df=df.attributes_to_columns()
+df=df.drop(['attributes'], axis=1)
+
+columns_to_keep=['seq_id', 'source', 'type', 'start', 'end', 'strand', 'CpGs_count','CpGoe', 'ID', 'Name', 'Parent', 'Target', '_eAED', 'callCpGs_count', 'meth_callcovs', 'meth_freqs','meth_meancallcov', 'meth_meanfreq']
+df=df[columns_to_keep]
+
+df.to_csv(in_file[:-3]+'tsv',header=True,index=False,sep='\t')
+
+print(df[:5])
+"
+done
+
+```
+
+${ind}.MASTER.cov1.tsv
+${ind}.MASTER.cov10.tsv
+${ind}.MASTER.covloss.tsv
+```{r, engine='bash', eval=FALSE}
+cd ~/Tubeworms/data/Epig/
+source ~/virtualenv/py38/bin/activate
+
+python -c "
+import pandas as pd
+import numpy as np
+import re
+
+# Load tsv and recompute methylation frequencies according to coverage threshold
+
+final_cols=['seq_id','source','type','start','end','CpGs_count','CpGoe','ID','Name','Parent',
+'callCpGs_count','meth_meancallcov','meth_meandepth','meth_meancov']
+
+for ind in ['Pec','R07B-5','P08H-3']:
+    print(ind)
+    pd.set_option('display.float_format','{:.1f}'.format)
+
+    file='/home/maeperez/Tubeworms/data/Epig/'+ind+'_raw_reads/'+ind+'.MASTER.tsv'
+    df=pd.read_csv(file,header=0,sep='\t', usecols = ['seq_id','source', 'type', 'start', 'end', 'CpGs_count','CpGoe','ID', 'Name', 'Parent',
+          'callCpGs_count','meth_callcovs','meth_freqs','meth_meancallcov','meth_meanfreq'])
+
+    # parse columns of lists
+
+    df['meth_callcovs']=df['meth_callcovs'].apply(lambda x : np.array([float(i) for i in re.split(',| ',x) if x!='.']))
+    df['meth_freqs']=df['meth_freqs'].apply(lambda x : np.array([float(i) for i in re.split(',| ',x) if x!='.']))
+    
+    coverage_threshold=10
+
+    # create a tmp column with indices of motifs that passed the coverage threshold
+
+    df['tmp']=df['meth_callcovs'].apply(lambda x : np.where(x >= coverage_threshold)[0] if len(np.where(x >= coverage_threshold)[0]) else np.nan)
+
+    # filter the columns meth_callCpGs meth_callcovs and meth_freqs to keep only the motifs that passed the coverage threshold
+
+    def index_parse(list_to_parse,list_of_idx):
+        try:
+            if type(list_of_idx)==float:
+                return np.array([])
+            else:
+                return list_to_parse[list_of_idx]
+        except IndexError:
+            print(list_to_parse,list_of_idx)
+
+    df['meth_freqs_cov10'] = df.apply(lambda x: index_parse(x['meth_freqs'], x['tmp']), axis=1)
+    df['meth_callcovs_covs10'] = df.apply(lambda x: index_parse(x['meth_callcovs'], x['tmp']), axis=1)
+    df['callCpGs_count_cov10']=df['meth_callcovs_covs10'].apply(lambda x: len(x))
+
+     # recompute meth_meancallcov and callCpGs_count for coverage thershold 10 (_cov10 suffix)
+
+    df['meth_meancallcov_cov10']=df['meth_callcovs_covs10'].apply(lambda x: x.mean() ) #if type(x) == np.ndarray and len(x) > 0 else np.nan
+
+    # compute methylation coverage and methylation depth per feature
+
+    df['meth_cov_per_CpG']=df['meth_freqs'].apply(lambda x: (x>0).astype(int).mean())
+    df['meth_depth_per_CpG']=df['meth_freqs'].apply(lambda x: x[x>0].mean())
+    df.loc[df.meth_cov_per_CpG==0,'meth_depth_per_CpG']=0
+
+    df['meth_cov_per_CpG_cov10']=df['meth_freqs_cov10'].apply(lambda x: (x>0).astype(int).mean())
+    df['meth_depth_per_CpG_cov10']=df['meth_freqs_cov10'].apply(lambda x: x[x>0].mean())
+    df.loc[df.meth_cov_per_CpG_cov10==0,'meth_depth_per_CpG_cov10']=0
+
+    df[['seq_id', 'source', 'type', 'start', 'end', 'CpGs_count','CpGoe', 'ID', 'Name', 'Parent','callCpGs_count_cov10','meth_meancallcov_cov10','meth_depth_per_CpG_cov10','meth_cov_per_CpG_cov10']].to_csv(file[:-3]+'cov10.tsv',header=final_cols,index=False,sep='\t')
+    df[['seq_id', 'source', 'type', 'start', 'end', 'CpGs_count','CpGoe', 'ID', 'Name', 'Parent','callCpGs_count','meth_meancallcov','meth_depth_per_CpG','meth_cov_per_CpG']].to_csv(file[:-3]+'cov1.tsv',header=final_cols,index=False,sep='\t')
+    df[['seq_id', 'source', 'type', 'start', 'end', 'ID', 'Name','CpGs_count', 'callCpGs_count','callCpGs_count_cov10']].to_csv(file[:-3]+'covloss.tsv',header=True,index=False,sep='\t')
+
+"
+
+
+```
+
+## Genes
+
+${ind}.genes_and_CDS_CGcontent.txt
+```{r, engine = 'bash', eval = FALSE}
+cd ~/Tubeworms/data
+module load bedtools
+
+for ind in Pec R07B-5 P08H-3
+do
+if [ $ind == "Pec" ]; then echo $ind; fasta_prefix=${ind}_contigs; else echo $ind; fasta_prefix=${ind}_wtdbg2; fi
+if [ $ind == "P08H-3" ]; then cov=1; else cov=10; fi
+
+nanopolish_folder=raw_reads
+
+fasta=/home/maeperez/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.fasta
+
+cd ~/Tubeworms/data/Epig/${ind}_${nanopolish_folder}
+
+###### get CG% and length for genes and CDS
+if [ $ind == "Pec" ];
+then
+echo 'Pec'
+awk -F'\t' -vOFS='\t' '{c=split($8, s, ":"); $8=s[2]; if ($3=="gene") print $1,$4-1,$5,$3,$9; else if($3=="CDS") print $1,$4-1,$5,$3,$8}' ${ind}.MASTER.cov${cov}.tsv | bedtools nuc -fi $fasta -pattern "CG" -bed - |
+awk -F'\t' -vOFS='\t' '{print $1,$2,$3,$4,$5,$7,$(NF-1)}' | bedtools groupby -g 5,4 -c 6,7 -o mean,sum -inheader > ${ind}.genes_and_CDS_CGcontent.txt;
+else
+echo $ind
+awk -F'\t' -vOFS='\t' '{c=split($8, s, ":"); $8=s[1]; if ($3=="gene") print $1,$4-1,$5,$3,$8"-mRNA-1"; else if($3=="CDS") print $1,$4-1,$5,$3,$8}' ${ind}.MASTER.cov${cov}.tsv  | bedtools nuc -fi $fasta -pattern "CG" -bed - |
+awk -F'\t' -vOFS='\t' '{print $1,$2,$3,$4,$5,$7,$(NF-1)}' | bedtools groupby -g 5,4 -c 6,7 -o mean,sum -inheader > ${ind}.genes_and_CDS_CGcontent.txt;
+fi
+done
+```
+
+${ind}.downstream_genes.tsv
+${ind}.downstream_genes_withCG_CDS.tsv
+ALL.downstream_genes_withCG_CDS.tsv
+```{python, eval=FALSE}
+import pandas as pd
+import numpy as np
+
+## Load functional annotation data and define variables
+
+# kog_hier=pd.read_csv('/home/maeperez/Tubeworms/data/annotations/reference_KOG_hierarchy.txt',header=0,sep='\t')
+# kog_hier=kog_hier.rename(columns = {'KOG_id':'KOG','list_cat':'KOG_lvl1_id','kog_des':'KOG_lvl1'})
+# 
+# brite_hier=pd.read_csv('/home/maeperez/Tubeworms/data/annotations/reference_BRITE_hierarchy_clean.tsv',header=0,sep='\t')
+# 
+# orthology_file='/home/maeperez/Tubeworms/data/annotations/Final_annotations.txt'
+# orth=pd.read_csv(orthology_file,header=0,sep='\t')
+# orth=orth.rename(columns = {'qseqid':'Name'})
+# orth=orth[['genome','Name','Description','Enzyme.Codes','Enzyme.Names','GO.IDs','GO.Names','KO','KOG','KOG_longname','tigrfam','tigrfam_longname','pfam','pfam_longname']]
+
+cov_thresh_dic={'Pec':10,'R07B-5':10,'P08H-3':1}
+genome_dic={'Pec':'P. echinospica','R07B-5':'R. piscesae','P08H-3':'P. palmiformis'}
+TMP_dic={'Pec':{'root_path':'~/Tubeworms/data/annotations/Pec/','transcriptomes':['Pec-V']},'R07B-5':{'root_path':'~/Tubeworms/data/annotations/R07B-5/maker2ndpass.30/','transcriptomes':['R08H-5-V','all8']},'P08H-3':{'root_path':'~/Tubeworms/data/annotations/P08H-3/maker2ndpass.12/','transcriptomes':['ParPal-G']}}
+
+## Parse MASTER dataframes
+
+for ind in ['Pec','R07B-5','P08H-3']:
+    print(ind)
+    # Load methylation summary file
+
+    cov_thresh=cov_thresh_dic[ind]
+    file='/home/maeperez/Tubeworms/data/Epig/'+ind+'_raw_reads/'+ind+'.MASTER.cov'+str(cov_thresh)+'.tsv'
+    df=pd.read_csv(file,header=0,sep='\t',usecols=['seq_id','type','start','end','CpGs_count','CpGoe','Name',
+'callCpGs_count','meth_meancallcov','meth_meandepth','meth_meancov'])
+    df=df[df.type=='mRNA'] #filter to keep only gene models
+    df.pop('type')
+    df['meth_meanfreq']=df.meth_meandepth*df.meth_meancov
+    
+    ## Add gene model expression level (TPM) from transcriptomic data
+    
+    for i in range(len(TMP_dic[ind]['transcriptomes'])):
+        transcriptome=TMP_dic[ind]['transcriptomes'][i]
+        TPM=pd.read_csv(TMP_dic[ind]['root_path']+transcriptome+'_Salmon_results/quant.sf',header=0,sep='\t')
+
+        if i==0:
+            TPM_ind=TPM[['Name','Length','TPM']].rename(columns = {'TPM':transcriptome+'_TPM'})
+        else:
+            TPM_ind=pd.merge(TPM_ind,TPM[['Name','Length','TPM']].rename(columns = {'TPM':transcriptome+'_TPM'}),on=['Name','Length'],how='left') #for cases where there is more than one transcriptome
+    df=pd.merge(df,TPM_ind,on='Name',how='left')
+    df['meth_binary']=((df.meth_meancov>0.75) & (df.meth_meandepth>0.50)).astype(int)
+    
+    # # get functional annotations
+    # 
+    # orth_ind=orth[orth['genome']==genome_dic[ind]] # get KOG and KEGG orthology hierarchy
+    # 
+    # orth_ind=pd.merge(orth_ind,kog_hier,on='KOG',how='left') 
+    # orth_ind=pd.merge(orth_ind,brite_hier,on='KO',how='left') # add BRITE hierarchy
+    # orth_ind=orth_ind[['genome', 'Name','KOG','KOG_lvl1_id','KOG_lvl1','KOG_longname','KEGG_lvl1','KO', 'KEGG_lvl2','KEGG_lvl3', 'KEGG_gene_name', 'KEGG_longname']]
+    # 
+    # df=pd.merge(df,orth_ind,on='Name',how='left') 
+# 
+#     file='/home/maeperez/Tubeworms/data/Epig/'+ind+'.downstream_genes.tsv'
+#     df.to_csv(file,header=True,sep='\t',index=False)
+    
+    # Add GC% and length for genes and CDS
+    
+    file='/home/maeperez/Tubeworms/data/Epig/'+ind+'_raw_reads/'+ind+'.genes_and_CDS_CGcontent.txt'
+    gc=pd.read_csv(file,header=None,sep='\t')
+    gc.columns=['id','type','GC','Length']
+    
+    dic_gene_gc=pd.Series(gc.loc[gc.type=='gene'].GC.values,index=gc.loc[gc.type=='gene'].id).to_dict()
+    dic_CDS_gc=pd.Series(gc.loc[gc.type=='CDS'].GC.values,index=gc.loc[gc.type=='CDS'].id).to_dict()
+    
+    df['CG%']=df.Name.map(dic_gene_gc)
+    df['cds_CG%']=df.Name.map(dic_CDS_gc)
+    
+    dic_gene_len=pd.Series(gc.loc[gc.type=='gene'].Length.values,index=gc.loc[gc.type=='gene'].id).to_dict()
+    dic_CDS_len=pd.Series(gc.loc[gc.type=='CDS'].Length.values,index=gc.loc[gc.type=='CDS'].id).to_dict()
+    
+    df['gene_Length']=df.Name.map(dic_gene_len)
+    df['cds_Length']=df.Name.map(dic_CDS_len)
+    
+    df.pop('Length')
+    
+    file='/home/maeperez/Tubeworms/data/Epig/'+ind+'.downstream_genes_withCG_CDS.tsv'
+    df.to_csv(file,header=True,sep='\t',index=False)
+    
+
+df_all=pd.read_csv('/home/maeperez/Tubeworms/data/Epig/'+'Pec'+'.downstream_genes_withCG_CDS.tsv',header=0,sep='\t')
+df_all=pd.melt(df_all,id_vars=[col for col in df_all.columns if '_TPM' not in col])
+df_all['genome']=genome_dic['Pec']
+
+for ind in ['R07B-5','P08H-3']:
+    df=pd.read_csv('/home/maeperez/Tubeworms/data/Epig/'+ind+'.downstream_genes_withCG_CDS.tsv',header=0,sep='\t')
+    df=pd.melt(df,id_vars=[col for col in df.columns if '_TPM' not in col])
+    df['genome']=genome_dic[ind]
+    df_all=df_all.append(df,ignore_index=True)
+df_all.rename(columns={'variable':'TPM_source','value':'TPM_value'}, inplace=True)
+df_all.to_csv('/home/maeperez/Tubeworms/data/Epig/'+'ALL'+'.downstream_genes_withCG_CDS.tsv',header=True,sep='\t',index=False)
+
+
+```
+### Get summary table for intron/exons comparisons
+
+ALL.downstream.introns_vs_exons_long.tsv
+```{r, engine = 'bash', eval = FALSE}
+source ~/virtualenv/py38/bin/activate
+
+cd ~/Tubeworms/data/Epig
+
+### Get summary dataframe
+python -c "
+import numpy as np
+import pandas as pd
+import re
+
+trial='raw_reads'
+
+intronexon=pd.DataFrame([],columns=['seq_id', 'type', 'start', 'end', 'strand', 'CpGs_count', 'CpGoe','Parent',
+       'callCpGs_count', 'meth_meancallcov', 'meth_cov',
+       'meth_depth', 'feature_posi','ind'])
+
+for ind in ['P08H-3','Pec','R07B-5']:
+    print(ind)
+    pd.set_option('display.float_format','{:.1f}'.format)
+
+    file='/home/maeperez/Tubeworms/data/Epig/'+ind+'_'+trial+'/'+ind+'.MASTER.tsv'
+    df=pd.read_csv(file,header=0,sep='\t', usecols = ['seq_id', 'type', 'start', 'end','strand', 'CpGs_count','CpGoe', 'ID','Parent',
+          'callCpGs_count','meth_callcovs','meth_freqs','meth_meancallcov'])
+    df=df[df.type.isin(['three_prime_UTR','five_prime_UTR','intron','exon'])]
+    
+    # parse columns of lists
+
+    df['meth_callcovs']=df['meth_callcovs'].apply(lambda x : np.array([float(i) for i in re.split(',| ',x) if x!='.']))
+    df['meth_freqs']=df['meth_freqs'].apply(lambda x : np.array([float(i) for i in re.split(',| ',x) if x!='.']))
+    
+    coverage_threshold=10
+
+    
+    df['meth_cov_per_CpG']=df['meth_freqs'].apply(lambda x: (x>0).astype(int).mean())
+    df['meth_depth_per_CpG']=df['meth_freqs'].apply(lambda x: x[x>0].mean())
+    df.loc[df.meth_cov_per_CpG==0,'meth_depth_per_CpG']=0
+
+    if ind in ['Pec','R07B-5']: # for tubeworms, filter out methylation coverage <10
+        
+        # create a tmp column with indices of motifs that passed the coverage threshold
+
+        df['tmp']=df['meth_callcovs'].apply(lambda x : np.where(x >= coverage_threshold)[0] if len(np.where(x >= coverage_threshold)[0]) else np.nan)
+
+        # filter the columns meth_callCpGs meth_callcovs and meth_freqs to keep only the motifs that passed the coverage threshold
+
+        def index_parse(list_to_parse,list_of_idx):
+            try:
+                if type(list_of_idx)==float:
+                    return np.array([])
+                else:
+                    return list_to_parse[list_of_idx]
+            except IndexError:
+                print(list_to_parse,list_of_idx)
+
+        df['meth_freqs'] = df.apply(lambda x: index_parse(x['meth_freqs'], x['tmp']), axis=1)
+        df['meth_callcovs'] = df.apply(lambda x: index_parse(x['meth_callcovs'], x['tmp']), axis=1)
+        df['callCpGs_count']=df['meth_callcovs'].apply(lambda x: len(x))
+
+         # recompute meth_meancallcov and meth_meanfreq and create callCpGs_count for coverage thershold 10 (_cov10 suffix)
+
+        df['meth_meancallcov']=df['meth_callcovs'].apply(lambda x: x.mean() ) #if type(x) == np.ndarray and len(x) > 0 else np.nan
+    #     df['meth_meanfreq_cov10']=df['meth_freqs_cov10'].apply(lambda x: x.mean() ) #if type(x) != float else np.nan
+
+        # compute methylation coverage and methylation depth per feature
+
+        df['meth_cov_per_CpG']=df['meth_freqs'].apply(lambda x: (x>0).astype(int).mean())
+        df['meth_depth_per_CpG']=df['meth_freqs'].apply(lambda x: x[x>0].mean())
+        df.loc[df.meth_cov_per_CpG==0,'meth_depth_per_CpG']=0
+    
+    
+    df=df[['seq_id', 'type', 'start', 'end', 'strand', 'CpGs_count', 'Parent', 'callCpGs_count', 
+       'meth_meancallcov', 'meth_cov_per_CpG', 'meth_depth_per_CpG']]
+    
+    parent = df['Parent']
+    featuretype = df['type']
+    strand =  df['strand']=='+'
+    seq = np.where(strand, df['start'], -df['start'])  # i.e. 'negate if odd'
+
+    df = df.iloc[np.lexsort((seq, strand, featuretype, parent))]
+    df['feature_posi'] = df.groupby(['Parent', 'type']).cumcount()+1
+    df['ind']=ind
+    df.columns=['seq_id', 'type', 'start', 'end', 'strand', 'CpGs_count', 'Parent',
+       'callCpGs_count', 'meth_meancallcov', 'meth_cov',
+       'meth_depth', 'feature_posi','ind']
+    intronexon=intronexon.append(df,ignore_index=True)
+
+    
+fileout='/home/maeperez/Tubeworms/data/Epig/ALL.downstream.introns_vs_exons_long.tsv'
+intronexon.to_csv(fileout,header=True,sep='\t')    
+intronexon[:20]
+"
+
+```
+
+## Step 4: get rolling windows methylation of genes and their upstream regions
+
+${ind}.downstream.cov1.TSS.2.tsv
+${ind}.downstream.cov10.TSS.2.tsv
+```{r, engine = 'bash', eval = FALSE}
+#!/bin/bash 
+module load bedtools
+
+#### flanking region size = 10 000bp
+#### window size = 1000bp
+#### step size = 200bp
+#### -> 100 datapoints per flank per gene
+
+for ind in Pec R07B-5 P08H-3
+do
+
+echo $ind
+
+nanopolish_folder=raw_reads
+if [ $ind == "P08H-3" ]; then echo $ind; trial=nanopolish_callmethylation; else trial=nanopolish_callmethylation_raw; fi
+if [ $ind == "Pec" ]; then echo $ind; fasta_prefix=${ind}_contigs; else fasta_prefix=${ind}_wtdbg2; fi
+fasta=/home/maeperez/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.fasta
+
+mkdir ~/Tubeworms/data/Epig/${ind}_${nanopolish_folder}/TSS
+cd ~/Tubeworms/data/Epig/${ind}_${nanopolish_folder}/TSS
+
+rm ${ind}.chrsizes
+ln -s /home/maeperez/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.sorted.chrsizes ${ind}.chrsizes
+
+### prepare de rolling window bedfile
+gff=../mrna.${ind}.final_gene_models.withintrons.withrepeats.withinterg.sorted.gff
+
+awk -F"[\t;]" -v OFS="\t" '{if ($3=="mRNA" ) print $1,$4-1,$5-1,$11,$7 }' $gff | awk -F"\t" -v OFS='\t' '{gsub("Name=","",$4); print }' > tmp.mrna.${ind}.final_gene_models.withintrons.withrepeats.withinterg.sorted.bed
+
+bed=tmp.mrna.${ind}.final_gene_models.withintrons.withrepeats.withinterg.sorted.bed
+
+awk -F"\t" -v OFS="\t" '{if ($5 =="+") print}' $bed > tmp.gene.forward.bed
+awk -F"\t" -v OFS="\t" '{if ($5 =="-") print}' $bed > tmp.gene.reverse.bed
+
+bedtools flank -i tmp.gene.forward.bed -g ${ind}.chrsizes -l 10000 -r 0  | bedtools makewindows -b - -w 1000 -s 200 -i srcwinnum -reverse | awk -v OFS="\t" '{print $1,$2,$3,$4,"upstream"}' > tmp.flank.forward.windows.bed
+
+bedtools flank -i tmp.gene.reverse.bed -g ${ind}.chrsizes -r 10000 -l 0  | bedtools makewindows -b - -w 1000 -s 200 -i srcwinnum | awk -v OFS="\t" '{print $1,$2,$3,$4,"upstream"}' > tmp.flank.reverse.windows.bed
+
+bedtools makewindows -b tmp.gene.forward.bed -w 1000 -s 200 -i srcwinnum | awk -v OFS="\t" '{print $1,$2,$3,$4,"downstream"}' > tmp.gene.forward.windows.bed
+
+bedtools makewindows -b tmp.gene.reverse.bed -w 1000 -s 200 -i srcwinnum -reverse | awk -v OFS="\t" '{print $1,$2,$3,$4,"downstream"}' > tmp.gene.reverse.windows.bed
+
+cat tmp.gene.forward.windows.bed tmp.flank.forward.windows.bed tmp.gene.reverse.windows.bed tmp.flank.reverse.windows.bed | sort -k1,1 -k2,2n > tmp.${ind}.genes.windows.bed
+
+
+# add CpGs and CpG o/e
+bedtools nuc -fi $fasta -pattern "CG" -bed tmp.${ind}.genes.windows.bed | tail -n +2 | awk -F"\t" -v OFS="\t" '{ if ($(NF-6)==0 || $(NF-5)==0) print $1,$2,$3,$4,$5,$NF,0; else print $1,$2,$3,$4,$5,$NF,($NF/($(NF-6)*$(NF-5)))*($(NF-1)^2/($(NF-1)-1))}' > ${ind}.genes.windows.bed # add annotations for CpGs
+
+
+#head ${ind}.genes.windows.bed
+
+###########################################
+
+### add methylation info per feature (coverage =1)
+
+bedtools map -a ${ind}.genes.windows.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov1.bed -c 5 -o count > tmp1.cov1.bed
+
+bedtools map -a tmp1.cov1.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov1.bed -c 5,6 -o mean > tmp2.cov1.bed # added mean callcoverage and mean meth_freq
+
+bedtools map -a tmp2.cov1.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov1.bed -c 5,6 -o collapse > tmp3.cov1.bed
+
+cat <(echo "" | awk -v OFS="\t" '{print "contig","start","end","feature_id","TSS_posi","CpGs_count","CpGoe","callCpGs_count","meth_meancallcov","meth_meanfreq","meth_callcovs","meth_freqs"}') tmp3.cov1.bed > ${ind}.downstream.cov1.TSS.tsv
+
+head ${ind}.downstream.cov1.TSS.tsv
+
+#feature_id,TSSposi,callCpGcount,meth_meancalcov,meth_freq,meth_meanfreq,meth_freqs
+
+file=${ind}.downstream.cov1.TSS.tsv
+
+tail -n+2 $file | awk -F'\t' -vOFS='\t' '{ if($8>0) print $4,$5,$6,$7,$8,$9,$10,$12}' | awk -F'\t|,' -v OFS='\t' '{ci=0; si=0; for (i=8; i<=NF; ++i) ci+=($i!=0);for (i=8; i<=NF; ++i) si += $i; if (ci>0) print $1,$2,$3,$4,$5,$6,$7,si/ci,$7/(si/ci); else print $1,$2,$3,$4,$5,$6,$7,0,0 }' | awk -F '\t|_' -vOFS='\t' '{for (i=1; i<=NF-9; i++) {printf ("%s", $i); if (i<NF-9) printf "_"} print "",$(NF-8),$(NF-7),$(NF-6), $(NF-5), $(NF-4), $(NF-3), $(NF-2), $(NF-1), $NF}' | awk -F'\t' -vOFS='\t' '{if ($3=="upstream") print $1,-$2,$4,$5,$6,$7,$8,$9,$10; else print $1,$2,$4,$5,$6,$7,$8,$9,$10}' > tmp.${ind}.downstream.cov1.TSS.2.tsv # if($8>0) at start of awk sequence filters out windows with no called CpG
+
+cat <(echo "" | awk -v OFS="\t" '{print "mRNA","TSS_idx","CpGs_count","CpGoe","callCpGs_count","meth_meancallcov","meth_freq","meth_depth","meth_cov"}') tmp.${ind}.downstream.cov1.TSS.2.tsv > ${ind}.downstream.cov1.TSS.2.tsv
+
+
+### add methylation info per feature (coverage =10)
+
+bedtools map -a ${ind}.genes.windows.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov10.bed -c 5 -o count > tmp1.cov10.bed
+
+bedtools map -a tmp1.cov10.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov10.bed -c 5,6 -o mean > tmp2.cov10.bed # added mean callcoverage and mean meth_freq
+
+bedtools map -a tmp2.cov10.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov10.bed -c 5,6 -o collapse > tmp3.cov10.bed
+
+
+cat <(echo "" | awk -v OFS="\t" '{print "contig","start","end","feature_id","TSS_posi","CpGs_count","CpGoe","callCpGs_count","meth_meancallcov","meth_meanfreq","meth_callcovs","meth_freqs"}') tmp3.cov10.bed > ${ind}.downstream.cov10.TSS.tsv
+
+
+file=${ind}.downstream.cov10.TSS.tsv 
+tail -n+2 $file | awk -F'\t' -vOFS='\t' '{ if($8>0) print $4,$5,$6,$7,$8,$9,$10,$12}' | awk -F'\t|,' -v OFS='\t' '{ci=0; si=0; for (i=8; i<=NF; ++i) ci+=($i!=0);for (i=8; i<=NF; ++i) si += $i; if (ci>0) print $1,$2,$3,$4,$5,$6,$7,si/ci,$7/(si/ci); else print $1,$2,$3,$4,$5,$6,$7,0,0 }' | awk -F '\t|_' -vOFS='\t' '{for (i=1; i<=NF-9; i++) {printf ("%s", $i); if (i<NF-9) printf "_"} print "",$(NF-8),$(NF-7),$(NF-6), $(NF-5), $(NF-4), $(NF-3), $(NF-2), $(NF-1), $NF}' | awk -F'\t' -vOFS='\t' '{if ($3=="upstream") print $1,-$2,$4,$5,$6,$7,$8,$9,$10; else print $1,$2,$4,$5,$6,$7,$8,$9,$10}' > tmp.${ind}.downstream.cov10.TSS.2.tsv # if($8>0) at beginning of first awk command filters out windows with no called CpGs (callCpGs_count>0)
+
+cat <(echo "" | awk -v OFS="\t" '{print "mRNA","TSS_idx","CpGs_count","CpGoe","callCpGs_count","meth_meancallcov","meth_freq","meth_depth","meth_cov"}') tmp.${ind}.downstream.cov10.TSS.2.tsv > ${ind}.downstream.cov10.TSS.2.tsv
+
+
+head ${ind}.downstream.cov1.TSS.2.tsv
+head ${ind}.downstream.cov10.TSS.2.tsv
+
+tail ${ind}.downstream.cov1.TSS.2.tsv
+tail ${ind}.downstream.cov10.TSS.2.tsv
+
+
+rm tmp*
+
+#### get GC% of promoter region
+
+file=${ind}.downstream.cov1.TSS.tsv 
+
+awk -vOFS='\t' '{print "genome","mRNA","flank_CG"}' <(echo '') > ${ind}.downstream.1KbPromoter_CG.tsv
+
+#awk -vOFS='\t' '{print "genome","mRNA","flank_CG"}' <(echo '') > /home/maeperez/Tubeworms/data/Epig/ALL.downstream.1KbPromoter_CG.tsv
+
+
+tail -n+2 $file | awk -F '\t|_' -vOFS='\t' '{for (i=1; i<=NF-1; i++) {printf ("%s", $i); if (i<NF-1) printf "_"} print "", $(NF-1), $NF}' |
+
+
+tail -n+2 $file | awk -F'\t' '{print $1,$2,$3,$5,$4}' | awk -F '\t|_' -vOFS='\t' '{for (i=1; i<=NF-1; i++) {printf ("%s", $i); if (i<NF-1) printf "_"} print "",$NF}' | awk -F' ' -vOFS='\t' '{if(($4=="upstream") && ($6==5)) print $1, $2, $3, $5}' | bedtools nuc -fi $fasta -pattern "CG" -bed - |
+awk -F'\t' -vOFS='\t' -vind="$ind" '{print ind,$4,$6}' | tail -n+2 >> ${ind}.downstream.1KbPromoter_CG.tsv
+
+tail -n+2 ${ind}.downstream.1KbPromoter_CG.tsv >> /home/maeperez/Tubeworms/data/Epig/ALL.downstream.1KbPromoter_CG.tsv
+
+done
+
+```
+
+## LTR-retrotransposons
+## Step 5: get methylation for LTR features
+
+${ind}.downstream.cov1.LTR.tsv
+${ind}.downstream.cov10.LTR.tsv
+```{r, engine = 'bash', eval = FALSE}
+#!/bin/bash
+
+#### flanking region size = 10 000bp
+#### window size = 10000bp
+#### step size = 200bp
+#### -> ${window} datapoints per flank per ltr
+
+window=1000
+step=200
+flank=10000
+
+module load bedtools
+source ~/virtualenv/py38/bin/activate
+
+
+for in in Pec R07B-5 P08H-5
+do
+
+nanopolish_folder=raw_reads
+
+if [ $ind == "P08H-3" ]; then echo $ind; trial=nanopolish_callmethylation; else trial=nanopolish_callmethylation_raw; fi
+
+if [ $ind == "Pec" ]; then echo $ind; fasta_prefix=${ind}_contigs; else fasta_prefix=${ind}_wtdbg2; fi
+
+fasta=~/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.fasta
+
+
+mkdir ~/Tubeworms/data/Epig/${ind}_${nanopolish_folder}/LTR
+cd ~/Tubeworms/data/Epig/${ind}_${nanopolish_folder}/LTR
+
+
+ln -s /home/maeperez/Tubeworms/data/assemblies/nucl_assemblies/${ind}.chrsizes ${ind}.chrsizes
+
+
+## run python script to clean up gff file and att insertion times
+PATH_LTR=/home/maeperez/Tubeworms/data/Epig/LTR
+gff_file=${fasta_prefix}.fasta.pass.list.gff3
+list_file=${fasta_prefix}.fasta.pass.list
+
+python /home/maeperez/Tubeworms/Epig/Downstream/parse_LTR_gff.py -gff ${PATH_LTR}/${gff_file} -list ${PATH_LTR}/${list_file}
+
+
+#### Get TSV file of all LTR features with some extra info (insertion tine, CpG density)
+init_file=${PATH_LTR}/clean_${gff_file}
+
+awk -F"\t" -v OFS="\t" '{match($9, /Name\=([^;]+)/, arr1);match($9, /LTR_type\=([^;]+)/, arr2);match($9, /insertion_time\=([^;]+)/, arr3); print $1,$4-1,$5,arr1[1],$7,arr2[1],arr3[1],$3}' $init_file > tmp.${ind}.ltrs.all_features.bed
+
+# add CpG count, CpG density and CpGoe
+
+echo '' | awk -F'\t' -vOFS='\t' '{print "contig_id","start","end","LTR","feature","strand","LTR_type","insertion_time","CpGs_count","CpG_density","CpGoe"}' > ${ind}.ltrs.all_features.tsv
+
+bedtools nuc -fi $fasta -pattern "CG" -bed tmp.${ind}.ltrs.all_features.bed | tail -n +2 | awk -F"\t" -v OFS="\t" '{ if ($(NF-6)==0 || $(NF-5)==0) print $1,$2,$3,$4,$8,$5,$6,$7,$NF,$NF/$(NF-1),0; else print $1,$2,$3,$4,$8,$5,$6,$7,$NF,$NF/$(NF-1),($NF/($(NF-6)*$(NF-5)))*($(NF-1)^2/($(NF-1)-1))}' >> ${ind}.ltrs.all_features.tsv
+
+head ${ind}.ltrs.all_features.tsv
+
+#### Add methylation data ####
+
+### add methylation info per feature (coverage =1)
+head ${ind}.ltrs.all_features.tsv
+tail -n+2 ${ind}.ltrs.all_features.tsv > tmp.${ind}.ltrs.all_features.bed
+
+bedtools map -a tmp.${ind}.ltrs.all_features.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov1.bed -c 5,6 -o mean > tmp1.cov1.bed # added mean callcoverage and mean meth_freq
+
+bedtools map -a tmp1.cov1.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov1.bed -c 5,6 -o collapse > tmp2.cov1.bed
+
+bedtools map -a tmp2.cov1.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov1.bed -c 5 -o count > tmp3.cov1.bed
+
+bedtools map -a tmp3.cov1.bed -b ${ind}_introns.bed -c 5 -o collapse > tmp4.cov1.bed
+
+cat <(echo "" | awk -v OFS="\t" '{print "contig","start","end","LTR","feature_type","strand","LTR_type","insertion_time","CpGs_count","CpG_density","CpGoe","meth_meancallcov","meth_meanfreq","meth_callcovs","meth_freqs","callCpGs_count","location"}') tmp4.cov1.bed > ${ind}.downstream.cov1.LTR.tsv
+
+head ${ind}.downstream.cov1.LTR.tsv
+
+### Coverage 10
+
+bedtools map -a tmp.${ind}.ltrs.all_features.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov10.bed -c 5,6 -o mean > tmp1.cov10.bed # added mean callcoverage and mean meth_freq
+
+bedtools map -a tmp1.cov10.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov10.bed -c 5,6 -o collapse > tmp2.cov10.bed
+
+bedtools map -a tmp2.cov10.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov10.bed -c 5 -o count > tmp3.cov10.bed
+
+bedtools map -a tmp3.cov10.bed -b ${ind}_introns.bed -c 5 -o collapse > tmp4.cov10.bed
+
+cat <(echo "" | awk -v OFS="\t" '{print "contig","start","end","LTR","feature_type","strand","LTR_type","insertion_time","CpGs_count","CpG_density","CpGoe","meth_meancallcov","meth_meanfreq","meth_callcovs","meth_freqs","callCpGs_count","location"}') tmp4.cov10.bed > ${ind}.downstream.cov10.LTR.tsv
+
+head ${ind}.downstream.cov10.LTR.tsv
+
+rm tmp*
+
+done
+
+```
+
+parse_LTR_gff.py program needed in Step 5
+
+```{r, engine = 'python', eval = FALSE}
+#!/usr/bin/python
+
+import argparse
+import pandas as pd
+import numpy as np
+import re
+
+if __name__=='__main__':
+    
+    parser = argparse.ArgumentParser(
+        description = '** clean up the LTR GFF file ** \nThis script will edit the GFF3 file of the LTRs and add some extra info about insertion time in the 9th field',
+        usage = 'parse_LTR_gff.py -gff <gff file> -list <list file>')
+    parser.add_argument('-gff', help='full path is necessary', dest='gff')
+    parser.add_argument('-list', help='full path is necessary', dest='list')
+    
+    options = parser.parse_args()
+    
+    gff_file = options.gff
+    list_file = options.list
+
+
+# gff_file='/home/maeperez/Tubeworms/data/Epig/LTR/Pec_contigs.fasta.pass.list.gff3'
+# list_file='/home/maeperez/Tubeworms/data/Epig/LTR/Pec_contigs.fasta.pass.list'
+
+dat=pd.read_csv(list_file,header=None,sep='\t',comment="#")
+ltr_dic={}
+for i in range(len(dat)):
+    ltr_dic[dat.loc[i,0]]={'LTR_type':dat.loc[i,9],'insertion_time':'{:.0f}'.format(dat.loc[i,11])}
+
+df=pd.read_csv(gff_file,header=None,sep='\t',comment="#")
+
+df=pd.read_csv(gff_file,header=None,sep='\t',comment="#")
+i=0
+for i in range(len(df)):
+        LTR=re.search('(?<=Name=).*?(?=;)', df.loc[i,8]).group(0)
+        df.iloc[i,8]=df.loc[i,8]+';LTR='+LTR+';LTR_type='+ltr_dic[LTR]['LTR_type']+';insertion_time='+ltr_dic[LTR]['insertion_time']
+    
+
+out_gff='/'.join(gff_file.split('/')[:-1])+'/clean_'+str(gff_file.split('/')[-1])
+# df[2] = pd.Categorical(df[2],categories=['repeat_region','target_site_duplication','long_terminal_repeat','LTR/Gypsy'])
+df=df.sort_values([0,3],ignore_index=True)
+df.to_csv(out_gff,header=False,index=False,sep='\t') 
+
+
+```
+
+## Step 6: get rolling windows methylation of LTRs and their upstream and downstream regions
+
+${ind}.downstream.cov1.LTR_TSS.2.tsv
+${ind}.downstream.cov10.LTR_TSS.2.tsv
+```{r, engine = 'bash', eval = FALSE}
+#### prepare de rolling window bedfile
+#!/bin/bash
+
+#### flanking region size = 10 000bp
+#### window size = 10000bp
+#### step size = 200bp
+#### -> ${window} datapoints per flank per ltr
+
+window=1000
+step=200
+flank=10000
+
+module load bedtools
+
+
+for ind in Pec R07B-5 P08H-3
+do
+if [ $ind == "P08H-3" ]; then echo $ind; trial=nanopolish_callmethylation; else trial=nanopolish_callmethylation_raw; fi
+if [ $ind == "Pec" ]; then echo $ind; fasta_prefix=${ind}_contigs; else fasta_prefix=${ind}_wtdbg2; fi
+
+fasta=~/Tubeworms/data/assemblies/nucl_assemblies/${fasta_prefix}.fasta
+
+nanopolish_folder=raw_reads
+
+mkdir ~/Tubeworms/data/Epig/${ind}_${nanopolish_folder}/LTR
+cd ~/Tubeworms/data/Epig/${ind}_${nanopolish_folder}/LTR
+
+
+PATH_LTR=/home/maeperez/Tubeworms/data/Epig/LTR
+gff_file=${fasta_prefix}.fasta.pass.list.gff3
+list_file=${fasta_prefix}.fasta.pass.list
+
+init_file=${PATH_LTR}/clean_${gff_file}
+
+awk -F"[\t;]" -v OFS="\t" '{if ($3=="repeat_region" ) print $1,$4-1,$5,$10,$7 }' $init_file | awk -F"\t" -v OFS='\t' '{gsub("Name=","",$4); print }' > tmp.clean_${list_file}.bed
+
+bed=tmp.clean_${list_file}.bed
+
+awk -F"\t" -v OFS="\t" '{if ($5 =="+") print}' $bed > tmp.ltr.forward.bed
+awk -F"\t" -v OFS="\t" '{if ($5 =="-") print}' $bed > tmp.ltr.reverse.bed
+awk -F"\t" -v OFS="\t" '{if ($5 =="?") print}' $bed > tmp.ltr.unknown.bed
+
+### get flanking regions 
+
+bedtools flank -i tmp.ltr.forward.bed -g ${ind}.chrsizes -l ${flank} -r 0 | bedtools makewindows -b - -w ${window} -s ${step} -i srcwinnum -reverse | awk -v OFS="\t" '{print $1,$2,$3,$4,"upstream"}' > tmp.flank.forward.windows.bed
+
+bedtools flank -i tmp.ltr.forward.bed -g ${ind}.chrsizes -l 0 -r ${flank} | bedtools makewindows -b - -w ${window} -s ${step} -i srcwinnum | awk -v OFS="\t" '{print $1,$2,$3,$4,"upstream_end"}' > tmp.flank2.forward.windows.bed
+
+bedtools flank -i tmp.ltr.reverse.bed -g ${ind}.chrsizes -r ${flank} -l 0  | bedtools makewindows -b - -w ${window} -s ${step} -i srcwinnum | awk -v OFS="\t" '{print $1,$2,$3,$4,"upstream"}' > tmp.flank.reverse.windows.bed
+
+bedtools flank -i tmp.ltr.reverse.bed -g ${ind}.chrsizes -r 0 -l ${flank}  | bedtools makewindows -b - -w ${window} -s ${step} -i srcwinnum -reverse | awk -v OFS="\t" '{print $1,$2,$3,$4,"upstream_end"}' > tmp.flank2.reverse.windows.bed
+
+bedtools flank -i tmp.ltr.unknown.bed -g ${ind}.chrsizes -l ${flank} -r 0 | bedtools makewindows -b - -w ${window} -s ${step} -i srcwinnum -reverse | awk -v OFS="\t" '{print $1,$2,$3,$4,"upstream"}' > tmp.flank.unknown.windows.bed
+
+bedtools flank -i tmp.ltr.unknown.bed -g ${ind}.chrsizes -l 0 -r ${flank} | bedtools makewindows -b - -w ${window} -s ${step} -i srcwinnum | awk -v OFS="\t" '{print $1,$2,$3,$4,"upstream_end"}' > tmp.flank2.unknown.windows.bed
+
+
+### get inward (i.e. downstream of feature boundary)
+
+bedtools makewindows -b tmp.ltr.forward.bed -w ${window} -s ${step} -i srcwinnum | awk -v OFS="\t" '{print $1,$2,$3,$4,"downstream"}' > tmp.ltr.forward.windows.bed
+
+bedtools makewindows -b tmp.ltr.forward.bed -w ${window} -s ${step} -i srcwinnum -reverse | awk -v OFS="\t" '{print $1,$2,$3,$4,"downstream_end"}' > tmp.ltr2.forward.windows.bed
+
+bedtools makewindows -b tmp.ltr.reverse.bed -w ${window} -s ${step} -i srcwinnum -reverse | awk -v OFS="\t" '{print $1,$2,$3,$4,"downstream"}' > tmp.ltr.reverse.windows.bed
+
+bedtools makewindows -b tmp.ltr.reverse.bed -w ${window} -s ${step} -i srcwinnum | awk -v OFS="\t" '{print $1,$2,$3,$4,"downstream_end"}' > tmp.ltr2.reverse.windows.bed
+
+bedtools makewindows -b tmp.ltr.unknown.bed -w ${window} -s ${step} -i srcwinnum | awk -v OFS="\t" '{print $1,$2,$3,$4,"downstream"}' > tmp.ltr.unknown.windows.bed
+
+bedtools makewindows -b tmp.ltr.unknown.bed -w ${window} -s ${step} -i srcwinnum -reverse | awk -v OFS="\t" '{print $1,$2,$3,$4,"downstream_end"}' > tmp.ltr2.unknown.windows.bed
+
+cat \
+tmp.ltr.forward.windows.bed \
+tmp.flank.forward.windows.bed \
+tmp.ltr.reverse.windows.bed \
+tmp.flank.reverse.windows.bed \
+tmp.ltr2.forward.windows.bed \
+tmp.flank2.forward.windows.bed \
+tmp.ltr2.reverse.windows.bed \
+tmp.flank2.reverse.windows.bed \
+tmp.ltr.unknown.windows.bed \
+tmp.flank.unknown.windows.bed \
+tmp.ltr2.unknown.windows.bed \
+tmp.flank2.unknown.windows.bed | sort -k1,1 -k2,2n > tmp.${ind}.ltr.windows.bed
+
+# add CpG count, CpGoe
+
+bedtools nuc -fi $fasta -pattern "CG" -bed tmp.${ind}.ltr.windows.bed | tail -n +2 | awk -F"\t" -v OFS="\t" '{ if ($(NF-6)==0 || $(NF-5)==0) print $1,$2,$3,$4,$5,$NF,0; else print $1,$2,$3,$4,$5,$NF,($NF/($(NF-6)*$(NF-5)))*($(NF-1)^2/($(NF-1)-1))}' > ${ind}.ltr.windows.bed
+
+
+###########################################
+
+### add methylation info per feature (coverage =1)
+bedtools map -a ${ind}.ltr.windows.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov1.bed -c 5 -o count > tmp1.cov1.bed
+
+bedtools map -a tmp1.cov1.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov1.bed -c 5,6 -o mean > tmp2.cov1.bed # added mean callcoverage and mean meth_freq
+
+bedtools map -a tmp2.cov1.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov1.bed -c 5,6 -o collapse > tmp3.cov1.bed
+
+
+cat <(echo "" | awk -v OFS="\t" '{print "contig","start","end","feature_id","TSS_posi","CpGs_count","CpGoe","callCpGs_count","meth_meancallcov","meth_meanfreq","meth_callcovs","meth_freqs"}') tmp3.cov1.bed > ${ind}.downstream.cov1.LTR_TSS.tsv
+
+
+file=${ind}.downstream.cov1.LTR_TSS.tsv
+tail -n+2 $file | awk -F'\t' -vOFS='\t' '{ if($8>0) print $4,$5,$6,$7,$8,$9,$10,$12}' | awk -F'\t|,' -v OFS='\t' '{gsub(/_/,"",$2); ci=0; si=0; for (i=8; i<=NF; ++i) ci+=($i!=0);for (i=8; i<=NF; ++i) si += $i; if (ci>0) print $1,$2,$3,$4,$5,$6,$7,si/ci,$7/(si/ci); else print $1,$2,$3,$4,$5,$6,$7,0,0 }' | awk -F'\t|_' -vOFS='\t' '{for (i=1; i<=NF-9; i++) {printf ("%s", $i); if (i<NF-9) printf "_"} print "",$(NF-8),$(NF-7),$(NF-6), $(NF-5), $(NF-4), $(NF-3), $(NF-2), $(NF-1), $NF}' | awk -F'\t' -vOFS='\t' '{if ($3=="upstream") print $1,-$2,$4,$5,$6,$7,$8,$9,$10,"start"; else if ($3=="upstreamend") print $1,-$2,$4,$5,$6,$7,$8,$9,$10,"end"; else if ($3=="downstream") print $1,$2,$4,$5,$6,$7,$8,$9,$10,"start"; else print $1,$2,$4,$5,$6,$7,$8,$9,$10,"end"}'> tmp.${ind}.downstream.cov1.LTR_TSS.2.tsv
+
+cat <(echo "" | awk -v OFS="\t" '{print "LTR","TSS_idx","CpGs_count","CpGoe","callCpGs_count","meth_meancallcov","meth_freq","meth_depth","meth_cov","LTR_boundary"}') tmp.${ind}.downstream.cov1.LTR_TSS.2.tsv > ${ind}.downstream.cov1.LTR_TSS.2.tsv
+
+### add methylation info per feature (coverage =10)
+
+bedtools map -a ${ind}.ltr.windows.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov10.bed -c 5 -o count > tmp1.cov10.bed
+
+bedtools map -a tmp1.cov10.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov10.bed -c 5,6 -o mean > tmp2.cov10.bed # added mean callcoverage and mean meth_freq
+
+bedtools map -a tmp2.cov10.bed -b ../${ind}_${trial}.perCpG_methylation.sorted.padded.cov10.bed -c 5,6 -o collapse > tmp3.cov10.bed
+
+cat <(echo "" | awk -v OFS="\t" '{print "contig","start","end","feature_id","TSS_posi","meth_meancallcov","meth_meanfreq","meth_callcovs","meth_freqs","callCpGs_count"}') tmp3.cov10.bed > ${ind}.downstream.cov10.LTR_TSS.tsv
+
+head ${ind}.downstream.cov10.LTR_TSS.tsv
+
+file=${ind}.downstream.cov10.LTR_TSS.tsv
+tail -n+2 $file | awk -F'\t' -vOFS='\t' '{ if($8>0) print $4,$5,$6,$7,$8,$9,$10,$12}' | awk -F'\t|,' -v OFS='\t' '{gsub(/_/,"",$2); ci=0; si=0; for (i=8; i<=NF; ++i) ci+=($i!=0);for (i=8; i<=NF; ++i) si += $i; if (ci>0) print $1,$2,$3,$4,$5,$6,$7,si/ci,$7/(si/ci); else print $1,$2,$3,$4,$5,$6,$7,0,0 }' | awk -F'\t|_' -vOFS='\t' '{for (i=1; i<=NF-9; i++) {printf ("%s", $i); if (i<NF-9) printf "_"} print "",$(NF-8),$(NF-7),$(NF-6), $(NF-5), $(NF-4), $(NF-3), $(NF-2), $(NF-1), $NF}' | awk -F'\t' -vOFS='\t' '{if ($3=="upstream") print $1,-$2,$4,$5,$6,$7,$8,$9,$10,"start"; else if ($3=="upstreamend") print $1,-$2,$4,$5,$6,$7,$8,$9,$10,"end"; else if ($3=="downstream") print $1,$2,$4,$5,$6,$7,$8,$9,$10,"start"; else print $1,$2,$4,$5,$6,$7,$8,$9,$10,"end"}' > tmp.${ind}.downstream.cov10.LTR_TSS.2.tsv
+
+
+cat <(echo "" | awk -v OFS="\t" '{print "mRNA","TSS_idx","CpGs_count","CpGoe","callCpGs_count","meth_meancallcov","meth_freq","meth_depth","meth_cov","LTR_boundary"}') tmp.${ind}.downstream.cov10.LTR_TSS.2.tsv > ${ind}.downstream.cov10.LTR_TSS.2.tsv
+
+
+
+head ${ind}.downstream.cov1.LTR_TSS.2.tsv
+head ${ind}.downstream.cov10.LTR_TSS.2.tsv
+
+tail ${ind}.downstream.cov1.LTR_TSS.2.tsv
+tail ${ind}.downstream.cov10.LTR_TSS.2.tsv
+
+rm tmp*
+done
+
+```
+
+## Write summary table for LTR
+
+All.downstream.LTR.tsv
+```{r, engine = 'bash', eval = FALSE}
+source ~/virtualenv/py38/bin/activate
+cd ~/Tubeworms/data/Epig
+
+python -c "
+import numpy as np
+import pandas as pd
+
+df=pd.DataFrame([],columns=[])
+genome_dic={'Pec':'P. echinospica','R07B-5':'R. piscesae','P08H-3':'P. palmiformis'}
+fastaprefix_dic={'Pec':'Pec_contigs','R07B-5':'R07B-5_wtdbg2','P08H-3':'P08H-3_wtdbg2'}
+
+for ind in genome_dic.keys():
+# for ind in ['Pec']:
+    
+    
+    print(ind)
+    cov='cov10' if ind != 'P08H-3' else 'cov1'
+    file='/home/maeperez/Tubeworms/data/Epig/LTR/'+fastaprefix_dic[ind]+'_list.fa.rexdb-metazoa.cls.tsv'
+    tmp=pd.read_csv(file,header=0,index_col=False,sep='\t')
+    tmp['LTR']=tmp['#TE'].str.split('|').str[0]
+    tmp['family']=tmp.Superfamily
+    tmp.loc[tmp.family=='unknown','family']=tmp.loc[tmp.family=='unknown','Order']
+    family_dic=dict(zip(tmp.LTR,tmp.family))
+    print('taxonomy',len(tmp.LTR.unique()))
+
+    ##### summarise data of genomic context (4kbp before and after LTR)
+    file='/home/maeperez/Tubeworms/data/Epig/'+ind+'_raw_reads/LTR/'+ind+'.downstream.'+cov+'.LTR_TSS.2.tsv'
+    tmp=pd.read_csv(file,header=0,sep='\t' )
+    tmp=tmp.rename(columns={'mRNA':'LTR'})    
+    flank_meth_meanfreq=dict(tmp[(tmp.TSS_idx<= -5) & (tmp.TSS_idx>= -20)].groupby(['LTR']).meth_freq.mean())
+    flank_meth_cov=dict(tmp[(tmp.TSS_idx<= -5) & (tmp.TSS_idx>= -20)].groupby(['LTR']).meth_cov.mean())
+    flank_meth_depth=dict(tmp[(tmp.TSS_idx<= -5) & (tmp.TSS_idx>= -20)].groupby(['LTR']).meth_depth.mean())
+    flank_CpGs_count=dict(tmp[(tmp.TSS_idx<= -5) & (tmp.TSS_idx>= -20)].groupby(['LTR']).callCpGs_count.mean())
+    print('flank',len(tmp.LTR.unique()))
+    print(len(flank_meth_meanfreq),len(flank_meth_cov),len(flank_meth_depth))
+    
+    ##### Get CpG density of long-terminal repeats
+    file='/home/maeperez/Tubeworms/data/Epig/'+ind+'_raw_reads/LTR/'+ind+'.ltrs.CpG_density.tsv'
+    tmp=pd.read_csv(file,header=None,sep='\t')
+    tmp=tmp.iloc[:,[3,7]]
+    tmp.columns=['LTR','reps_CpG_density']
+    reps_CpG_density=dict(tmp.groupby(['LTR']).reps_CpG_density.mean())
+
+    ###### get CpG o/e of long terminal repeats
+    file='/home/maeperez/Tubeworms/data/Epig/'+ind+'_raw_reads/LTR/'+ind+'.downstream.'+cov+'.LTR.tsv'
+    tmp=pd.read_csv(file,header=0,index_col=False,sep='\t')
+    print('meta',len(tmp.LTR.unique()))
+    
+    tmp.loc[tmp['feature_type']=='long_terminal_repeat',['LTR','CpGoe']]
+    reps_CpGoe=dict(tmp.groupby(['LTR']).CpGoe.mean())
+
+    ###### map summary statistics to maind df
+    tmp['LTR_type']=tmp.LTR.map(family_dic)
+    tmp['flank4kb_meth_meanfreq']=tmp.LTR.map(flank_meth_meanfreq)
+    tmp['flank4kb_meth_cov']=tmp.LTR.map(flank_meth_cov)
+    tmp['flank4kb_meth_depth']=tmp.LTR.map(flank_meth_depth)
+    tmp['flank4kb_callCpGs_count']=tmp.LTR.map(flank_CpGs_count)
+    tmp['reps_CpG_density']=tmp.LTR.map(reps_CpG_density)
+    tmp['reps_CpGoe']=tmp.LTR.map(reps_CpGoe)
+
+        
+    tmp['meth_callcovs']=tmp['meth_callcovs'].apply(lambda x : np.array([int(i) for i in x.split(',') if x!='.']))
+    tmp['meth_freqs']=tmp['meth_freqs'].apply(lambda x : np.array([float(i) for i in x.split(',') if x!='.'])) 
+
+    tmp['meth_meancallcov']=tmp['meth_meancallcov'].apply( lambda x: float(x) if x!='.' else np.nan)
+    tmp['meth_meanfreq']=tmp['meth_meanfreq'].apply( lambda x: float(x) if x!='.' else np.nan)
+
+    tmp['meth_cov']=tmp['meth_freqs'].apply(lambda x: (x>0).astype(int).mean())
+    tmp['meth_depth']=tmp['meth_freqs'].apply(lambda x: x[x>0].mean())
+
+    tmp['insertion_time']=tmp.insertion_time.astype(float)
+    tmp['insertion_time_my']=tmp['insertion_time']/1000000
+    tmp['meth_binary']=((tmp.meth_cov>0.75) & (tmp.meth_depth>0.50)).astype(int)
+    tmp['recent_insertion']=(tmp.insertion_time==0).astype(int)
+    tmp.loc[(tmp['recent_insertion']==0) & (tmp.insertion_time<500000),'recent_insertion']=0.5
+    tmp['insertion_time_10kbin']=np.floor(tmp.insertion_time.astype(float)*20)
+    tmp['insertion_time_qbins']=pd.qcut(tmp.insertion_time,q=5,duplicates='drop')
+    
+    qcut=pd.qcut(tmp.insertion_time_my,q=5,duplicates='drop',precision=1)
+    first_I = qcut.cat.categories[0]
+    new_I = pd.Interval(0, first_I.right)
+    qcut = qcut.cat.rename_categories({first_I: new_I})
+    tmp['insertion_time_qbins_my']=qcut
+    
+
+    tmp['feature_size']=tmp.end-tmp.start
+
+    tmp['location']=tmp['location'].apply(lambda x: list(set(x.split(',')))[0])
+
+    tmp['genome']=genome_dic[ind]
+    df=df.append(tmp,ignore_index=True)
+
+dat=df[~df.meth_cov.isna()]
+
+# keep only info for whole LTR and write only useful columns of df to new file
+dat.loc[dat.feature_type=='repeat_region',['LTR', 'strand', 'LTR_type','insertion_time_my', 'CpGs_count','CpGoe','location', 'meth_meancallcov',
+       'meth_meanfreq', 'callCpGs_count','meth_cov', 'meth_depth', 'meth_binary',
+       'recent_insertion', 'feature_size', 'genome', 'insertion_time_qbins_my',
+     'flank4kb_meth_meanfreq','flank4kb_meth_cov','flank4kb_meth_depth',
+     'flank4kb_callCpGs_count','reps_CpG_density','reps_CpGoe']].to_csv(
+    '/home/maeperez/Tubeworms/data/Epig/All.downstream.LTR.tsv',header=True,sep='\t',index=False)
+    
+dat.loc[dat.feature_type=='repeat_region',['LTR', 'strand', 'LTR_type','insertion_time_my', 'CpGs_count','CpGoe','location', 'meth_meancallcov',
+       'meth_meanfreq', 'callCpGs_count','meth_cov', 'meth_depth', 'meth_binary',
+       'recent_insertion', 'feature_size', 'genome', 'insertion_time_qbins_my',
+     'flank4kb_meth_meanfreq','flank4kb_meth_cov','flank4kb_meth_depth',
+     'flank4kb_callCpGs_count','reps_CpG_density','reps_CpGoe']].to_csv(
+    '/home/maeperez/Tubeworms/data/Epig/LTR/All.downstream.LTR.tsv',header=True,sep='\t',index=False)
+"
+
+
+```
+
+\pagebreak
+
+# References
+
+

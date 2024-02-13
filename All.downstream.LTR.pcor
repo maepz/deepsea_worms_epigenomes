@@ -1,0 +1,13 @@
+genome	n	ctrl	estimate	p.value	method	variable	p.value_str	signif
+P. echinospica	1980		0.20571494804505	2.30823459156029e-20	spearman	insertion_time_my	0.000000	1
+P. echinospica	1980		0.0583185716855496	0.00944305666897473	pearson	insertion_time_my	0.009443	1
+P. echinospica	1980	flank4kb_meth_meanfreq	0.225359961052663	3.31849007567368e-24	spearman	insertion_time_my	0.000000	1
+P. echinospica	1980	flank4kb_meth_meanfreq	0.0755483210763551	0.000769543672544983	pearson	insertion_time_my	0.000770	1
+R. piscesae	138		-0.0453592147878185	0.59730821896001	spearman	insertion_time_my	0.597308	0
+R. piscesae	138		0.142663538463814	0.0950732783001832	pearson	insertion_time_my	0.095073	0
+R. piscesae	138	flank4kb_meth_meanfreq	-0.151810162086028	0.076578956275101	spearman	insertion_time_my	0.076579	0
+R. piscesae	138	flank4kb_meth_meanfreq	0.00793806100930365	0.926648187723181	pearson	insertion_time_my	0.926648	0
+P. palmiformis	84		0.0843842554008905	0.445362813667273	spearman	insertion_time_my	0.445363	0
+P. palmiformis	84		0.0671028427551207	0.544198255456531	pearson	insertion_time_my	0.544198	0
+P. palmiformis	84	flank4kb_meth_meanfreq	0.0673971129392127	0.544917293653954	spearman	insertion_time_my	0.544917	0
+P. palmiformis	84	flank4kb_meth_meanfreq	0.0614637406227942	0.580954205932629	pearson	insertion_time_my	0.580954	0

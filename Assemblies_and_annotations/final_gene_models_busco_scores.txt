@@ -1,0 +1,8 @@
+final gene models busco scores	Pec	Pec	R07B-5	R07B-5	P08H-3	P08H-3
+	count	%	count	%	count	%
+Complete BUSCOs (C)	776	81%	838	88%	842	88%
+Complete and single-copy BUSCOs (S)	757	79%	821	86%	833	87%
+Complete and duplicated BUSCOs (D)	19	2%	17	2%	9	1%
+Fragmented BUSCOs (F)	67	7%	62	6%	72	8%
+Missing BUSCOs (M)	111	12%	54	6%	40	4%
+Total BUSCO groups searched	954	100%	954	100%	954	100%

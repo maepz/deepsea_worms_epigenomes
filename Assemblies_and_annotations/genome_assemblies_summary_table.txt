@@ -1,0 +1,7 @@
+Assembly strategy	Assembly pipeline	Assembly size (Mbp)1	Longest contig length (Mbp)1	# of scaffolds1	% genome in scaffolds > 50kbp1	Assembly size (Mbp)	Longest contig length (Mbp)	# of scaffolds	% genome in scaffolds > 50kbp
+Short-read + scaffolding	Platanus + LINKS	1257	1.224	4284603	41%	1145	0.714	3331631	34%
+Long-read + polishing	SMARTdenovo + Pilon	9	0.092	195	43%	n.a.	n.a.	n.a.	n.a.
+Long-read + polishing	wtdbg2 + Pilon	657	1.182	9207	88%	601	3.770	3622	95%
+Long-read + polishing	Canu + Pilon	1315	0.041	56123	31%	978	0.839	49957	24%
+Hybrid	MaSuRCA	676	1.092	9867	82%	n.a.	n.a.	n.a.	n.a.
+Hybrid	HASLR	205	0.103	16993	4%	313	0.550	20338	20%

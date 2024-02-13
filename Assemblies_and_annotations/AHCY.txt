@@ -1,0 +1,9 @@
+		AdoHcyase_NAD
+		PF00670
+Pec	PE_Scaf7756_5.5	present
+	TRINITY_DN6635_c0_g1_i2	present
+R07	NP493_37g11015	present
+	TRINITY_DN1919_c0_g1_i1	present
+P08	LSH36_915g00057	present
+	TRINITY_DN842_c0_g1_i1	present
+Human	P23526	present

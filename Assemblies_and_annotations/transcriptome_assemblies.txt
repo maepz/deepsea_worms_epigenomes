@@ -1,0 +1,406 @@
+assembly	min_scaf	contig_count	tot_contig_len	assembly_type	filtering	species
+Alvinella_cDNA.fasta	1	218723	150260658	assembeled		
+Alvinella_cDNA.fasta	50	218723	150260658	assembeled		
+Alvinella_cDNA.fasta	100	218723	150260658	assembeled		
+Alvinella_cDNA.fasta	250	214913	149526086	assembeled		
+Alvinella_cDNA.fasta	500	197453	142688487	assembeled		
+Alvinella_cDNA.fasta	1000	1	1002	assembeled		
+buscogold_Alvinella_cDNA.fasta	1	121	24581	assembeled		
+buscogold_Alvinella_cDNA.fasta	50	121	24581	assembeled		
+buscogold_Alvinella_cDNA.fasta	100	120	24514	assembeled		
+buscogold_Alvinella_cDNA.fasta	250	27	6870	assembeled		
+buscogold_Escarpiaspicata_annotated_AA.fasta	1	209	41480	assembeled		
+buscogold_Escarpiaspicata_annotated_AA.fasta	100	209	41480	assembeled		
+buscogold_Escarpiaspicata_annotated_AA.fasta	250	42	13087	assembeled		
+buscogold_Escarpiaspicata_annotated_AA.fasta	500	4	2205	assembeled		
+buscogold_Lamellibrachialuymesi_annotated_AA.fasta	1	873	351553	assembeled		
+buscogold_Lamellibrachialuymesi_annotated_AA.fasta	50	873	351553	assembeled		
+buscogold_Lamellibrachialuymesi_annotated_AA.fasta	100	867	351051	assembeled		
+buscogold_Lamellibrachialuymesi_annotated_AA.fasta	250	618	307495	assembeled		
+buscogold_Lamellibrachialuymesi_annotated_AA.fasta	500	248	179607	assembeled		
+buscogold_Lamellibrachialuymesi_annotated_AA.fasta	1000	30	38697	assembeled		
+buscogold_Pec_ragoo_v1.0.cds.fasta	1	745	275223	assembeled		
+buscogold_Pec_ragoo_v1.0.cds.fasta	50	745	275223	assembeled		
+buscogold_Pec_ragoo_v1.0.cds.fasta	100	740	274809	assembeled		
+buscogold_Pec_ragoo_v1.0.cds.fasta	250	496	233606	assembeled		
+buscogold_Pec_ragoo_v1.0.cds.fasta	500	178	124910	assembeled		
+buscogold_Pec_ragoo_v1.0.cds.fasta	1000	19	23635	assembeled		
+buscogold_Phess.final.pep.fasta	1	775	309976	assembeled		
+buscogold_Phess.final.pep.fasta	50	775	309976	assembeled		
+buscogold_Phess.final.pep.fasta	100	770	309519	assembeled		
+buscogold_Phess.final.pep.fasta	250	537	269576	assembeled		
+buscogold_Phess.final.pep.fasta	500	219	160441	assembeled		
+buscogold_Phess.final.pep.fasta	1000	26	36410	assembeled		
+buscogold_Phess.final.pep.fasta	2500	1	2557	assembeled		
+buscogold_Ridgeia_assembeled_454_SAMN00153321.fasta	1	16	2374	assembeled		
+buscogold_Ridgeia_assembeled_454_SAMN00153321.fasta	50	16	2374	assembeled		
+buscogold_Ridgeia_assembeled_454_SAMN00153321.fasta	100	15	2289	assembeled		
+buscogold_Ridgeia_assembeled_454_SAMN00153321.fasta	250	1	266	assembeled		
+buscogold_Ridgeiapiscesae_annotated_AA.fasta	1	311	82047	assembeled		
+buscogold_Ridgeiapiscesae_annotated_AA.fasta	100	311	82047	assembeled		
+buscogold_Ridgeiapiscesae_annotated_AA.fasta	250	137	51770	assembeled		
+buscogold_Ridgeiapiscesae_annotated_AA.fasta	500	20	13102	assembeled		
+buscogold_Ridgeiapiscesae_annotated_AA.fasta	1000	1	986	assembeled		
+buscogold_Riftia_proteome.fasta	1	834	346234	assembeled		
+buscogold_Riftia_proteome.fasta	100	834	346234	assembeled		
+buscogold_Riftia_proteome.fasta	250	601	305350	assembeled		
+buscogold_Riftia_proteome.fasta	500	238	179127	assembeled		
+buscogold_Riftia_proteome.fasta	1000	33	45647	assembeled		
+buscogold_Riftia_proteome.fasta	2500	2	5428	assembeled		
+buscogold_Riftiapachyptila_annotated_AA.fasta	1	409	116013	assembeled		
+buscogold_Riftiapachyptila_annotated_AA.fasta	100	409	116013	assembeled		
+buscogold_Riftiapachyptila_annotated_AA.fasta	250	218	84157	assembeled		
+buscogold_Riftiapachyptila_annotated_AA.fasta	500	39	23463	assembeled		
+buscogold_Riftiapachyptila_annotated_AA.fasta	1000	1	987	assembeled		
+Escarpiaspicata_annotated_AA.fasta	1	5836	845367	assembeled		
+Escarpiaspicata_annotated_AA.fasta	50	5836	845367	assembeled		
+Escarpiaspicata_annotated_AA.fasta	100	5836	845367	assembeled		
+Escarpiaspicata_annotated_AA.fasta	250	339	100232	assembeled		
+Escarpiaspicata_annotated_AA.fasta	500	5	2769	assembeled		
+gold_ParGra1_transcripto.fasta	1	2819	8720675	assembeled		
+gold_ParGra1_transcripto.fasta	250	2819	8720675	assembeled		
+gold_ParGra1_transcripto.fasta	500	2691	8670724	assembeled		
+gold_ParGra1_transcripto.fasta	1000	2488	8522734	assembeled		
+gold_ParGra1_transcripto.fasta	2500	1459	6645205	assembeled		
+gold_ParGra1_transcripto.fasta	5000	376	2908233	assembeled		
+gold_ParGra1_transcripto.fasta	10000	59	849085	assembeled		
+gold_ParGra1_transcripto.fasta	25000	3	87306	assembeled		
+gold_ParPal-G_transcripto.fasta	1	15498	31674008	assembeled		
+gold_ParPal-G_transcripto.fasta	250	15498	31674008	assembeled		
+gold_ParPal-G_transcripto.fasta	500	13399	30856044	assembeled		
+gold_ParPal-G_transcripto.fasta	1000	10566	28779909	assembeled		
+gold_ParPal-G_transcripto.fasta	2500	4744	18909317	assembeled		
+gold_ParPal-G_transcripto.fasta	5000	803	5315499	assembeled		
+gold_ParPal-G_transcripto.fasta	10000	42	628101	assembeled		
+gold_ParPal-G_transcripto.fasta	25000	3	84331	assembeled		
+Lamellibrachialuymesi_annotated_AA.fasta	1	40753	13763969	assembeled		
+Lamellibrachialuymesi_annotated_AA.fasta	50	40752	13763926	assembeled		
+Lamellibrachialuymesi_annotated_AA.fasta	100	36725	13435266	assembeled		
+Lamellibrachialuymesi_annotated_AA.fasta	250	18259	10639433	assembeled		
+Lamellibrachialuymesi_annotated_AA.fasta	500	7843	7077153	assembeled		
+Lamellibrachialuymesi_annotated_AA.fasta	1000	2136	3336748	assembeled		
+Lamellibrachialuymesi_annotated_AA.fasta	2500	200	720894	assembeled		
+Lamellibrachialuymesi_annotated_AA.fasta	5000	21	155785	assembeled		
+Lamellibrachialuymesi_annotated_AA.fasta	10000	3	42703	assembeled		
+NCBI_tubeworm_proteins.fasta	1	222	48287	assembeled		
+NCBI_tubeworm_proteins.fasta	50	209	47866	assembeled		
+NCBI_tubeworm_proteins.fasta	100	200	47203	assembeled		
+NCBI_tubeworm_proteins.fasta	250	75	25604	assembeled		
+NCBI_tubeworm_proteins.fasta	500	4	2103	assembeled		
+Pec_ragoo_v1.0.cds.fasta	1	22641	26195934	assembeled		
+Pec_ragoo_v1.0.cds.fasta	100	22641	26195934	assembeled		
+Pec_ragoo_v1.0.cds.fasta	250	20012	25699026	assembeled		
+Pec_ragoo_v1.0.cds.fasta	500	15135	23912496	assembeled		
+Pec_ragoo_v1.0.cds.fasta	1000	9155	19579056	assembeled		
+Pec_ragoo_v1.0.cds.fasta	2500	2184	8774430	assembeled		
+Pec_ragoo_v1.0.cds.fasta	5000	391	2835882	assembeled		
+Pec_ragoo_v1.0.cds.fasta	10000	47	617724	assembeled		
+Pec_ragoo_v1.0.cds.fasta	25000	1	29832	assembeled		
+Pec_ragoo_v1.0.gene.fasta	1	22642	262092706	assembeled		
+Pec_ragoo_v1.0.gene.fasta	100	22642	262092706	assembeled		
+Pec_ragoo_v1.0.gene.fasta	250	22468	262057995	assembeled		
+Pec_ragoo_v1.0.gene.fasta	500	21160	261556655	assembeled		
+Pec_ragoo_v1.0.gene.fasta	1000	19231	260167535	assembeled		
+Pec_ragoo_v1.0.gene.fasta	2500	16591	255816173	assembeled		
+Pec_ragoo_v1.0.gene.fasta	5000	13937	246033842	assembeled		
+Pec_ragoo_v1.0.gene.fasta	10000	9802	215338459	assembeled		
+Pec_ragoo_v1.0.gene.fasta	25000	2800	101965652	assembeled		
+Pec_ragoo_v1.0.gene.fasta	50000	321	19555748	assembeled		
+Pec_ragoo_v1.0.gene.fasta	100000	6	687716	assembeled		
+Pec_ragoo_v1.0.pep.fasta	1	22641	8389571	assembeled		
+Pec_ragoo_v1.0.pep.fasta	50	22165	8368752	assembeled		
+Pec_ragoo_v1.0.pep.fasta	100	18860	8127798	assembeled		
+Pec_ragoo_v1.0.pep.fasta	250	11725	6983707	assembeled		
+Pec_ragoo_v1.0.pep.fasta	500	5500	4825791	assembeled		
+Pec_ragoo_v1.0.pep.fasta	1000	1459	2173953	assembeled		
+Pec_ragoo_v1.0.pep.fasta	2500	114	383120	assembeled		
+Pec_ragoo_v1.0.pep.fasta	5000	6	43166	assembeled		
+Phess.final.pep.fasta	1	22302	9819811	assembeled		
+Phess.final.pep.fasta	50	22302	9819811	assembeled		
+Phess.final.pep.fasta	100	21013	9720922	assembeled		
+Phess.final.pep.fasta	250	14502	8642597	assembeled		
+Phess.final.pep.fasta	500	6677	5926139	assembeled		
+Phess.final.pep.fasta	1000	1832	2776838	assembeled		
+Phess.final.pep.fasta	2500	164	545308	assembeled		
+Phess.final.pep.fasta	5000	12	70673	assembeled		
+Ridgeia_assembeled_454_SAMN00153321.fasta	1	515	287415	assembeled		
+Ridgeia_assembeled_454_SAMN00153321.fasta	50	515	287415	assembeled		
+Ridgeia_assembeled_454_SAMN00153321.fasta	100	513	287218	assembeled		
+Ridgeia_assembeled_454_SAMN00153321.fasta	250	448	275365	assembeled		
+Ridgeia_assembeled_454_SAMN00153321.fasta	500	266	207492	assembeled		
+Ridgeia_assembeled_454_SAMN00153321.fasta	1000	48	54935	assembeled		
+Ridgeia_assembeled_454_SAMN00153321.fasta	2500	1	2506	assembeled		
+Ridgeiapiscesae_annotated_AA.fasta	1	33069	6545315	assembeled		
+Ridgeiapiscesae_annotated_AA.fasta	50	33069	6545315	assembeled		
+Ridgeiapiscesae_annotated_AA.fasta	100	33069	6545315	assembeled		
+Ridgeiapiscesae_annotated_AA.fasta	250	7129	2874773	assembeled		
+Ridgeiapiscesae_annotated_AA.fasta	500	1493	1034857	assembeled		
+Ridgeiapiscesae_annotated_AA.fasta	1000	195	236134	assembeled		
+Riftia_proteome.fasta	1	67097	16739892	assembeled		
+Riftia_proteome.fasta	50	67097	16739892	assembeled		
+Riftia_proteome.fasta	100	65697	16606783	assembeled		
+Riftia_proteome.fasta	250	18805	10421715	assembeled		
+Riftia_proteome.fasta	500	7807	6687734	assembeled		
+Riftia_proteome.fasta	1000	2033	2930891	assembeled		
+Riftia_proteome.fasta	2500	127	384324	assembeled		
+Riftia_proteome.fasta	5000	2	11986	assembeled		
+Riftia.Trinity.Singles.ORFs.jaccard.symfree.fasta	1	99774	249565077	assembeled		
+Riftia.Trinity.Singles.ORFs.jaccard.symfree.fasta	250	99774	249565077	assembeled		
+Riftia.Trinity.Singles.ORFs.jaccard.symfree.fasta	500	90705	246070297	assembeled		
+Riftia.Trinity.Singles.ORFs.jaccard.symfree.fasta	1000	76768	235718656	assembeled		
+Riftia.Trinity.Singles.ORFs.jaccard.symfree.fasta	2500	39415	171983231	assembeled		
+Riftia.Trinity.Singles.ORFs.jaccard.symfree.fasta	5000	10452	70544960	assembeled		
+Riftia.Trinity.Singles.ORFs.jaccard.symfree.fasta	10000	566	6761963	assembeled		
+Riftia.Trinity.Singles.ORFs.jaccard.symfree.fasta	25000	2	51535	assembeled		
+Riftiapachyptila_annotated_AA.fasta	1	36264	7330048	assembeled		
+Riftiapachyptila_annotated_AA.fasta	50	36264	7330048	assembeled		
+Riftiapachyptila_annotated_AA.fasta	100	36264	7330048	assembeled		
+Riftiapachyptila_annotated_AA.fasta	250	8272	3397059	assembeled		
+Riftiapachyptila_annotated_AA.fasta	500	1990	1340722	assembeled		
+Riftiapachyptila_annotated_AA.fasta	1000	176	219302	assembeled		
+Tubeworm_proteins.fasta	1	89960	25177750	assembeled		
+Tubeworm_proteins.fasta	50	89471	25156510	assembeled		
+Tubeworm_proteins.fasta	100	84757	24781784	assembeled		
+Tubeworm_proteins.fasta	250	30605	17431026	assembeled		
+Tubeworm_proteins.fasta	500	13311	11515628	assembeled		
+Tubeworm_proteins.fasta	1000	3492	5104844	assembeled		
+Tubeworm_proteins.fasta	2500	241	767444	assembeled		
+Tubeworm_proteins.fasta	5000	8	55152	assembeled		
+uniprot_sprot.fasta	1	566978	195572801	assembeled		
+uniprot_sprot.fasta	50	554304	195208420	assembeled		
+uniprot_sprot.fasta	100	511025	191950488	assembeled		
+uniprot_sprot.fasta	250	331585	161998888	assembeled		
+uniprot_sprot.fasta	500	111658	85821526	assembeled		
+uniprot_sprot.fasta	1000	19433	27615950	assembeled		
+uniprot_sprot.fasta	2500	1571	5091422	assembeled		
+uniprot_sprot.fasta	5000	216	1267574	assembeled		
+uniprot_sprot.fasta	10000	28	247099	assembeled		
+uniprot_sprot.fasta	25000	2	67347	assembeled		
+all8_Trinity_TMP_nonnull.fasta	1	37120	23848688	denovo	nonnull	Ridgeia
+all8_Trinity_TMP_nonnull.fasta	250	37120	23848688	denovo	nonnull	Ridgeia
+all8_Trinity_TMP_nonnull.fasta	500	15538	15651202	denovo	nonnull	Ridgeia
+all8_Trinity_TMP_nonnull.fasta	1000	4527	8205536	denovo	nonnull	Ridgeia
+all8_Trinity_TMP_nonnull.fasta	2500	605	2489404	denovo	nonnull	Ridgeia
+all8_Trinity_TMP_nonnull.fasta	5000	100	851868	denovo	nonnull	Ridgeia
+all8_Trinity_TMP_nonnull.fasta	10000	21	331923	denovo	nonnull	Ridgeia
+all8_Trinity_TMP_nonull.fasta	1	37120	23848688	denovo	nonnull	Ridgeia
+all8_Trinity_TMP_nonull.fasta	250	37120	23848688	denovo	nonnull	Ridgeia
+all8_Trinity_TMP_nonull.fasta	500	15538	15651202	denovo	nonnull	Ridgeia
+all8_Trinity_TMP_nonull.fasta	1000	4527	8205536	denovo	nonnull	Ridgeia
+all8_Trinity_TMP_nonull.fasta	2500	605	2489404	denovo	nonnull	Ridgeia
+all8_Trinity_TMP_nonull.fasta	5000	100	851868	denovo	nonnull	Ridgeia
+all8_Trinity_TMP_nonull.fasta	10000	21	331923	denovo	nonnull	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta	1	31804	18084317	denovo	nonnull_unique_realHQ	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta	250	31804	18084317	denovo	nonnull_unique_realHQ	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta	500	11814	10529394	denovo	nonnull_unique_realHQ	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta	1000	2894	4545074	denovo	nonnull_unique_realHQ	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta	2500	223	752923	denovo	nonnull_unique_realHQ	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta	5000	17	115277	denovo	nonnull_unique_realHQ	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta	10000	1	16019	denovo	nonnull_unique_realHQ	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.cds.fasta	1	15415	7798509	denovo	nonnull_unique_realHQ_translated	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.cds.fasta	250	15415	7798509	denovo	nonnull_unique_realHQ_translated	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.cds.fasta	500	5045	3924471	denovo	nonnull_unique_realHQ_translated	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.cds.fasta	1000	813	1099092	denovo	nonnull_unique_realHQ_translated	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.cds.fasta	2500	22	68613	denovo	nonnull_unique_realHQ_translated	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	1	15415	2521144	denovo	nonnull_unique_realHQ_translated	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	50	15415	2521144	denovo	nonnull_unique_realHQ_translated	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	100	15314	2511732	denovo	nonnull_unique_realHQ_translated	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	250	1933	663891	denovo	nonnull_unique_realHQ_translated	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	500	178	113844	denovo	nonnull_unique_realHQ_translated	Ridgeia
+all8_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	1000	9	10730	denovo	nonnull_unique_realHQ_translated	Ridgeia
+all8_Trinity_TMP_uniquenonnull.fasta	1	31824	18101641	denovo	nonnull_unique	Ridgeia
+all8_Trinity_TMP_uniquenonnull.fasta	250	31824	18101641	denovo	nonnull_unique	Ridgeia
+all8_Trinity_TMP_uniquenonnull.fasta	500	11827	10543677	denovo	nonnull_unique	Ridgeia
+all8_Trinity_TMP_uniquenonnull.fasta	1000	2899	4554094	denovo	nonnull_unique	Ridgeia
+all8_Trinity_TMP_uniquenonnull.fasta	2500	223	752923	denovo	nonnull_unique	Ridgeia
+all8_Trinity_TMP_uniquenonnull.fasta	5000	17	115277	denovo	nonnull_unique	Ridgeia
+all8_Trinity_TMP_uniquenonnull.fasta	10000	1	16019	denovo	nonnull_unique	Ridgeia
+all8_Trinity.fasta	1	37698	24542158	denovo	none	Ridgeia
+all8_Trinity.fasta	250	37698	24542158	denovo	none	Ridgeia
+all8_Trinity.fasta	500	15941	16276323	denovo	none	Ridgeia
+all8_Trinity.fasta	1000	4742	8701501	denovo	none	Ridgeia
+all8_Trinity.fasta	2500	667	2754644	denovo	none	Ridgeia
+all8_Trinity.fasta	5000	112	951283	denovo	none	Ridgeia
+all8_Trinity.fasta	10000	22	355759	denovo	none	Ridgeia
+ParGra_Trinity.dedup.fasta	1	77744	94731406	denovo	none	ParGra
+ParGra_Trinity.dedup.fasta	250	77744	94731406	denovo	none	ParGra
+ParGra_Trinity.dedup.fasta	500	51874	84703453	denovo	none	ParGra
+ParGra_Trinity.dedup.fasta	1000	27959	67988633	denovo	none	ParGra
+ParGra_Trinity.dedup.fasta	2500	8785	37863517	denovo	none	ParGra
+ParGra_Trinity.dedup.fasta	5000	1930	14506881	denovo	none	ParGra
+ParGra_Trinity.dedup.fasta	10000	275	3801437	denovo	none	ParGra
+ParGra_Trinity.dedup.fasta	25000	12	361660	denovo	none	ParGra
+ParGra1_Trinity_TMP_nonnull.fasta	1	49974	66540756	denovo	nonnull	ParGra1
+ParGra1_Trinity_TMP_nonnull.fasta	250	49974	66540756	denovo	nonnull	ParGra1
+ParGra1_Trinity_TMP_nonnull.fasta	500	34698	60613413	denovo	nonnull	ParGra1
+ParGra1_Trinity_TMP_nonnull.fasta	1000	20174	50410675	denovo	nonnull	ParGra1
+ParGra1_Trinity_TMP_nonnull.fasta	2500	6763	29113593	denovo	nonnull	ParGra1
+ParGra1_Trinity_TMP_nonnull.fasta	5000	1479	11153650	denovo	nonnull	ParGra1
+ParGra1_Trinity_TMP_nonnull.fasta	10000	207	2914182	denovo	nonnull	ParGra1
+ParGra1_Trinity_TMP_nonnull.fasta	25000	10	304280	denovo	nonnull	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	1	20340	7119612	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	50	20340	7119612	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	100	20281	7114218	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	250	9739	5527013	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	500	4053	3598891	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	1000	1012	1630240	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	2500	114	434198	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	5000	16	113086	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	10000	1	11225	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	1	20340	7119612	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	50	20340	7119612	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	100	20281	7114218	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	250	9739	5527013	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	500	4053	3598891	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	1000	1012	1630240	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	2500	114	434198	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	5000	16	113086	denovo	nonnull_unique_realHQ	ParGra1
+ParGra1_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	10000	1	11225	denovo	nonnull_unique_realHQ	ParGra1
+ParGra2_Trinity_TMP_nonnull.fasta	1	27672	23697461	denovo	nonnull	ParGra2
+ParGra2_Trinity_TMP_nonnull.fasta	250	27672	23697461	denovo	nonnull	ParGra2
+ParGra2_Trinity_TMP_nonnull.fasta	500	15997	19192514	denovo	nonnull	ParGra2
+ParGra2_Trinity_TMP_nonnull.fasta	1000	6408	12582643	denovo	nonnull	ParGra2
+ParGra2_Trinity_TMP_nonnull.fasta	2500	1192	4705395	denovo	nonnull	ParGra2
+ParGra2_Trinity_TMP_nonnull.fasta	5000	188	1348025	denovo	nonnull	ParGra2
+ParGra2_Trinity_TMP_nonnull.fasta	10000	32	381510	denovo	nonnull	ParGra2
+ParGra2_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	1	13661	3056647	denovo	nonnull_unique_realHQ	ParGra2
+ParGra2_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	50	13661	3056647	denovo	nonnull_unique_realHQ	ParGra2
+ParGra2_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	100	13606	3051653	denovo	nonnull_unique_realHQ	ParGra2
+ParGra2_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	250	3629	1604079	denovo	nonnull_unique_realHQ	ParGra2
+ParGra2_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	500	915	717836	denovo	nonnull_unique_realHQ	ParGra2
+ParGra2_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	1000	160	250819	denovo	nonnull_unique_realHQ	ParGra2
+ParGra2_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	2500	20	67967	denovo	nonnull_unique_realHQ	ParGra2
+ParGra2_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	1	13661	3056647	denovo	nonnull_unique_realHQ	ParGra2
+ParGra2_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	50	13661	3056647	denovo	nonnull_unique_realHQ	ParGra2
+ParGra2_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	100	13606	3051653	denovo	nonnull_unique_realHQ	ParGra2
+ParGra2_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	250	3629	1604079	denovo	nonnull_unique_realHQ	ParGra2
+ParGra2_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	500	915	717836	denovo	nonnull_unique_realHQ	ParGra2
+ParGra2_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	1000	160	250819	denovo	nonnull_unique_realHQ	ParGra2
+ParGra2_Trinity_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	2500	20	67967	denovo	nonnull_unique_realHQ	ParGra2
+ParPal-G_Trinity_TMP_nonnull.fasta	1	69527	96765025	denovo	nonnull	ParPal
+ParPal-G_Trinity_TMP_nonnull.fasta	250	69527	96765025	denovo	nonnull	ParPal
+ParPal-G_Trinity_TMP_nonnull.fasta	500	46747	88076034	denovo	nonnull	ParPal
+ParPal-G_Trinity_TMP_nonnull.fasta	1000	29792	76147054	denovo	nonnull	ParPal
+ParPal-G_Trinity_TMP_nonnull.fasta	2500	11479	46386362	denovo	nonnull	ParPal
+ParPal-G_Trinity_TMP_nonnull.fasta	5000	2115	14219691	denovo	nonnull	ParPal
+ParPal-G_Trinity_TMP_nonnull.fasta	10000	118	1746079	denovo	nonnull	ParPal
+ParPal-G_Trinity_TMP_nonnull.fasta	25000	5	135987	denovo	nonnull	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull_realHQ.fasta	1	49255	54999269	denovo	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull_realHQ.fasta	250	49255	54999269	denovo	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull_realHQ.fasta	500	28495	47124371	denovo	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull_realHQ.fasta	1000	15864	38376959	denovo	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull_realHQ.fasta	2500	5593	21907105	denovo	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull_realHQ.fasta	5000	872	5793181	denovo	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull_realHQ.fasta	10000	48	720311	denovo	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull_realHQ.fasta	25000	4	110456	denovo	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull.fasta	1	50464	57738098	denovo	nonnull_unique	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull.fasta	250	50464	57738098	denovo	nonnull_unique	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull.fasta	500	29561	49806523	denovo	nonnull_unique	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull.fasta	1000	16711	40901252	denovo	nonnull_unique	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull.fasta	2500	5994	23676674	denovo	nonnull_unique	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull.fasta	5000	964	6487866	denovo	nonnull_unique	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull.fasta	10000	57	878586	denovo	nonnull_unique	ParPal
+ParPal-G_Trinity_TMP_uniquenonnull.fasta	25000	5	135987	denovo	nonnull_unique	ParPal
+ParPal-G_Trinity.fasta	1	72222	104164484	denovo	none	ParPal
+ParPal-G_Trinity.fasta	250	72222	104164484	denovo	none	ParPal
+ParPal-G_Trinity.fasta	500	49172	95372645	denovo	none	ParPal
+ParPal-G_Trinity.fasta	1000	31933	83237011	denovo	none	ParPal
+ParPal-G_Trinity.fasta	2500	12750	51978555	denovo	none	ParPal
+ParPal-G_Trinity.fasta	5000	2449	16452508	denovo	none	ParPal
+ParPal-G_Trinity.fasta	10000	130	1917795	denovo	none	ParPal
+ParPal-G_Trinity.fasta	25000	5	135987	denovo	none	ParPal
+all8_Trinity-GG_TMP_nonnull.fasta	1	42586	18223190	genome-guided	nonnull	Ridgeia
+all8_Trinity-GG_TMP_nonnull.fasta	100	42586	18223190	genome-guided	nonnull	Ridgeia
+all8_Trinity-GG_TMP_nonnull.fasta	250	31050	15617156	genome-guided	nonnull	Ridgeia
+all8_Trinity-GG_TMP_nonnull.fasta	500	8741	8169830	genome-guided	nonnull	Ridgeia
+all8_Trinity-GG_TMP_nonnull.fasta	1000	2338	3864410	genome-guided	nonnull	Ridgeia
+all8_Trinity-GG_TMP_nonnull.fasta	2500	233	783670	genome-guided	nonnull	Ridgeia
+all8_Trinity-GG_TMP_nonnull.fasta	5000	16	104384	genome-guided	nonnull	Ridgeia
+all8_Trinity-GG_TMP_nonnull.fasta	10000	1	12386	genome-guided	nonnull	Ridgeia
+all8_Trinity-GG_TMP_uniquenonnull_realHQ.fasta	1	36304	14109392	genome-guided	nonnull_unique_realHQ	Ridgeia
+all8_Trinity-GG_TMP_uniquenonnull_realHQ.fasta	100	36304	14109392	genome-guided	nonnull_unique_realHQ	Ridgeia
+all8_Trinity-GG_TMP_uniquenonnull_realHQ.fasta	250	25522	11673302	genome-guided	nonnull_unique_realHQ	Ridgeia
+all8_Trinity-GG_TMP_uniquenonnull_realHQ.fasta	500	6141	5273007	genome-guided	nonnull_unique_realHQ	Ridgeia
+all8_Trinity-GG_TMP_uniquenonnull_realHQ.fasta	1000	1342	2080379	genome-guided	nonnull_unique_realHQ	Ridgeia
+all8_Trinity-GG_TMP_uniquenonnull_realHQ.fasta	2500	93	304935	genome-guided	nonnull_unique_realHQ	Ridgeia
+all8_Trinity-GG_TMP_uniquenonnull_realHQ.fasta	5000	5	30352	genome-guided	nonnull_unique_realHQ	Ridgeia
+all8_Trinity-GG_TMP_uniquenonnull.fasta	1	37588	14696108	genome-guided	nonnull_unique_realHQ	Ridgeia
+all8_Trinity-GG_TMP_uniquenonnull.fasta	100	37588	14696108	genome-guided	nonnull_unique	Ridgeia
+all8_Trinity-GG_TMP_uniquenonnull.fasta	250	26477	12185909	genome-guided	nonnull_unique	Ridgeia
+all8_Trinity-GG_TMP_uniquenonnull.fasta	500	6388	5550109	genome-guided	nonnull_unique	Ridgeia
+all8_Trinity-GG_TMP_uniquenonnull.fasta	1000	1430	2251268	genome-guided	nonnull_unique	Ridgeia
+all8_Trinity-GG_TMP_uniquenonnull.fasta	2500	106	353606	genome-guided	nonnull_unique	Ridgeia
+all8_Trinity-GG_TMP_uniquenonnull.fasta	5000	7	42363	genome-guided	nonnull_unique	Ridgeia
+all8_Trinity-GG.fasta	1	40388	17808593	genome-guided	none	Ridgeia
+all8_Trinity-GG.fasta	100	40388	17808593	genome-guided	none	Ridgeia
+all8_Trinity-GG.fasta	250	29817	15417049	genome-guided	none	Ridgeia
+all8_Trinity-GG.fasta	500	8643	8329676	genome-guided	none	Ridgeia
+all8_Trinity-GG.fasta	1000	2373	4108350	genome-guided	none	Ridgeia
+all8_Trinity-GG.fasta	2500	285	1039658	genome-guided	none	Ridgeia
+all8_Trinity-GG.fasta	5000	44	293927	genome-guided	none	Ridgeia
+all8_Trinity-GG.fasta	10000	3	35959	genome-guided	none	Ridgeia
+ParPal-G_Trinity-GG_TMP_nonnull.fasta	1	116679	124395259	genome-guided	nonnull	ParPal
+ParPal-G_Trinity-GG_TMP_nonnull.fasta	100	116679	124395259	genome-guided	nonnull	ParPal
+ParPal-G_Trinity-GG_TMP_nonnull.fasta	250	92028	118899285	genome-guided	nonnull	ParPal
+ParPal-G_Trinity-GG_TMP_nonnull.fasta	500	51492	105152579	genome-guided	nonnull	ParPal
+ParPal-G_Trinity-GG_TMP_nonnull.fasta	1000	34053	92876309	genome-guided	nonnull	ParPal
+ParPal-G_Trinity-GG_TMP_nonnull.fasta	2500	14662	61003941	genome-guided	nonnull	ParPal
+ParPal-G_Trinity-GG_TMP_nonnull.fasta	5000	3133	20895394	genome-guided	nonnull	ParPal
+ParPal-G_Trinity-GG_TMP_nonnull.fasta	10000	160	2239257	genome-guided	nonnull	ParPal
+ParPal-G_Trinity-GG_TMP_nonnull.fasta	25000	9	281432	genome-guided	nonnull	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta	1	49270	55067920	genome-guided	nonnull_unique_realHQ_translated	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta	250	49270	55067920	genome-guided	nonnull_unique_realHQ_translated	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta	500	28509	47192669	genome-guided	nonnull_unique_realHQ_translated	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta	1000	15878	38445087	genome-guided	nonnull_unique_realHQ_translated	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta	2500	5606	21972918	genome-guided	nonnull_unique_realHQ_translated	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta	5000	877	5828430	genome-guided	nonnull_unique_realHQ_translated	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta	10000	48	721729	genome-guided	nonnull_unique_realHQ_translated	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta	25000	4	110456	genome-guided	nonnull_unique_realHQ_translated	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	1	19627	6965803	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	50	19627	6965803	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	100	19569	6960476	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	250	10254	5556829	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	500	4421	3561500	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	1000	922	1300445	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	2500	40	177442	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.labelled.pep.fasta	5000	15	97670	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	1	19627	6965803	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	50	19627	6965803	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	100	19569	6960476	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	250	10254	5556829	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	500	4421	3561500	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	1000	922	1300445	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	2500	40	177442	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull_realHQ.fasta.transdecoder.pep.fasta	5000	15	97670	genome-guided	nonnull_unique_realHQ	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull.fasta	1	50495	57910773	genome-guided	nonnull_unique	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull.fasta	250	50495	57910773	genome-guided	nonnull_unique	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull.fasta	500	29592	49979198	genome-guided	nonnull_unique	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull.fasta	1000	16742	41073757	genome-guided	nonnull_unique	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull.fasta	2500	6024	23845643	genome-guided	nonnull_unique	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull.fasta	5000	978	6597537	genome-guided	nonnull_unique	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull.fasta	10000	58	898880	genome-guided	nonnull_unique	ParPal
+ParPal-G_Trinity-GG_TMP_uniquenonnull.fasta	25000	5	135987	genome-guided	nonnull_unique	ParPal
+ParGra1_Trinity.fasta	1	51553	71297750	denovo	none	ParGra1
+ParGra1_Trinity.fasta	250	51553	71297750	denovo	none	ParGra1
+ParGra1_Trinity.fasta	500	36194	65337060	denovo	none	ParGra1
+ParGra1_Trinity.fasta	1000	21456	54973045	denovo	none	ParGra1
+ParGra1_Trinity.fasta	2500	7517	32775468	denovo	none	ParGra1
+ParGra1_Trinity.fasta	5000	1712	12938002	denovo	none	ParGra1
+ParGra1_Trinity.fasta	10000	237	3344647	denovo	none	ParGra1
+ParGra1_Trinity.fasta	25000	12	361660	denovo	none	ParGra1
+ParGra2_Trinity.fasta	1	28016	24408057	denovo	none	ParGra2
+ParGra2_Trinity.fasta	250	28016	24408057	denovo	none	ParGra2
+ParGra2_Trinity.fasta	500	16298	19886796	denovo	none	ParGra2
+ParGra2_Trinity.fasta	1000	6623	13213166	denovo	none	ParGra2
+ParGra2_Trinity.fasta	2500	1282	5135808	denovo	none	ParGra2
+ParGra2_Trinity.fasta	5000	218	1568879	denovo	none	ParGra2
+ParGra2_Trinity.fasta	10000	38	456790	denovo	none	ParGra2
+ParPal-G_Trinity-GG.fasta	1	121067	136311559	genome-guided	none	ParPal
+ParPal-G_Trinity-GG.fasta	100	121067	136311559	genome-guided	none	ParPal
+ParPal-G_Trinity-GG.fasta	250	96017	130726828	genome-guided	none	ParPal
+ParPal-G_Trinity-GG.fasta	500	54947	116792664	genome-guided	none	ParPal
+ParPal-G_Trinity-GG.fasta	1000	37157	104265066	genome-guided	none	ParPal
+ParPal-G_Trinity-GG.fasta	2500	16695	70500696	genome-guided	none	ParPal
+ParPal-G_Trinity-GG.fasta	5000	3786	25393642	genome-guided	none	ParPal
+ParPal-G_Trinity-GG.fasta	10000	211	2859398	genome-guided	none	ParPal
+ParPal-G_Trinity-GG.fasta	25000	9	281432	genome-guided	none	ParPal

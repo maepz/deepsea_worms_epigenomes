@@ -1,0 +1,9 @@
+		Tet_JBP
+		PF12851
+Pec	PE_Scaf5346_7.1	5' partial
+	Pec2_TRINITY_DN1533_c0_g1_i41	present
+R07	NP493_370g03019	present
+			
+P08	LSH36_127g18064	present
+	TRINITY_DN23735_c0_g1_i1	5' and 3' partial
+Dmel	M9NEY8	present

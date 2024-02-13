@@ -1,0 +1,73 @@
+bp_total	source	sequencing	filtering	ind	tissue
+90564963900	nuclear	DNA: Illumina	raw reads	R07B-5	vestimentum
+5213469600	symbionts	DNA: Illumina	raw reads	R07B-5	vestimentum
+227046000	mitochondrial	DNA: Illumina	raw reads	R07B-5	vestimentum
+98839265357	nuclear	DNA: ONT	raw reads	R07B-5	vestimentum
+7143470297	symbionts	DNA: ONT	raw reads	R07B-5	vestimentum
+173001702	mitochondrial	DNA: ONT	raw reads	R07B-5	vestimentum
+1873910100	nuclear	RNA: Illumina	raw reads	R07B-5	Gills,vestimentum,trophosome,body wall
+428965500	symbionts	RNA: Illumina	raw reads	R07B-5	Gills,vestimentum,trophosome,body wall
+40200297600	mitochondrial	RNA: Illumina	raw reads	R07B-5	Gills,vestimentum,trophosome,body wall
+129768199200	nuclear	DNA: Illumina	raw reads	P08H-3	bodywall
+145791900	mitochondrial	DNA: Illumina	raw reads	P08H-3	bodywall
+26660539698	nuclear	DNA: ONT	raw reads	P08H-3	bodywall
+16693360	mitochondrial	DNA: ONT	raw reads	P08H-3	bodywall
+6359450400	nuclear	RNA: Illumina	raw reads	P08H-3	gills
+1696089800	mitochondrial	RNA: Illumina	raw reads	P08H-3	gills
+87060585435	nuclear	DNA: Illumina	filtered/corrected reads	R07B-5	vestimentum
+5150391967	symbionts	DNA: Illumina	filtered/corrected reads	R07B-5	vestimentum
+226626788	mitochondrial	DNA: Illumina	filtered/corrected reads	R07B-5	vestimentum
+99471776711	nuclear	DNA: ONT	filtered/corrected reads	R07B-5	vestimentum
+7183038681	symbionts	DNA: ONT	filtered/corrected reads	R07B-5	vestimentum
+185597392	mitochondrial	DNA: ONT	filtered/corrected reads	R07B-5	vestimentum
+1678120336	nuclear	RNA: Illumina	filtered/corrected reads	R07B-5	Gills,vestimentum,trophosome,body wall
+414062947	symbionts	RNA: Illumina	filtered/corrected reads	R07B-5	Gills,vestimentum,trophosome,body wall
+38800848093	mitochondrial	RNA: Illumina	filtered/corrected reads	R07B-5	Gills,vestimentum,trophosome,body wall
+129356024889	nuclear	DNA: Illumina	filtered/corrected reads	P08H-3	bodywall
+145483822	mitochondrial	DNA: Illumina	filtered/corrected reads	P08H-3	bodywall
+26856756825	nuclear	DNA: ONT	filtered/corrected reads	P08H-3	bodywall
+15579645	mitochondrial	DNA: ONT	filtered/corrected reads	P08H-3	bodywall
+5624813005	nuclear	RNA: Illumina	filtered/corrected reads	P08H-3	gills
+1565899253	mitochondrial	RNA: Illumina	filtered/corrected reads	P08H-3	gills
+459539700	mitochondrial	RNA: Illumina	raw reads	Pec	Collar
+242700	symbionts	RNA: Illumina	raw reads	Pec	Collar
+5607401700	nuclear	RNA: Illumina	raw reads	Pec	Collar
+1022896800	mitochondrial	RNA: Illumina	raw reads	Pec	Gills
+241500	symbionts	RNA: Illumina	raw reads	Pec	Gills
+5406400500	nuclear	RNA: Illumina	raw reads	Pec	Gills
+4863827400	mitochondrial	RNA: Illumina	raw reads	Pec	Operculum/Opistosome
+37615500	symbionts	RNA: Illumina	raw reads	Pec	Operculum/Opistosome
+1265868000	nuclear	RNA: Illumina	raw reads	Pec	Operculum/Opistosome
+9932651100	mitochondrial	RNA: Illumina	raw reads	Pec	trophosome
+37423800	symbionts	RNA: Illumina	raw reads	Pec	trophosome
+9440527500	nuclear	RNA: Illumina	raw reads	Pec	trophosome
+552777900	mitochondrial	RNA: Illumina	raw reads	Pec	vestimentum
+354600	symbionts	RNA: Illumina	raw reads	Pec	vestimentum
+5082291600	nuclear	RNA: Illumina	raw reads	Pec	vestimentum
+104055900	mitochondrial	DNA: Illumina	raw reads	Pec	vestimentum
+10500	symbionts	DNA: Illumina	raw reads	Pec	vestimentum
+219471000000	nuclear	DNA: Illumina	raw reads	Pec	vestimentum
+98135456	mitochondrial	DNA: Illumina	filtered/corrected reads	Pec	vestimentum
+9992	symbionts	DNA: Illumina	filtered/corrected reads	Pec	vestimentum
+203924588429	nuclear	DNA: Illumina	filtered/corrected reads	Pec	vestimentum
+268389839	mitochondrial	DNA: ONT	raw reads	Pec	vestimentum
+7591738	symbionts	DNA: ONT	raw reads	Pec	vestimentum
+53916153095	nuclear	DNA: ONT	raw reads	Pec	vestimentum
+7582649	mitochondrial	DNA: ONT	filtered/corrected reads	Pec	vestimentum
+270459580	symbionts	DNA: ONT	filtered/corrected reads	Pec	vestimentum
+52999212380	nuclear	DNA: ONT	filtered/corrected reads	Pec	vestimentum
+434203572	mitochondrial	RNA: Illumina	filtered/corrected reads	Pec	Collar
+229602	symbionts	RNA: Illumina	filtered/corrected reads	Pec	Collar
+5239043429	nuclear	RNA: Illumina	filtered/corrected reads	Pec	Collar
+966386092	mitochondrial	RNA: Illumina	filtered/corrected reads	Pec	Gills
+227161	symbionts	RNA: Illumina	filtered/corrected reads	Pec	Gills
+5061326601	nuclear	RNA: Illumina	filtered/corrected reads	Pec	Gills
+4291720429	mitochondrial	RNA: Illumina	filtered/corrected reads	Pec	Operculum/Opistosome
+32971971	symbionts	RNA: Illumina	filtered/corrected reads	Pec	Operculum/Opistosome
+1085695521	nuclear	RNA: Illumina	filtered/corrected reads	Pec	Operculum/Opistosome
+198524931	mitochondrial	RNA: Illumina	filtered/corrected reads	Pec	trophosome
+4201155886	symbionts	RNA: Illumina	filtered/corrected reads	Pec	trophosome
+4149756489	nuclear	RNA: Illumina	filtered/corrected reads	Pec	trophosome
+527116519	mitochondrial	RNA: Illumina	filtered/corrected reads	Pec	vestimentum
+338542	symbionts	RNA: Illumina	filtered/corrected reads	Pec	vestimentum
+4795435203	nuclear	RNA: Illumina	filtered/corrected reads	Pec	vestimentum

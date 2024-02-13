@@ -1,0 +1,25 @@
+reads	ind	correction	step
+21602852	R07	corrected	parsed_and_indexed_reads
+18098614	R07	corrected	Reads mapped
+15033619	R07	corrected	Reads_processed_by_nanopolish
+9639834	R07	corrected	Reads_with_good_methylation_calls
+21602852	R07	raw	parsed_and_indexed_reads
+20308810	R07	raw	Reads mapped
+16067878	R07	raw	Reads_processed_by_nanopolish
+15845278	R07	raw	Reads_with_good_methylation_calls
+9512903	P08	corrected	parsed_and_indexed_reads
+8401201	P08	corrected	Reads mapped
+6966357	P08	corrected	Reads_processed_by_nanopolish
+5251117	P08	corrected	Reads_with_good_methylation_calls
+9512903	P08	raw	parsed_and_indexed_reads
+6484159	P08	raw	Reads mapped
+5659345	P08	raw	Reads_processed_by_nanopolish
+4929338	P08	raw	Reads_with_good_methylation_calls
+21071681	Pec	corrected	parsed_and_indexed_reads
+14936910	Pec	corrected	Reads mapped
+14094721	Pec	corrected	Reads_processed_by_nanopolish
+13430536	Pec	corrected	Reads_with_good_methylation_calls
+21071681	Pec	raw	parsed_and_indexed_reads
+14977506	Pec	raw	Reads mapped
+14488844	Pec	raw	Reads_processed_by_nanopolish
+13806597	Pec	raw	Reads_with_good_methylation_calls

@@ -1,0 +1,10 @@
+		S-methyl_trans	Pterin_bind	B12-binding	B12-binding_2	Met_synt_B12
+		PF02574	PF00809	PF02310	PF02607	 PF02965
+Pec	PE_Scaf12088_5.9	present	present	present	present	3' partial
+	PE_Scaf10753_11.6					5' partial
+	TRINITY_DN1482_c0_g4_i1	present	present	present	present	present
+R07	NP493_734g01015	present	present	present	present	present
+	TRINITY_DN80800_c0_g1_i1		3' partial			
+P08	LSH36_405g01009	present	present	present	present	present
+	TRINITY_DN26095_c0_g1_i1	3' partial				
+Cele	Q09582	present	present	present	present	present
